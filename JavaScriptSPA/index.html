@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Practee Technologies</title>
+
+    <!-- msal.js with a fallback to backup CDN -->
+    <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.2.1/js/msal.js" integrity="sha384-9TV1245fz+BaI+VvCjMYL0YDMElLBwNS84v3mY57pXNOt6xcUYch2QLImaTahcOP" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      if(typeof Msal === 'undefined')document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.2.1/js/msal.js' type='text/javascript' integrity='sha384-m/3NDUcz4krpIIiHgpeO0O8uxSghb+lfBTngquAo2Zuy2fEF+YgFeP08PWFo5FiJ' crossorigin='anonymous'%3E%3C/script%3E"));
+    </script>
+
+    <!-- adding Bootstrap 4 for UI components  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- adding links for datepicker
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+      
+    <script>
+        $(function() {
+          $( "#datepicker-13" ).datepicker();
+        });
+    </script> -->
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/">Practee Identity Platform</a>
+      <div class="btn-group ml-auto dropleft">
+        <button type="button" id="signIn" class="btn btn-secondary" onclick="signIn()">Sign In</button>
+        <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
+    </div>
+    </nav>
+    <br>
+    <br>
+    <div class="row" style="margin:auto;" >
+    <div id="card-div" class="col-md-3 d-none">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" id="welcomeMessage">Please sign-in to see your profile and read your mails</h5>
+        <div id="profile-div"></div>
+        <br>
+        <br>
+        <button class="btn btn-primary" id="seeProfile" onclick="seeProfile()">See Profile</button>
+        <br>
+        <br>
+        <button class="btn btn-primary d-none" id="readMail" onclick="readMail()">Read Mails</button>
+      </div>
+    </div>
+    </div>
+    <div class="col-md-9">
+      <div class="d-none" id="session">
+          <div style="line-height: 30px;">
+            <label for="date"><strong>Enter the date on which you reqire the data:</strong></label>
+            <select name="month" id="month">
+              <option disabled selected>month</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+            </select>
+            <select name="day" id="day">
+              <option disabled selected>day</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option>
+            </select>
+            <select name="year" id="year">
+              <option disabled selected>year</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option><option>2031</option>
+            </select>
+          </div> 
+          <button type="submit" id="dateSubmit" onclick="date_Submit()">Submit</button>
+        <div id="on_sub"></div>
+        <div class="d-none" id="table_div">
+          <table border="1" id="table_data">
+            <tr>
+              <th>Session ID</th>
+              <th>Start Time</th>
+              <!-- <th>Mentor's Name</th> -->
+              <th>Mentor's Contact No</th>
+              <th>Student's Contact No</th>
+              <th>Session Link</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>
+      <!-- <div class="col-md-4">
+        <div class="list-group" id="list-tab" role="tablist">
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="tab-content" id="nav-tabContent">
+        </div>
+      </div> -->
+    </div>
+    <br>
+    <br>
+    
+    <!-- importing bootstrap.js and supporting js libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- importing app scripts (load order is important) -->
+    <script type="text/javascript" src="./authConfig.js"></script>
+    <script type="text/javascript" src="./graphConfig.js"></script>
+    <script type="text/javascript" src="./ui.js"></script>
+
+    <!-- replace next line with authRedirect.js if you would like to use the redirect flow -->
+    <!-- <script type="text/javascript" src="./authRedirect.js"></script>   -->
+    <script type="text/javascript" src="./authPopup.js"></script>
+    <script type="text/javascript" src="./graph.js"></script>
+  </body>
+</html>
