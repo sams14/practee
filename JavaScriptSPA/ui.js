@@ -124,25 +124,8 @@ function date_Submit() {
           }
         });
     });
-    // fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + yr.value + "-" + mon.value + "-" + dy.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + yr.value + "-" + mon.value + "-" + dy.value + "%2023%3A23%3A59%2B05%3A30&limit=" + tc, {
-    //   method: 'GET',
-    //   headers: {
-    //     "Accept": "application/json",
-    //     "x-api-key": "xihMXYtXYY0E1v8Vkwai7WW4YmLgCGN5PyN3i8R6",
-    //     "Authorization": "07a30c67-cd45-4fe9-a874-347260404af9"
-    //   }
-    // })
-    //   .then(response => { 
-    //     // console.log(response);
-    //     return response.json();
-    //   })
-    //   .then(data => { 
-    //     table_div.classList.remove('d-none');
-    //     var i;
-    //     for (i = 0; i < data["objects"].length; i++) {
-    //       const nr = document.createElement('tr');
-    //       nr.innerHTML = "<td>" + data["objects"][i]["id"] + "</td>" + "<td>" + data["objects"][i]["start_time"] + "</td>" + "<td>" + "Shreya" + "</td>" + "<td>" + data["objects"][i]["agent_number"] + "</td>" + "<td>" + data["objects"][i]["customer_number"] + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>click here</a></td>";
-    //       table_data.appendChild(nr);
-    //     }
-    //   });
 }
+
+// function dataImpo(data){
+//   console.log(data);
+// }
