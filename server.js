@@ -30,11 +30,11 @@ app.use(express.static('JavaScriptSPA'))
 app.use(bodyParser.json());
 
 //set route middleware
-app.use('/user', authRoute);
+app.use('/', authRoute);
 
 // Set up a route for index.html.
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + 'index.html'));
 });
 
 

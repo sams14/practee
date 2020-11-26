@@ -1,6 +1,10 @@
 const router = require('express').Router();
+const path =  require('path');
+const bodyParser = require('body-parser');
 const User = require('../DB/user');
 
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 //route to post user details to db
 router.post('/new', async (req, res) => {
     const user = new User({
@@ -36,5 +40,13 @@ router.get('/read', function(req, res) {
     });
 });
 
+
+router.get('/test', async (req, res) => {
+    res.sendFile(path.join(__dirname + '/test.html'))
+});
+
+router.post('/test', function(req, res){
+    res.send(req.body);
+});
 
 module.exports = router;

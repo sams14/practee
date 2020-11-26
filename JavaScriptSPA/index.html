@@ -52,6 +52,7 @@
     </div>
     <div class="col-md-9">
       <div class="d-none" id="session">
+        <form action="/test" method="post">
           <div style="line-height: 30px;">
             <label for="date"><strong>Enter the date on which you reqire the data:</strong></label>
             <select name="month" id="month">
@@ -64,7 +65,8 @@
               <option disabled selected>year</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option><option>2031</option>
             </select>
           </div> 
-          <button type="submit" id="dateSubmit" onclick="date_Submit()">Submit</button>
+          <button type="submit" id="dateSubmit">Submit</button>
+        </form>
         <div id="on_sub"></div>
         <div class="d-none" id="table_div">
           <table border="1" id="table_data">
