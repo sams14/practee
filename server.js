@@ -11,6 +11,8 @@ dotenv.config();
 //initialize express.
 const app = express();
 
+
+app.set('view engine', 'ejs');
 //connect to db
 mongoose.connect(
     process.env.DB_CONNECT, 

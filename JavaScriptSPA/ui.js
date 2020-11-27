@@ -125,7 +125,3 @@ function date_Submit() {
         });
     });
 }
-
-// function dataImpo(data){
-//   console.log(data);
-// }

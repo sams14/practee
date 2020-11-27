@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Document</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Sl. No.</th>
+            <th>Session ID</th>
+            <th>Start Time</th>
+            <th>Mentor's Name</th>
+            <th>Mentor's Contact No</th>
+            <th>Student's Name</th>
+            <th>Student's Contact No</th>
+            <th>Course</th>
+            <th>Session Link</th>
+        </tr>
+        <% var i = 1, tec = new Set(), tuc = new Set(); %>
+        <% sd.objects.forEach(function(ob){ %>
+            <% if(ob.call_recording != "") {%>
+            <tr>
+                <td><%= i %></td>
+                <td><%= ob.id %></td>
+                <td><%= ob.start_time %></td>
+                <td>
+                    <% t_d.forEach(function(t){ %>
+                        <% if(t.phoneNo == ob.agent_number.split('+91')[1]){ %>
+                            <%= t.name %>
+                        <% } %>
+                    <% }); %>
+                </td>
+                <td><%= ob.agent_number.split('+91')[1] %></td>
+                <td>
+                    <% st_d.forEach(function(st){ %>
+                        <% if(st.phoneNo == ob.customer_number.split('+91')[1]){ %>
+                            <%= st.name %>
+                        <% } %>
+                    <% }); %>
+                </td>
+                <td><%= ob.customer_number.split('+91')[1] %></td>
+                <td>
+                    <% var stc = ""; %>
+                    <% st_d.forEach(function(st){ %>
+                        <% if(st.phoneNo == ob.customer_number.split('+91')[1]){ %>
+                            <%= st.course %>
+                            <% tec.add(ob.customer_number.split('+91')[1]) %>
+                            <% stc = st.course; %>
+                        <% } %>
+                    <% }); %>
+                    <% if(stc == "") { %>
+                        <% tuc.add(ob.customer_number.split('+91')[1]) %>
+                        Unpaid
+                    <% } %>
+                </td>
+                <td><a href="<%= ob.call_recording %>"><%= Math.floor(ob.call_duration/60) %>m <%= ob.call_duration%60 %>sec</a></td>
+            </tr>
+            <% i+=1; } %>
+        <% }); %>
+    </table>
+    <div style="text-align: center;">
+        <h3>Total Number of Unique Calls : <%= tec.size + tuc.size %></h3>
+        <h3>Total Number of Unique Paid Calls : <%= tec.size %></h3>
+        <h3>Total Number of Unique Unpaid Calls : <%= tuc.size %></h3>
+    </div>
+</body>
+</html>
