@@ -41,7 +41,6 @@
     <table border="1">
         <tr>
             <th>Sl. No.</th>
-            <th>Session ID</th>
             <th>Start Time</th>
             <th>Mentor's Name</th>
             <th>Mentor's Contact No</th>
@@ -55,8 +54,20 @@
             <% if(ob.call_recording != "") {%>
             <tr>
                 <td><%= i %></td>
-                <td><%= ob.id %></td>
-                <td><%= ob.start_time %></td>
+                <td>
+                    <% var t = (ob.start_time.split(" ")[1]).split(":")[0]; %>
+                    <% if(parseInt(t) >= 12) { %>
+                        <% var tt = ""; %>
+                        <% if(((parseInt(t)-12)) < 10) { %>
+                            <% tt = "0" + (parseInt(t)-12).toString(); %>
+                        <% } else { %>
+                            <% tt = (parseInt(t)-12).toString(); %>
+                        <% } %>
+                        <%= tt + ":" + (ob.start_time.split(" ")[1]).split(":")[1] + ":" + ((ob.start_time.split(" ")[1]).split(":")[2]).split("+")[0] + " pm" %>
+                    <% } else { %>
+                        <%= (ob.start_time.split(" ")[1]).split("+")[0] + " am" %>
+                    <% } %>
+                </td>
                 <td>
                     <% t_d.forEach(function(t){ %>
                         <% if(t.phoneNo == ob.agent_number.split('+91')[1]){ %>
@@ -98,8 +109,6 @@
         <h3>Total Number of Unique Unpaid Calls : <%= tuc.size %></h3>
     </div>
     <button id="btnExport" onclick="exportTableToExcel('tb1');" style="float: right;margin-bottom: 10px;"> EXPORT TO EXCEL </button>
-
-
     
 </body>
 </html>

@@ -27,7 +27,7 @@ const port = 3000; // process.env.PORT || 3000;
 app.use(morgan('dev'));
 
 // Set the front-end folder to serve public assets.
-app.use(express.static('JavaScriptSPA'))
+app.use(express.static('JavaScriptSPA'));
 
 app.use(bodyParser.json());
 

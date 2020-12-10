@@ -10,9 +10,11 @@ const session = document.getElementById("session");
 const on_sub = document.getElementById("on_sub");
 const table_data = document.getElementById('table_data');
 const table_div = document.getElementById('table_div');
+const ac_n_i = document.getElementById('ac_n_i');
 
 function expData (data, endpoint) {
   console.log('Graph API responded at: ' + new Date().toString());
+  ac_n_i.value = data.jobTitle;
   if(endpoint === graphConfig.graphMeEndpoint){
     if(data.jobTitle === "Consultant"){
       session.classList.remove('d-none');
@@ -20,7 +22,17 @@ function expData (data, endpoint) {
   }
 }
 
+ function back(){
+   console.log('hi');
+   signIn();
+ }
+
+function redir(){
+  window.location.href = window.location.href + 'redir';
+}
+
 function showWelcomeMessage(account) {
+  console.log(account)
   // Reconfiguring DOM elements
   cardDiv.classList.remove('d-none');
   welcomeDiv.innerHTML = `Welcome ${account.name}`;

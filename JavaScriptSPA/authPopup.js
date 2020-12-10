@@ -7,6 +7,7 @@ function signIn() {
       console.log(loginResponse);
 
       if (myMSALObj.getAccount()) {
+        // window.location.href = window.location.href + 'redir';
         showWelcomeMessage(myMSALObj.getAccount());
         getTokenPopup(loginRequest)
         .then(response => {

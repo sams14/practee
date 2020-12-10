@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test redirect</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <h1>You are a <%= role %></h1>
+    <button type="button" id="signOut" class="btn btn-success d-none" onclick="signOut()">Sign Out</button>
+    <form action="/test" method="post">
+        <div style="line-height: 30px;">
+          <label for="date"><strong>Enter the date on which you reqire the data:</strong></label>
+          <select name="month" id="month">
+            <option disabled selected>month</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+          </select>
+          <select name="day" id="day">
+            <option disabled selected>day</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option>
+          </select>
+          <select name="year" id="year">
+            <option disabled selected>year</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option><option>2031</option>
+          </select>
+        </div> 
+        <button type="submit" id="dateSubmit">Submit</button>
+    </form>
+    <a id="btnExport" class="btn btn-primary" href="/" onclick="back()" style="float: right;margin-bottom: 10px;"> GO BACK </a>
+
+    <!-- importing app scripts (load order is important) -->
+    <script type="text/javascript" src="../JavaScriptSPA/authConfig.js"></script>
+    <script type="text/javascript" src="../JavaScriptSPA/graphConfig.js"></script>
+    <script type="text/javascript" src="../JavaScriptSPA/ui.js"></script>
+
+    <!-- replace next line with authRedirect.js if you would like to use the redirect flow -->
+    <!-- <script type="text/javascript" src="./authRedirect.js"></script>   -->
+    <script type="text/javascript" src="../JavaScriptSPA/authPopup.js"></script>
+    <script type="text/javascript" src="../JavaScriptSPA/graph.js"></script>
+</body>
+</html>

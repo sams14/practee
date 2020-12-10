@@ -36,11 +36,16 @@
     <br>
     <br>
     <div class="row" style="margin:auto;" >
-    <div id="card-div" class="col-md-3 d-none">
+      <div class="container">
+    <div id="card-div" class="d-none mx-auto">
     <div class="card text-center">
       <div class="card-body">
+      <form action="/redir" method="post">
         <h5 class="card-title" id="welcomeMessage">Please sign-in to see your profile and read your mails</h5>
         <div id="profile-div"></div>
+        <input type="hidden" name="role" id="ac_n_i">
+        <button type="submit" onclick="redir()" id="redb">Hit Here</button>
+      </form>
         <br>
         <br>
         <button class="btn btn-primary" id="seeProfile" onclick="seeProfile()">See Profile</button>
@@ -50,7 +55,8 @@
       </div>
     </div>
     </div>
-    <div class="col-md-9">
+      </div>
+    <!-- <div class="col-md-9">
       <div class="d-none" id="session">
         <form action="/test" method="post">
           <div style="line-height: 30px;">
@@ -67,20 +73,8 @@
           </div> 
           <button type="submit" id="dateSubmit">Submit</button>
         </form>
-        <div id="on_sub"></div>
-        <div class="d-none" id="table_div">
-          <table border="1" id="table_data">
-            <tr>
-              <th>Session ID</th>
-              <th>Start Time</th>
-              <!-- <th>Mentor's Name</th> -->
-              <th>Mentor's Contact No</th>
-              <th>Student's Contact No</th>
-              <th>Session Link</th>
-            </tr>
-          </table>
-        </div>
-      </div>
+
+      </div> -->
     </div>
     <br>
     <br>
@@ -111,7 +105,5 @@
     <script type="text/javascript" src="./authPopup.js"></script>
     <script type="text/javascript" src="./graph.js"></script>
 
-
-    <script type="text/javascript" src="./dataExt.js"></script>
   </body>
 </html>
