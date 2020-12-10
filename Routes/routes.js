@@ -20,7 +20,7 @@ router.post('/teacher', async(req, res) => {
 });
 
 router.get('/student', function(req, res) {
-    res.sendFile(path.join(__dirname + '/studentform.html'))
+    return res.render('student', { st_data: "first" });
 });
 
 router.post('/pstudent', async(req, res) => {
@@ -47,7 +47,7 @@ router.post('/pstudent', async(req, res) => {
         } else {
             if (foundData.length == 0) {
                 var responseObj = "";
-                await student.save();
+                await pstudent.save();
             } else {
                 var responseObj = foundData;
             }
