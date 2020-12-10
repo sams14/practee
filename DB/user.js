@@ -97,13 +97,13 @@ const practeeStudentSchema = new mongoose.Schema({
     },
     bandScore: {
         type: Number,
-        required:true 
+        required: true
     }
 });
 
 var teacher = mongoose.model('Teacher', teacherSchema);
 var student = mongoose.model('Student', studentSchema);
-var pstudent = mongoose.model('pStudent', practeeStudentSchema);
+var pstudent = mongoose.model('Practee Student', practeeStudentSchema);
 module.exports = {
     teacher: teacher,
     student: student,
@@ -143,4 +143,3 @@ module.exports = {
 // });
 
 // module.exports = mongoose.model('User', userSchema);
-

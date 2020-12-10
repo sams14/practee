@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practee Database Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <% if(st_data == ""){ %>
+        <div class="alert alert-success" role="alert">
+            A simple success alert—check it out!
+        </div>
+        <% } else { %>
+            <% if(st_data != "first"){ %>
+                <div class="alert alert-danger" role="alert">
+                    A simple danger alert—check it out!
+                </div>
+                <% } %>
+                    <% } %>
+                        <div class="row mt-5">
+                            <div class="card text-center col-md-9 px-0 mx-auto">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#">Student</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="">Teacher</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body col-md-9 mx-auto">
+                                    <h5 class="card-title">Special title treatment</h5>
+                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                    <form action="/pstudent" method="POST">
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">studentSNo :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="studentSNo" name="studentSNo" placeholder="Enter The Student Sl No">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">Name :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">Email :</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">Phone No :</label>
+                                            <div class="col-sm-10">
+                                                <input type="tel" class="form-control" id="phoneNo" name="phoneNo" placeholder="Enter Phone Number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">courseType :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="courseType" name="courseType" placeholder="Enter Course Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">moodleUN :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="moodleUN" name="moodleUN" placeholder="Enter Moodle User Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">location :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="location" name="location" placeholder="Enter The Location">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">qualification :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="qualification" name="qualification" placeholder="Enter Qualification">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">classSD :</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" id="classSD" name="classSD" placeholder="Enter Class Starting Date">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">classED :</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" id="classED" name="classED" placeholder="Enter Class End Date">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">RenewalD :</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" id="RenewalD" name="RenewalD" placeholder="Enter The Renewal Date">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">firstAmount :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="firstAmount" name="firstAmount" placeholder="Enter The First Amount">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">secondAmount :</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="secondAmount" name="secondAmount" placeholder="Enter The Second Amount">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">bandScore :</label>
+                                            <div class="col-sm-10">
+                                                <input type="number" class="form-control" id="bandScore" name="bandScore" placeholder="Enter The Band Score">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+</html>

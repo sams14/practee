@@ -15,9 +15,8 @@ const app = express();
 app.set('view engine', 'ejs');
 //connect to db
 mongoose.connect(
-    process.env.DB_CONNECT, 
-    { useUnifiedTopology: true, useNewUrlParser: true}, 
-    () => console.log('connected to db') 
+    process.env.DB_CONNECT, { useUnifiedTopology: true, useNewUrlParser: true },
+    () => console.log('connected to db')
 );
 
 // Initialize variables.
@@ -35,7 +34,7 @@ app.use(bodyParser.json());
 app.use('/', authRoute);
 
 // Set up a route for index.html.
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + 'index.html'));
 });
 
