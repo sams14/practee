@@ -10,19 +10,22 @@ const session = document.getElementById("session");
 const on_sub = document.getElementById("on_sub");
 const table_data = document.getElementById('table_data');
 const table_div = document.getElementById('table_div');
-const ac_n_i = document.getElementById('ac_n_i');
+const acc_r = document.getElementById('acc_r');
+const acc_n = document.getElementById('acc_n');
 
 function expData (data, endpoint) {
   console.log('Graph API responded at: ' + new Date().toString());
-  ac_n_i.value = data.jobTitle;
   if(endpoint === graphConfig.graphMeEndpoint){
+    // console.log(data.displayName);
+    acc_r.value = data.jobTitle;
+    acc_n.value = data.displayName;
     if(data.jobTitle === "Consultant"){
       session.classList.remove('d-none');
     }
   }
 }
 
- function back(){
+ function goback(){
    console.log('hi');
    signIn();
  }

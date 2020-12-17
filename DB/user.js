@@ -52,7 +52,10 @@ const practeeStudentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    email: {
+    moodleUN: {
+        type: String
+    },
+    courseType: {
         type: String,
         required: true
     },
@@ -60,43 +63,40 @@ const practeeStudentSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    courseType: {
+    email: {
         type: String,
         required: true
     },
-    moodleUN: {
+    classSD: {
+        type: String,
+        required: true
+    },
+    classED: {
+        type: String,
+        required: true
+    },
+    firstAmount: {
         type: String
     },
-    location: {
-        type: String,
-        required: true
+    secondAmount: {
+        type: String
+    },
+    remainingAmount: {
+        type: String
+    },
+    RenewalD: {
+        type: String
     },
     qualification: {
         type: String,
         required: true
     },
-    classSD: {
-        type: Date,
-        required: true
-    },
-    classED: {
-        type: Date,
-        required: true
-    },
-    RenewalD: {
-        type: Date,
-        required: true
-    },
-    firstAmount: {
-        type: String,
-        required: true
-    },
-    secondAmount: {
-        type: String,
-        required: true
-    },
     bandScore: {
-        type: Number,
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
         required: true
     }
 });

@@ -7,6 +7,11 @@ const User = require('../DB/user');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+// route for index
+router.get('/', function(req, res) {
+    res.render('index');
+});
+
 //route to post user details to db
 router.post('/teacher', async(req, res) => {
     const teacher = new User.teacher({
@@ -153,7 +158,12 @@ router.post('/test', function(req, res) {
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
-    res.render('consultant', { role: req.body.role });
+    console.log(req.body);
+    if(req.body.role == "Mentor"){
+        res.render('mentor', { data: req.body });
+    } else {
+        res.render('consultant', { role: req.body.role });
+    }
 });
 
 
