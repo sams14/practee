@@ -76,13 +76,13 @@ const practeeStudentSchema = new mongoose.Schema({
         required: true
     },
     firstAmount: {
-        type: String
+        type: Number
     },
     secondAmount: {
-        type: String
+        type: Number
     },
     remainingAmount: {
-        type: String
+        type: Number
     },
     RenewalD: {
         type: String
@@ -92,7 +92,7 @@ const practeeStudentSchema = new mongoose.Schema({
         required: true
     },
     bandScore: {
-        type: String,
+        type: Number,
         required: true
     },
     location: {
@@ -103,7 +103,7 @@ const practeeStudentSchema = new mongoose.Schema({
 
 var teacher = mongoose.model('Teacher', teacherSchema);
 var student = mongoose.model('Student', studentSchema);
-var pstudent = mongoose.model('Practee Student', practeeStudentSchema);
+var pstudent = mongoose.model('Student Detail', practeeStudentSchema);
 module.exports = {
     teacher: teacher,
     student: student,

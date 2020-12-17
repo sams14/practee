@@ -7,11 +7,6 @@ const User = require('../DB/user');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// route for index
-router.get('/', function(req, res) {
-    res.render('index');
-});
-
 //route to post user details to db
 router.post('/teacher', async(req, res) => {
     const teacher = new User.teacher({
@@ -32,10 +27,10 @@ router.post('/pstudent', async(req, res) => {
     const pstudent = new User.pstudent({
         studentSNo: req.body.studentSNo,
         name: req.body.name,
+        moodleUN: req.body.moodleUN,
         email: req.body.email,
         phoneNo: req.body.phoneNo,
         courseType: req.body.courseType,
-        moodleUN: req.body.moodleUN,
         location: req.body.location,
         qualification: req.body.qualification,
         classSD: req.body.classSD,
@@ -43,6 +38,7 @@ router.post('/pstudent', async(req, res) => {
         RenewalD: req.body.RenewalD,
         firstAmount: req.body.firstAmount,
         secondAmount: req.body.secondAmount,
+        remainingAmount: req.body.remainingAmount,
         bandScore: req.body.bandScore
     });
     User.pstudent.find({ "phoneNo": req.body.phoneNo }, async(err, foundData) => {
@@ -158,12 +154,7 @@ router.post('/test', function(req, res) {
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
-    console.log(req.body);
-    if(req.body.role == "Mentor"){
-        res.render('mentor', { data: req.body });
-    } else {
-        res.render('consultant', { role: req.body.role });
-    }
+    res.render('consultant', { role: req.body.role });
 });
 
 
