@@ -154,7 +154,29 @@ router.post('/test', function(req, res) {
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
-    res.render('consultant', { role: req.body.role });
+    var st_data;
+    var t_data;
+    User.pstudent.find({}, (err, foundData) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+        } else {
+            window.st_data = foundData;
+        }
+    });
+    User.teacher.find({}, (err, foundData) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+        } else {
+            window.t_data = foundData;
+        }
+    });
+    res.render('mentor', {
+        data: req.body,
+        st_data: st_data,
+        t_data: t_data
+    });
 });
 
 

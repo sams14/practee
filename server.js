@@ -33,6 +33,9 @@ app.use(bodyParser.json());
 //set route middleware
 app.use('/', authRoute);
 
+app.use('/', function(req, res) {
+    res.render('index');
+});
 
 // Start the server.
 app.listen(port);
