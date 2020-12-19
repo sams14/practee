@@ -113,9 +113,15 @@
                         </div>
                     </div>
                     <hr style="color:sienna">
-                    <div id="testdiv" data-test=%<= st_d %>>
-              
+                    <div>
+                          <script>
+                            var st_d = '<%- JSON.stringify(st_d) %>'
+                            var t_d = '<%- JSON.stringify(t_d) %>'
+                            var d = '<%- JSON.stringify(data) %>'
+                            var week = '<%- week %>'
+                          </script>
                     </div>
+                    <div id="nembuu"></div>
                 </div>
             </div>
             <!-- <main class="col col-md-9 ms-sm-auto col-lg-10 px-md-4">
