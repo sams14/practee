@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.79.0">
+    <title>Dashboard</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Practee Technologies</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+        <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+            </li>
+        </ul>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2">
+                <div id="sidebarMenu" class="d-inline-block bg-light sidebar collapse">
+                    <div class="position-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">
+                  Dashboard
+                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="home"></span> Home Page
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="users"></span> Student Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="file"></span> Session Details
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-lg-10">
+                <div id="homedata">
+                    <div style="text-align: center;" class="mt-3"> Welcome <span style="font-weight: 700; font-size: 20px; color:#d17605;">
+              <%= data.name %> !
+            </span></div>
+                    <hr style="color:sienna">
+                    <div class="row">
+                        <div class="col-lg-3 border-right text-center">
+                            <% let curr=new Date; %>
+                                <% let week=[]; %>
+
+                                    <% for (let i=1; i <=7; i++) { %>
+                                        <% let first=curr.getDate() - curr.getDay() + i ; %>
+                                            <% let day=new Date(curr.setDate(first)).toLocaleString(); %>
+                                                <% day=day.split(',')[0] %>
+                                                    <% week.push(day); %>
+                                                        <% } %>
+                                                            <h3 class="text-info">This Week</h3>
+                                                            <h6 class="text-muted">
+                                                                <%= week[0] %> to
+                                                                    <%= week[6] %>
+                                                            </h6>
+                        </div>
+                        <div class="col-lg-3 border-right text-center">
+                            <h3 class="text-info"><span id="psc">hi</span></h3>
+                            <h6 class="text-muted">Paid Students</h6>
+                        </div>
+                        <div class="col-lg-3 border-right text-center">
+                            <h3 class="text-info">This Week</h3>
+                            <h6 class="text-muted">Free Students</h6>
+                        </div>
+                        <div class="col-lg-3 text-center">
+                            <h3 class="text-info">This Week</h3>
+                            <h6 class="text-muted">Total Students</h6>
+                        </div>
+                    </div>
+                    <hr style="color:sienna">
+                    <div>
+                        <form>
+                            <fieldset disabled>
+                                <legend>Disabled fieldset example</legend>
+                                <div class="mb-3">
+                                    <label for="disabledTextInput" class="form-label">Disabled input</label>
+                                    <input type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="disabledSelect" class="form-label">Disabled select menu</label>
+                                    <select id="disabledSelect" class="form-select">
+                              <option>Disabled select</option>
+                            </select>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
+                                        <label class="form-check-label" for="disabledFieldsetCheck">
+                                Can't check this
+                              </label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="card text-center">
+                        <div class="card-header" style="color:sienna">
+                            <h6>Session Details</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table table-striped table-hover">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                        <th>Sl. No.</th>
+                                        <th>Start Time</th>
+                                        <th>Mentor's Name</th>
+                                        <th>Mentor's Contact No</th>
+                                        <th>Student's Name</th>
+                                        <th>Student's Contact No</th>
+                                        <th>Course</th>
+                                        <th>Session Link</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                            <td>Lorem ipsum dolor sit</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn btn-primary">Go somewhere</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
