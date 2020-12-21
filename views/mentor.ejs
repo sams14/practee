@@ -89,37 +89,40 @@
                     <div class="row">
                         <div class="col-lg-3 border-right text-center">
                             <% let curr=new Date; %>
-                            <% let week=[]; %>
-                            <% for (let i=1; i <=7; i++) { %>
-                              <% let first=curr.getDate() - curr.getDay() + i ; %>
-                              <% let day=new Date(curr.setDate(first)).toLocaleString(); %>
-                              <% day=day.split(',')[0] %>
-                              <% week.push(day); %>
-                            <% } %>
-                            <h3 class="text-info">This Week</h3>
-                            <h6 class="text-muted"><%= week[0] %> to <%= week[6] %></h6>
+                                <% let week=[]; %>
+                                    <% for (let i=1; i <=7; i++) { %>
+                                        <% let first=curr.getDate() - curr.getDay() + i ; %>
+                                            <% let day=new Date(curr.setDate(first)).toLocaleString(); %>
+                                                <% day=day.split(',')[0] %>
+                                                    <% week.push(day); %>
+                                                        <% } %>
+                                                            <h3 class="text-info">This Week</h3>
+                                                            <h6 class="text-muted">
+                                                                <%= week[0] %> to
+                                                                    <%= week[6] %>
+                                                            </h6>
                         </div>
                         <div class="col-lg-3 border-right text-center">
                             <h3 class="text-info"><span id="psc">hi</span></h3>
                             <h6 class="text-muted">Paid Students</h6>
                         </div>
                         <div class="col-lg-3 border-right text-center">
-                            <h3 class="text-info">This Week</h3>
+                            <h3 class="text-info"><span id="fsc">hi</span></h3>
                             <h6 class="text-muted">Free Students</h6>
                         </div>
                         <div class="col-lg-3 text-center">
-                            <h3 class="text-info">This Week</h3>
+                            <h3 class="text-info"><span id="tsc">hi</span></h3>
                             <h6 class="text-muted">Total Students</h6>
                         </div>
                     </div>
                     <hr style="color:sienna">
                     <div>
-                          <script>
+                        <script>
                             var st_d = '<%- JSON.stringify(st_d) %>'
                             var t_d = '<%- JSON.stringify(t_d) %>'
                             var d = '<%- JSON.stringify(data) %>'
                             var week = '<%- week %>'
-                          </script>
+                        </script>
                     </div>
                     <div id="nembuu"></div>
                 </div>
@@ -273,7 +276,7 @@
 
         </div>
     </div>
-  
+
 
     <!-- importing app scripts (load order is important) -->
     <script type="text/javascript" src="/authConfig.js"></script>

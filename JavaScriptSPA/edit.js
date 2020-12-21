@@ -1,15 +1,15 @@
 const nembuu = document.getElementById('nembuu');
 var pn, tc;
 t_d = JSON.parse(t_d);
-data = JSON.parse(d);
+d = JSON.parse(d);
 t_d.forEach(element => {
-    if(element.name == d.name){
+    if (element.name == d.name) {
         pn = element.phoneNo;
+        console.log(pn)
     }
 });
 week = week.split(',');
-for(let i = 0; i < week.length; i++) {
-    console.log(week[i]);
+for (let i = 0; i < week.length; i++) {
     fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + week[i].split('/')[2] + "-" + week[i].split('/')[0] + "-" + week[i].split('/')[1] + "%2000%3A00%3A01%2B05%3A30&end_time=" + week[i].split('/')[2] + "-" + week[i].split('/')[0] + "-" + week[i].split('/')[1] + "%2023%3A23%3A59%2B05%3A30", {
             method: 'GET',
             headers: {
@@ -35,7 +35,24 @@ for(let i = 0; i < week.length; i++) {
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data["meta"]["total_count"]);
+                    paid = new Set();
+                    total = new Set();
+                    data.objects.forEach(function(ob) {
+                        if (ob.call_recording != "" && ob.agent_number.split('+91')[1] == pn) {
+                            total.add(ob.customer_number.split('+91')[1])
+                            st_d.forEach(function(st) {
+                                if (st.phoneNo == ob.customer_number.split('+91')[1]) {
+                                    paid.add(ob.customer_number.split('+91')[1])
+                                }
+                            });
+                        }
+                    });
+                    console.log(paid.size)
+                    console.log(total.size - paid.size)
+                    console.log(total.size)
+                    document.getElementById('psc').innerHTML = paid.size;
+                    document.getElementById('fsc').innerHTML = total.size - paid.size;
+                    document.getElementById('tsc').innerHTML = total.size;
                 });
-            });
+        });
 }
