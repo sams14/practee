@@ -28,8 +28,9 @@
                 font-size: 3.5rem;
             }
         }
+        
         a {
-          cursor: pointer;
+            cursor: pointer;
         }
     </style>
 
@@ -65,12 +66,12 @@
                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" onclick="homePage()">
                                     <span data-feather="home"></span> Home Page
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" onclick="studentProf()">
                                     <span data-feather="users"></span> Student Profile
                                 </a>
                             </li>
@@ -91,21 +92,21 @@
             </span></div>
                     <hr style="color:sienna">
                     <div class="row">
-                      <div class="col-lg-12 text-center">
-                        <% let curr=new Date; %>
-                            <% let week=[]; %>
-                                <% for (let i=1; i <=7; i++) { %>
-                                    <% let first=curr.getDate() - curr.getDay() + i ; %>
-                                        <% let day=new Date(curr.setDate(first)).toLocaleString(); %>
-                                            <% day=day.split(',')[0] %>
-                                                <% week.push(day); %>
-                                                    <% } %>
-                                                        <h3 class="text-info">This Week</h3>
-                                                        <h6 class="text-muted">
-                                                            <%= week[0] %> to
-                                                                <%= week[6] %>
-                                                        </h6>
-                      </div>
+                        <div class="col-lg-12 text-center">
+                            <% let curr=new Date; %>
+                                <% let week=[]; %>
+                                    <% for (let i=1; i <=7; i++) { %>
+                                        <% let first=curr.getDate() - curr.getDay() + i ; %>
+                                            <% let day=new Date(curr.setDate(first)).toLocaleString(); %>
+                                                <% day=day.split(',')[0] %>
+                                                    <% week.push(day); %>
+                                                        <% } %>
+                                                            <h3 class="text-info">This Week</h3>
+                                                            <h6 class="text-muted">
+                                                                <%= week[0] %> to
+                                                                    <%= week[6] %>
+                                                            </h6>
+                        </div>
                     </div>
                     <hr style="color:sienna">
                     <div class="row">
@@ -134,30 +135,145 @@
                     <div id="nembuu"></div>
                 </div>
             </div>
-          
-          
-          <div id="session" class="col-md-9 col-lg-10 d-none">
-            <div class="container mt-2 text-center">
-              <label for="sdatePick">Choose your start date:</label>
-              <input type="date" name="datePick" id="sdatePick"><br>
-              <label for="edatePick">Choose your end date:</label>
-              <input type="date" name="datePick" id="edatePick"><br>
-              <span style="color: white;">jhhfjfjhhvhkf</span><button type="submit" onclick="date_result()">Submit</button>
+
+            <div class="col-md-9 col-lg-10 d-none" id="profile">
+                <div>
+                    <button class="btn btn-light mt-3" id="stuFormBtn" style="width: 100%;" onclick="stuForm()">Add a Student</button>
+                    <div id="sf" class="container mt-3 d-none">
+                        <form action="/pstudent" method="POST">
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="studentSNo" name="studentSNo" placeholder="Enter The Student Sl No">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">Name <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="name" placeholder="Enter Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">moodleUN :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="moodleUN" placeholder="Enter Moodle User Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">courseType <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="courseType" placeholder="Enter Course Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">Phone No <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" name="phoneNo" placeholder="Enter Phone Number">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">Email <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="email" placeholder="Enter Email Address">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">classSD <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="classSD" placeholder="Enter Class Starting Date">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">classED <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="classED" placeholder="Enter Class End Date">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">firstAmount <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="firstAmount" placeholder="Enter The First Amount">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">secondAmount <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="secondAmount" placeholder="Enter The Second Amount">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">remainingAmount <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="remainingAmount" placeholder="Enter The Remaining Amount">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">RenewalD <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="RenewalD" placeholder="Enter The Renewal Date">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">qualification <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="qualification" placeholder="Enter Qualification">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">bandScore <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="bandScore" placeholder="Enter The Band Score">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colFormLabel" class="col-sm-3 col-form-label">location <span style="color: red;">*</span> :</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="location" placeholder="Enter The Location">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <table border="1" id="profdata">
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Course Type</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div id="table_div" class="d-none">
-              <table id="table_data" border="1">
-                <tr>
-                  <th>Sl. No.</th>
-                  <th>Start Time</th>
-                  <th>Student's Name</th>
-                  <th>Student's Contact No</th>
-                  <th>Student's Email</th>
-                  <th>Course</th>
-                  <th>Session Link</th>
-                </tr>
-              </table>
+
+            <div class="col-md-9 col-lg-10 d-none" id="session">
+                <div class="container mt-2 text-center">
+                    <label for="sdatePick">Choose your start date:</label>
+                    <input type="date" name="datePick" id="sdatePick"><br>
+                    <label for="edatePick">Choose your end date:</label>
+                    <input type="date" name="datePick" id="edatePick"><br>
+                    <button type="submit" onclick="date_result()">Submit</button>
+                </div>
+                <div id="table_div" class="d-none">
+                    <table border="1" class="mt-3 mb-3">
+                        <tr>
+                            <th>Sl. No.</th>
+                            <th>Start Time</th>
+                            <th>Student's Name</th>
+                            <th>Student's Contact No</th>
+                            <th>Student's Email</th>
+                            <th>Course</th>
+                            <th>Session Link</th>
+                        </tr>
+                        <tbody id="table_data"></tbody>
+                    </table>
+                </div>
             </div>
-          </div>
         </div>
     </div>
 
@@ -177,6 +293,7 @@
 
 
     <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
