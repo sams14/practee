@@ -75,30 +75,29 @@ weekdetails(paid, total).then(data => {
 function sessionDet(){
     document.getElementById('home').classList.add('d-none');
     document.getElementById('session').classList.remove('d-none');
+    document.getElementById('profile').classList.add('d-none');
+}
+
+function homePage(){
+    document.getElementById('home').classList.remove('d-none');
+    document.getElementById('session').classList.add('d-none');
+    document.getElementById('profile').classList.add('d-none');   
+}
+
+function studentProf(){
+    document.getElementById('home').classList.add('d-none');
+    document.getElementById('session').classList.add('d-none');    
+    document.getElementById('profile').classList.remove('d-none');    
 }
 
 function date_result() {
     document.getElementById('table_div').classList.remove('d-none');
     const table_data = document.getElementById('table_data');
-    const sdatePick = document.getElementById("sdatePick");
-    const edatePick = document.getElementById("edatePick");
-    var start = new Date(sdatePick.value),
-    end = new Date(edatePick.value),
-    year = start.getFullYear(),
-    month = start.getMonth()
-    day = start.getDate(),
-    dates = [start];
-
-    while(dates[dates.length-1] < end) {
-        dates.push(new Date(year, month, ++day));
-    }
-
-    for (let index = 0; index < dates.length; index++) {
-        dates[index] = dates[index].toLocaleString();
-    }
+    table_data.innerHTML = "";
+    const sdatePick = document.getElementById('sdatePick');
+    const edatePick = document.getElementById('edatePick');
     var tc;
-    for (let index = 0; index < dates.length; index++) {
-        fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + dates[index].split("/")[2] + "-" + dates[index].split("/")[0] + "-" + dates[index].split("/")[1] + "%2000%3A00%3A01%2B05%3A30&end_time=" + dates[index].split("/")[2] + "-" + dates[index].split("/")[0] + "-" + dates[index].split("/")[1] + "%2023%3A23%3A59%2B05%3A30", {
+        fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B919038715215", {
         method: 'GET',
         headers: {
             "Accept": "application/json",
@@ -113,7 +112,7 @@ function date_result() {
         .then(data => { 
             tc = data['meta']['total_count'];
             console.log(tc);
-            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + dates[index].split("/")[2] + "-" + dates[index].split("/")[0] + "-" + dates[index].split("/")[1] + "%2000%3A00%3A01%2B05%3A30&end_time=" + dates[index].split("/")[2] + "-" + dates[index].split("/")[0] + "-" + dates[index].split("/")[1] + "%2023%3A23%3A59%2B05%3A30&limit=" + tc.toString(), {
+            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B919038715215&limit=" + tc.toString(), {
             method: 'GET',
             headers: {
                 "Accept": "application/json",
@@ -136,6 +135,12 @@ function date_result() {
                                 sc = std.courseType;
                             }
                         });
+                        if(spn === undefined){
+                            spn = data["objects"][i]["customer_number"].split('+91')[1];
+                            sn = "N/A";
+                            sem = "N/A";
+                            sc = "Free";
+                        }
                         c += 1;
                         const nr = document.createElement('tr');
                         var t = (data["objects"][i]["start_time"].split(" ")[1]).split(":")[0];
@@ -150,11 +155,16 @@ function date_result() {
                         } else {
                                 tt = (data["objects"][i]["start_time"].split(" ")[1]).split("+")[0] + " am";
                         }
+                        tt = data["objects"][i]["start_time"].split(" ")[0] + " " + tt;
                         nr.innerHTML = "<td>" + c + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>click here</a></td>";
                         table_data.appendChild(nr);
                     }
                 }
             });
-        });
-    }    
+        });  
+  }
+
+
+  function stuForm(){
+    document.getElementById('sf').classList.toggle('d-none');
   }
