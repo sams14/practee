@@ -137,8 +137,8 @@
           
             <div class="col-md-9 col-lg-10 d-none" id="profile">
                 <div>
-                    <button class="btn btn-light mt-3" id="stuFormBtn" style="width: 100%;" onclick="stuForm()">Add a Student</button>
-                    <div id="sf" class="container mt-3 d-none">
+                    <button class="btn btn-light shadow-none mt-3" data-toggle="modal" data-target="#myModal" id="stuFormBtn" style="width: 100%;" onclick="stuForm()">Add a Student</button>
+                    <!-- <div id="sf" class="container mt-3 d-none">
                         <form action="/pstudent" method="POST">
                             <div class="form-group row">
                                 <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
@@ -236,11 +236,130 @@
 
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
+                    </div> -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="exampleModalLabel" style="color: #e20f0f;">Enter details:</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/pstudent" method="POST">
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="studentSNo" name="studentSNo" placeholder="Enter The Student Sl No">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">Name <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="name" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">moodleUN :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="moodleUN" placeholder="Enter Moodle User Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">courseType <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="courseType" placeholder="Enter Course Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">Phone No <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="tel" class="form-control" name="phoneNo" placeholder="Enter Phone Number">
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">Email <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="email" class="form-control" name="email" placeholder="Enter Email Address">
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">classSD <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="classSD" placeholder="Enter Class Starting Date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">classED <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="classED" placeholder="Enter Class End Date">
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">firstAmount <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" name="firstAmount" placeholder="Enter The First Amount">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">secondAmount <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" name="secondAmount" placeholder="Enter The Second Amount">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">remainingAmount <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" name="remainingAmount" placeholder="Enter The Remaining Amount">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">RenewalD <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="RenewalD" placeholder="Enter The Renewal Date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">qualification <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="qualification" placeholder="Enter Qualification">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">bandScore <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" name="bandScore" placeholder="Enter The Band Score">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="colFormLabel" class="col-sm-3 col-form-label">location <span style="color: red;">*</span> :</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="location" placeholder="Enter The Location">
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <table>
-                        <tr></tr>
+                <div class="mt-3 mb-3">
+                    <table border="1" id="profdata">
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Course Type</th>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -286,6 +405,7 @@
     <script type="text/javascript" src="/edit.js"></script>
     
 
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="/dashboard.js"></script>
