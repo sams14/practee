@@ -91,11 +91,15 @@ function studentProf() {
     const profdata = document.getElementById('profdata');
     var tr;
     st_d.forEach((std) => {
-        console.log(std);
         tr = document.createElement('tr');
-        tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>";
+        tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'profile' type='button' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>";
         profdata.appendChild(tr);
     });
+}
+
+function seeProfile(phoneNo) {
+    console.log(phoneNo)
+    document.getElementById('profile').classList.add('d-none');
 }
 
 function date_result() {
