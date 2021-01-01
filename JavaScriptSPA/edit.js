@@ -88,6 +88,14 @@ function studentProf() {
     document.getElementById('home').classList.add('d-none');
     document.getElementById('session').classList.add('d-none');
     document.getElementById('profile').classList.remove('d-none');
+    const profdata = document.getElementById('profdata');
+    var tr;
+    st_d.forEach((std) => {
+        console.log(std);
+        tr = document.createElement('tr');
+        tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>";
+        profdata.appendChild(tr);
+    });
 }
 
 function date_result() {
