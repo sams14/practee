@@ -40,26 +40,41 @@ async function weekdetails(paid, total) {
                         return response.json();
                     })
                     .then(data => {
+                        var addNote = document.getElementById('addNote');
                         data.objects.forEach(function(ob) {
                             if (ob.call_recording != "" && ob.agent_number.split('+91')[1] == "8130436631") {
                                 total.add(ob.customer_number.split('+91')[1]);
                                 st_d.forEach(function(st) {
                                     if (st.phoneNo == ob.customer_number.split('+91')[1]) {
                                         paid.add(ob.customer_number.split('+91')[1]);
+                                        var nr = document.createElement('tr');
+                                        var t = (ob.start_time.split(" ")[1]).split(":")[0];
+                                        var tt = "";
+                                        if (parseInt(t) >= 12) {
+                                            if (((parseInt(t) - 12)) < 10) {
+                                                tt = "0" + (parseInt(t) - 12).toString();
+                                            } else {
+                                                tt = (parseInt(t) - 12).toString();
+                                            }
+                                            tt += ":" + (ob.start_time.split(" ")[1]).split(":")[1] + ":" + ((ob.start_time.split(" ")[1]).split(":")[2]).split("+")[0] + " pm";
+                                        } else {
+                                            tt = (ob.start_time.split(" ")[1]).split("+")[0] + " am";
+                                        }
+                                        tt = ob.start_time.split(" ")[0] + " " + tt;
+                                        nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>"; 
+                                        addNote.appendChild(nr);
                                     }
                                 });
                             }
-                            var paidcall = paid.size;
-                            var freecall = total.size - paid.size;
-                            var totalcall = total.size;
+                            
                         });
                     })
 
             });
     }
-    paidcall = paid.size;
-    freecall = total.size - paid.size;
-    totalcall = total.size;
+    var paidcall = paid.size;
+    var freecall = total.size - paid.size;
+    var totalcall = total.size;
     return {
         paidcall,
         freecall,

@@ -53,7 +53,7 @@ router.post('/pstudent', async(req, res) => {
                 var responseObj = foundData;
             }
         }
-        return res.render('student', { st_data: responseObj });
+        return res.render('mentor');
     });
 
 });
