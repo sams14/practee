@@ -134,7 +134,7 @@
                             <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Notes</h6>
                         </div>
                         <div class="card-body">
-                            <div class="my-0 table-responsive table table-striped table-hover">
+                            <div class="my-0 table-responsive table table-striped">
                                 <table class="table">
                                     <thead class="table-dark">
                                         <th>Start Time</th>
@@ -148,6 +148,32 @@
                                     <tbody id="addNote">
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="noteModalLabel" style="color: #e20f0f;">Enter Note:</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/addnote" method="POST">
+                                            <input type="hidden" name="teacherNumber" id="teacherNumber">
+                                            <input type="hidden" name="studentNumber" id="studentNumber">
+                                            <input type="hidden" name="sessionStartTime" id="sessionStartTime">
+                                            <div class="form-group row">
+                                                <div class="col-sm-12">
+                                                    <textarea class="form-control" name="noteValue">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="subsi btn btn-danger" data-dismiss="modal">Submit</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -286,7 +312,7 @@
                         <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Notes</h6>
                     </div>
                     <div class="card-body">
-                        <div class="my-0 table-responsive table table-striped table-hover">
+                        <div class="my-0 table-responsive table table-striped">
                             <table class="table">
                                 <thead class="table-dark">
                                     <th>Name</th>
@@ -320,6 +346,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-9 col-lg-10 d-none" id="session">
                 <div class="container mt-2 text-center">
                     <label for="sdatePick">Choose your start date:</label>

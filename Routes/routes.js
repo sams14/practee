@@ -3,6 +3,7 @@ const path = require('path');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const User = require('../DB/user');
+const { sessionNote } = require('../DB/user');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -108,10 +109,6 @@ router.get('/readStu', function(req, res) {
 });
 
 
-// router.get('/test', async(req, res) => {
-//     res.sendFile(path.join(__dirname + '/test.html'))
-// });
-
 router.post('/test', function(req, res) {
     const mon = req.body.month;
     const dy = req.body.day;
@@ -163,5 +160,16 @@ router.post('/redir', function(req, res) {
     }
 });
 
+
+router.post('/addnote', async(req, res) => {
+    const note = new User.sessionNote({
+        teacherNumber: req.body.teacherNumber,
+        studentNumber: req.body.studentNumber,
+        sessionStartTime: req.body.sessionStartTime,
+        noteValue: req.body.noteValue      
+    });
+    const savedNote = await note.save();
+    res.send(savedNote);
+});
 
 module.exports = router;

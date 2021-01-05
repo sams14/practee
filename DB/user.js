@@ -101,13 +101,34 @@ const practeeStudentSchema = new mongoose.Schema({
     }
 });
 
+const sessionNoteSchema = new mongoose.Schema({
+    teacherNumber: {
+        type: Number,
+        required: true
+    },
+    studentNumber: {
+        type: Number,
+        required: true
+    },
+    sessionStartTime: {
+        type: String,
+        required: true
+    },
+    noteValue: {
+        type: String,
+        required: true
+    }
+});
+
 var teacher = mongoose.model('Teacher', teacherSchema);
 var student = mongoose.model('Student', studentSchema);
 var pstudent = mongoose.model('Student Detail', practeeStudentSchema);
+var sessionNote = mongoose.model('Session Note', sessionNoteSchema);
 module.exports = {
     teacher: teacher,
     student: student,
-    pstudent: pstudent
+    pstudent: pstudent,
+    sessionNote: sessionNote
 }
 
 
