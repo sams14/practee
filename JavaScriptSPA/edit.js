@@ -61,12 +61,11 @@ async function weekdetails(paid, total) {
                                             tt = (ob.start_time.split(" ")[1]).split("+")[0] + " am";
                                         }
                                         tt = ob.start_time.split(" ")[0] + " " + tt;
-                                        nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>"; 
+                                        nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' value = 'Add Note' //>" + "</td>";
                                         addNote.appendChild(nr);
                                     }
                                 });
                             }
-                            
                         });
                     })
 

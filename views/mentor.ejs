@@ -129,33 +129,43 @@
                         </div>
                     </div>
                     <hr style="color:sienna">
-                    <div class="container">
-                        <table class="mx-auto" id="addNote" border="1">
-                            <tr>
-                                <th>Start Time</th>
-                                <th>Student's Name</th>
-                                <th>Student's Contact No</th>
-                                <th>Student's Email</th>
-                                <th>Course</th>
-                                <th>Session Link</th>
-                            </tr>
-                        </table>
+                    <div class="card text-center">
+                        <div class="card-header">
+                            <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Notes</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="my-0 table-responsive table table-striped table-hover">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                        <th>Start Time</th>
+                                        <th>Student's Name</th>
+                                        <th>Student's Contact No</th>
+                                        <th>Student's Email</th>
+                                        <th>Course</th>
+                                        <th>Session Link</th>
+                                        <th>Note</th>
+                                    </thead>
+                                    <tbody id="addNote">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <script>
-                            var st_d = '<%- JSON.stringify(st_d) %>'
-                            var t_d = '<%- JSON.stringify(t_d) %>'
-                            var d = '<%- JSON.stringify(data) %>'
-                            var week = '<%- week %>'
-                        </script>
-                    </div>
-                    
                 </div>
+                <div>
+                    <script>
+                        var st_d = '<%- JSON.stringify(st_d) %>'
+                        var t_d = '<%- JSON.stringify(t_d) %>'
+                        var d = '<%- JSON.stringify(data) %>'
+                        var week = '<%- week %>'
+                    </script>
+                </div>
+
             </div>
 
             <div class="col-md-9 col-lg-10 d-none" id="profile">
                 <div>
-                    <button class="btn btn-light shadow-none mt-3" data-toggle="modal" data-target="#myModal" id="stuFormBtn" style="width: 100%;" onclick="stuForm()">Add a Student</button>
+                    <button class="btn btn-primary mt-3 mx-auto px-5" data-toggle="modal" data-target="#myModal" id="stuFormBtn" style="color: white; font-weight: 700; display: block;" onclick="stuForm()">Add a Student</button>
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -271,16 +281,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-3 mb-3">
-                    <table border="1" id="profdata">
-                        <tr>
-                            <th>Name</th>
-                            <th>Phone Number</th>
-                            <th>Email</th>
-                            <th>Course Type</th>
-                            <th>Profile</th>
-                        </tr>
-                    </table>
+                <div class="card text-center mt-3">
+                    <div class="card-header">
+                        <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Notes</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="my-0 table-responsive table table-striped table-hover">
+                            <table class="table">
+                                <thead class="table-dark">
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Course Type</th>
+                                    <th>Profile</th>
+                                </thead>
+                                <tbody id="profdata">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal fade" id="fullProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                     <div class="modal-dialog" role="document">
