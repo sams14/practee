@@ -1,6 +1,7 @@
 var pn, tc;
 t_d = JSON.parse(t_d);
-n_d = JSON.parse(n_d);
+// n_d = JSON.parse(n_d);
+n_d = JSON.parse(n_d.replace(/[\r]?[\n]/g, '\\n'));
 st_d = JSON.parse(st_d);
 var paid = new Set();
 var total = new Set();
