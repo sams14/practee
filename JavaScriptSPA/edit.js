@@ -1,7 +1,8 @@
 var pn, tc;
 t_d = JSON.parse(t_d);
 // n_d = JSON.parse(n_d);
-n_d = JSON.parse(n_d.replace(/[\r]?[\n]/g, '\\n'));
+n_d = JSON.parse(n_d.replace(/[\r]?[\n]/g, ''));
+console.log(n_d);
 st_d = JSON.parse(st_d);
 var paid = new Set();
 var total = new Set();
@@ -16,6 +17,8 @@ t_d.forEach(element => {
 week = week.split(',');
 
 function addNOTE(tn, sn, sst) {
+    document.getElementById('viewNoteData').classList.add('d-none');
+    document.getElementById('addNoteForm').classList.remove('d-none');
     document.getElementById('teacherNumber').value = tn;
     document.getElementById('studentNumber').value = sn;
     document.getElementById('sessionStartTime').value = sst;
@@ -23,6 +26,7 @@ function addNOTE(tn, sn, sst) {
 
 function viewNOTE(noteData) {
     document.getElementById('addNoteForm').classList.add('d-none');
+    document.getElementById('viewNoteData').classList.remove('d-none');
     document.getElementById('viewNoteData').innerHTML = "<b class = 'a'>Note Data</b> : " + noteData;
 
 }
@@ -77,6 +81,7 @@ async function weekdetails(paid, total) {
                                         tt = ob.start_time.split(" ")[0] + " " + tt;
                                         n_d.forEach(function(nd) {
                                             if (nd.sessionStartTime == ob.start_time && nd.teacherNumber == pn) {
+                                                console.log(nd.sessionStartTime, "----", ob.start_time);
                                                 nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'viewNOTE(\"" + nd.noteValue + "\")' value = 'View Note' />" + "</td>";
                                             } else {
                                                 nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'addNOTE(\"" + pn + "\",\"" + st.phoneNo + "\",\"" + ob.start_time + "\")' value = 'Add Note' />" + "</td>";

@@ -165,7 +165,7 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/addnote" method="POST" id="addNoteForm">
+                                    <form action="/addnote" class="d-none" method="POST" id="addNoteForm">
                                         <input type="hidden" name="teacherNumber" id="teacherNumber">
                                         <input type="hidden" name="studentNumber" id="studentNumber">
                                         <input type="hidden" name="sessionStartTime" id="sessionStartTime">
@@ -177,7 +177,7 @@
                                             <button type="submit" class="btn btn-primary mx-auto">Submit</button>
                                         </div>
                                     </form>
-                                    <div id="viewNoteData">
+                                    <div id="viewNoteData" class="d-none">
 
                                     </div>
                                 </div>
