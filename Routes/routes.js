@@ -49,17 +49,22 @@ router.post('/pstudent', async(req, res) => {
         } else {
             if (foundData.length == 0) {
                 var responseObj = "";
-                await pstudent.save();
+                var saveStu = await pstudent.save();
             } else {
                 var responseObj = foundData;
             }
         }
-        return res.render('mentor');
+        return res.send(saveStu);
     });
 
 });
 
-
+router.post('/deleteS', function(req, res) {
+    User.pstudent.deleteOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
+        if (err) return handleError(err);
+        else res.send(results);
+    });
+});
 
 //route to see the data in the database
 router.get('/readTea', function(req, res) {
@@ -151,23 +156,25 @@ router.post('/test', function(req, res) {
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
-    if(req.body.role == "Mentor"){
+    if (req.body.role == "Mentor") {
         User.pstudent.find({}, (err, stData) => {
             User.teacher.find({}, (err, tData) => {
-                res.render('mentor', { data: req.body, st_d: stData, t_d: tData });
+                User.sessionNote.find({}, (err, nData) => {
+                    res.render('mentor', { data: req.body, st_d: stData, t_d: tData, n_d: nData });
+                });
             });
         });
     }
 });
 
 
-router.post('/addnote', function(req, res){
+router.post('/addnote', function(req, res) {
     console.log(req.body);
     const note = new User.sessionNote({
         teacherNumber: parseInt(req.body.teacherNumber),
         studentNumber: parseInt(req.body.studentNumber),
         sessionStartTime: req.body.sessionStartTime,
-        noteValue: req.body.noteValue      
+        noteValue: req.body.noteValue
     });
     var snote = note.save();
     res.send(snote);

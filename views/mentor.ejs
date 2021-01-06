@@ -9,6 +9,12 @@
     <meta name="generator" content="Hugo 0.79.0">
     <title>Dashboard</title>
 
+    <!-- msal.js with a fallback to backup CDN -->
+    <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.2.1/js/msal.js" integrity="sha384-9TV1245fz+BaI+VvCjMYL0YDMElLBwNS84v3mY57pXNOt6xcUYch2QLImaTahcOP" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        if (typeof Msal === 'undefined') document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.2.1/js/msal.js' type='text/javascript' integrity='sha384-m/3NDUcz4krpIIiHgpeO0O8uxSghb+lfBTngquAo2Zuy2fEF+YgFeP08PWFo5FiJ' crossorigin='anonymous'%3E%3C/script%3E"));
+    </script>
+
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
     <!-- Bootstrap core CSS -->
@@ -54,7 +60,7 @@
         <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
+                <a class="nav-link" id="signOut" onclick="signOut()">Sign out</a>
             </li>
         </ul>
     </header>
@@ -159,7 +165,7 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/addnote" method="POST">
+                                    <form action="/addnote" method="POST" id="addNoteForm">
                                         <input type="hidden" name="teacherNumber" id="teacherNumber">
                                         <input type="hidden" name="studentNumber" id="studentNumber">
                                         <input type="hidden" name="sessionStartTime" id="sessionStartTime">
@@ -169,14 +175,17 @@
                                         </div>
                                         <div class="form-group row">
                                             <button type="submit" class="btn btn-primary mx-auto">Submit</button>
-                                        </div>                            
+                                        </div>
                                     </form>
+                                    <div id="viewNoteData">
+
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>                                                        
+                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
-                        </div>                  
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -184,6 +193,7 @@
                         var st_d = '<%- JSON.stringify(st_d) %>'
                         var t_d = '<%- JSON.stringify(t_d) %>'
                         var d = '<%- JSON.stringify(data) %>'
+                        var n_d = '<%- JSON.stringify(n_d) %>'
                         var week = '<%- week %>'
                     </script>
                 </div>
@@ -339,6 +349,11 @@
                                 <div id="profcont">
 
                                 </div>
+                                <hr>
+                                <form action="/deleteS" method="POST">
+                                    <input type="hidden" name="stdPhn" id="stdPhn">
+                                    <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Delete </button>
+                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
