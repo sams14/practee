@@ -88,9 +88,9 @@
                     <% var stc = ""; %>
                     <% st_d.forEach(function(st){ %>
                         <% if(st.phoneNo == ob.customer_number.split('+91')[1]){ %>
-                            <%= st.course %>
+                            <%= st.courseType %>
                             <% tec.add(ob.customer_number.split('+91')[1]) %>
-                            <% stc = st.course; %>
+                            <% stc = st.courseType; %>
                         <% } %>
                     <% }); %>
                     <% if(stc == "") { %>

@@ -139,7 +139,7 @@ router.post('/test', function(req, res) {
                     return response.json();
                 })
                 .then(data => {
-                    User.student.find({}, (err, stData) => {
+                    User.pstudent.find({}, (err, stData) => {
                         User.teacher.find({}, (err, tData) => {
                             res.render('test', { sd: data, st_d: stData, t_d: tData });
                         });
@@ -161,15 +161,16 @@ router.post('/redir', function(req, res) {
 });
 
 
-router.post('/addnote', async(req, res) => {
+router.post('/addnote', function(req, res){
+    console.log(req.body);
     const note = new User.sessionNote({
-        teacherNumber: req.body.teacherNumber,
-        studentNumber: req.body.studentNumber,
+        teacherNumber: parseInt(req.body.teacherNumber),
+        studentNumber: parseInt(req.body.studentNumber),
         sessionStartTime: req.body.sessionStartTime,
         noteValue: req.body.noteValue      
     });
-    const savedNote = await note.save();
-    res.send(savedNote);
+    var snote = note.save();
+    res.send(snote);
 });
 
 module.exports = router;

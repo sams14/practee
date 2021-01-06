@@ -150,32 +150,33 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="noteModalLabel" style="color: #e20f0f;">Enter Note:</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="/addnote" method="POST">
-                                            <input type="hidden" name="teacherNumber" id="teacherNumber">
-                                            <input type="hidden" name="studentNumber" id="studentNumber">
-                                            <input type="hidden" name="sessionStartTime" id="sessionStartTime">
-                                            <div class="form-group row">
-                                                <div class="col-sm-12">
-                                                    <textarea class="form-control" name="noteValue">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="subsi btn btn-danger" data-dismiss="modal">Submit</button>
-                                    </div>
+                    </div>
+                    <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="exapmleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalLabel" style="color: #e20f0f;">Enter Note:</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/addnote" method="POST">
+                                        <input type="hidden" name="teacherNumber" id="teacherNumber">
+                                        <input type="hidden" name="studentNumber" id="studentNumber">
+                                        <input type="hidden" name="sessionStartTime" id="sessionStartTime">
+                                        <div class="form-group row">
+                                            <label for="noteValue" class="col-sm-3">Enter Note:</label>
+                                            <textarea name="noteValue" class="col-sm-8" id="noteValue" cols="20" rows="5"></textarea>
+                                        </div>
+                                        <div class="form-group row">
+                                            <button type="submit" class="btn btn-primary mx-auto">Submit</button>
+                                        </div>                            
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>                                                        
                                 </div>
                             </div>
-                        </div>
+                        </div>                  
                     </div>
                 </div>
                 <div>

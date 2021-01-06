@@ -13,6 +13,12 @@ t_d.forEach(element => {
 });
 week = week.split(',');
 
+function addNOTE(tn, sn, sst){
+    document.getElementById('teacherNumber').value = tn;
+    document.getElementById('studentNumber').value = sn;
+    document.getElementById('sessionStartTime').value = sst;
+}
+
 async function weekdetails(paid, total) {
     for (let i = 0; i < week.length; i++) {
         await fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + week[i].split('/')[2] + "-" + week[i].split('/')[0] + "-" + week[i].split('/')[1] + "%2000%3A00%3A01%2B05%3A30&end_time=" + week[i].split('/')[2] + "-" + week[i].split('/')[0] + "-" + week[i].split('/')[1] + "%2023%3A23%3A59%2B05%3A30", {
@@ -61,7 +67,8 @@ async function weekdetails(paid, total) {
                                             tt = (ob.start_time.split(" ")[1]).split("+")[0] + " am";
                                         }
                                         tt = ob.start_time.split(" ")[0] + " " + tt;
-                                        nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onClick=addNOTE(" + st.phoneNo + "," + st.phoneNo + "," + ob.start_time + ") value = 'Add Note' //>" + "</td>";
+                                        var passData = {tp: st.phoneNo, sp: st.phoneNo, sst: ob.start_time};
+                                        nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'addNOTE(\"" + pn + "\",\"" + st.phoneNo + "\",\"" + ob.start_time + "\")' value = 'Add Note' />" + "</td>";
                                         addNote.appendChild(nr);
                                     }
                                 });
@@ -85,12 +92,6 @@ weekdetails(paid, total).then(data => {
     document.getElementById('fsc').innerHTML = data.freecall;
     document.getElementById('tsc').innerHTML = data.totalcall;
 });
-
-function addNOTE(tn, sn, sst){
-    document.getElementById('teacherNumber').value = tn;
-    document.getElementById('studentNumber').value = sn;
-    document.getElementById('sessionStartTime').value = sst;
-}
 
 
 function sessionDet() {
