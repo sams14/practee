@@ -60,7 +60,7 @@ async function weekdetails(paid, total) {
                     .then(data => {
                         var addNote = document.getElementById('addNote');
                         data.objects.forEach(function(ob) {
-                            if (ob.call_recording != "" && ob.agent_number.split('+91')[1] == "8130436631") {
+                            if (ob.call_recording != "" && ob.agent_number.split('+91')[1] == pn) {
                                 total.add(ob.customer_number.split('+91')[1]);
                                 st_d.forEach(function(st) {
                                     if (st.phoneNo == ob.customer_number.split('+91')[1]) {
@@ -79,14 +79,15 @@ async function weekdetails(paid, total) {
                                             tt = (ob.start_time.split(" ")[1]).split("+")[0] + " am";
                                         }
                                         tt = ob.start_time.split(" ")[0] + " " + tt;
-                                        n_d.forEach(function(nd) {
-                                            if (nd.sessionStartTime == ob.start_time && nd.teacherNumber == pn) {
-                                                console.log(nd.sessionStartTime, "----", ob.start_time);
-                                                nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'viewNOTE(\"" + nd.noteValue + "\")' value = 'View Note' />" + "</td>";
+                                        var i;
+                                        for (i in n_d) {
+                                            if (n_d[i].sessionStartTime == ob.start_time && n_d[i].teacherNumber == pn) {
+                                                nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'viewNOTE(\"" + n_d[i].noteValue + "\")' value = 'View Note' />" + "</td>";
+                                                break;
                                             } else {
                                                 nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'addNOTE(\"" + pn + "\",\"" + st.phoneNo + "\",\"" + ob.start_time + "\")' value = 'Add Note' />" + "</td>";
                                             }
-                                        });
+                                        };
                                         addNote.appendChild(nr);
                                     }
                                 });
@@ -153,7 +154,7 @@ function date_result() {
     const sdatePick = document.getElementById('sdatePick');
     const edatePick = document.getElementById('edatePick');
     var tc;
-    fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B919038715215", {
+    fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn, {
             method: 'GET',
             headers: {
                 "Accept": "application/json",
@@ -168,7 +169,7 @@ function date_result() {
         .then(data => {
             tc = data['meta']['total_count'];
             console.log(tc);
-            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B919038715215&limit=" + tc.toString(), {
+            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn + "&limit=" + tc.toString(), {
                     method: 'GET',
                     headers: {
                         "Accept": "application/json",
@@ -182,7 +183,7 @@ function date_result() {
                 .then(data => {
                     var i, spn, sn, sem, sc, c = 0;
                     for (i = 0; i < data["objects"].length; i++) {
-                        if (data["objects"][i]["call_recording"] != "" && data["objects"][i]["agent_number"].split('+91')[1] == "9038715215") {
+                        if (data["objects"][i]["call_recording"] != "" && data["objects"][i]["agent_number"].split('+91')[1] == pn) {
                             st_d.forEach(function(std) {
                                 if (std.phoneNo == data["objects"][i]["customer_number"].split('+91')[1]) {
                                     spn = std.phoneNo;

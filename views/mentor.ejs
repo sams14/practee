@@ -169,6 +169,8 @@
                                         <input type="hidden" name="teacherNumber" id="teacherNumber">
                                         <input type="hidden" name="studentNumber" id="studentNumber">
                                         <input type="hidden" name="sessionStartTime" id="sessionStartTime">
+                                        <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role" id="role">
                                         <div class="form-group row">
                                             <label for="noteValue" class="col-sm-3">Enter Note:</label>
                                             <textarea name="noteValue" class="col-sm-8" id="noteValue" cols="20" rows="5"></textarea>
@@ -212,6 +214,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <form action="/pstudent" method="POST">
+                                        <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role" id="role">
                                         <div class="form-group row">
                                             <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-9">
@@ -351,6 +355,8 @@
                                 </div>
                                 <hr>
                                 <form action="/deleteS" method="POST">
+                                    <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                    <input type="hidden" value="<%= data.role %>" name="role" id="role">
                                     <input type="hidden" name="stdPhn" id="stdPhn">
                                     <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Delete </button>
                                 </form>
@@ -407,10 +413,10 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/dashboard.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-    <script src="dashboard.js"></script>
+    <script src="/dashboard.js"></script>
 </body>
 
 </html>

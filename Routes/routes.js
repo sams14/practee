@@ -54,7 +54,7 @@ router.post('/pstudent', async(req, res) => {
                 var responseObj = foundData;
             }
         }
-        return res.send(saveStu);
+        return res.redirect(`/${req.body.role}/${req.body.name}`);
     });
 
 });
@@ -62,7 +62,7 @@ router.post('/pstudent', async(req, res) => {
 router.post('/deleteS', function(req, res) {
     User.pstudent.deleteOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
         if (err) return handleError(err);
-        else res.send(results);
+        else res.redirect(`/${req.body.role}/${req.body.name}`);
     });
 });
 
@@ -153,17 +153,32 @@ router.post('/test', function(req, res) {
         });
 });
 
+router.get('/mentor/:name', function(req, res) {
+    // res.send(`Hello ${req.params.name}`);
+    User.pstudent.find({}, (err, stData) => {
+        User.teacher.find({}, (err, tData) => {
+            User.sessionNote.find({}, (err, nData) => {
+                data = {
+                    name: req.params.name,
+                    role: 'Mentor'
+                }
+                res.render('mentor', { data: data, st_d: stData, t_d: tData, n_d: nData });
+            });
+        });
+    });
+});
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
     if (req.body.role == "Mentor") {
-        User.pstudent.find({}, (err, stData) => {
-            User.teacher.find({}, (err, tData) => {
-                User.sessionNote.find({}, (err, nData) => {
-                    res.render('mentor', { data: req.body, st_d: stData, t_d: tData, n_d: nData });
-                });
-            });
-        });
+        res.redirect(`/mentor/${req.body.name}`)
+            // User.pstudent.find({}, (err, stData) => {
+            //     User.teacher.find({}, (err, tData) => {
+            //         User.sessionNote.find({}, (err, nData) => {
+            //             res.render('mentor', { data: req.body, st_d: stData, t_d: tData, n_d: nData });
+            //         });
+            //     });
+            // });
     }
 });
 
@@ -177,7 +192,7 @@ router.post('/addnote', function(req, res) {
         noteValue: req.body.noteValue
     });
     var snote = note.save();
-    res.send(snote);
+    res.redirect(`/${req.body.role}/${req.body.name}`);
 });
 
 module.exports = router;
