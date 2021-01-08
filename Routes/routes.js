@@ -171,14 +171,7 @@ router.get('/mentor/:name', function(req, res) {
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
     if (req.body.role == "Mentor") {
-        res.redirect(`/mentor/${req.body.name}`)
-            // User.pstudent.find({}, (err, stData) => {
-            //     User.teacher.find({}, (err, tData) => {
-            //         User.sessionNote.find({}, (err, nData) => {
-            //             res.render('mentor', { data: req.body, st_d: stData, t_d: tData, n_d: nData });
-            //         });
-            //     });
-            // });
+        res.redirect(`/mentor/${req.body.name}`);
     }
 });
 
