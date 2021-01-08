@@ -9,6 +9,12 @@
     <meta name="generator" content="Hugo 0.79.0">
     <title>Dashboard</title>
 
+    <!-- msal.js with a fallback to backup CDN -->
+    <script type="text/javascript" src="https://alcdn.msauth.net/lib/1.2.1/js/msal.js" integrity="sha384-9TV1245fz+BaI+VvCjMYL0YDMElLBwNS84v3mY57pXNOt6xcUYch2QLImaTahcOP" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        if (typeof Msal === 'undefined') document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/lib/1.2.1/js/msal.js' type='text/javascript' integrity='sha384-m/3NDUcz4krpIIiHgpeO0O8uxSghb+lfBTngquAo2Zuy2fEF+YgFeP08PWFo5FiJ' crossorigin='anonymous'%3E%3C/script%3E"));
+    </script>
+
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
     <!-- Bootstrap core CSS -->
@@ -54,7 +60,7 @@
         <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
+                <a class="nav-link" id="signOut" onclick="signOut()">Sign out</a>
             </li>
         </ul>
     </header>
@@ -159,24 +165,29 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/addnote" method="POST">
+                                    <form action="/addnote" class="d-none" method="POST" id="addNoteForm">
                                         <input type="hidden" name="teacherNumber" id="teacherNumber">
                                         <input type="hidden" name="studentNumber" id="studentNumber">
                                         <input type="hidden" name="sessionStartTime" id="sessionStartTime">
+                                        <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role" id="role">
                                         <div class="form-group row">
                                             <label for="noteValue" class="col-sm-3">Enter Note:</label>
                                             <textarea name="noteValue" class="col-sm-8" id="noteValue" cols="20" rows="5"></textarea>
                                         </div>
                                         <div class="form-group row">
                                             <button type="submit" class="btn btn-primary mx-auto">Submit</button>
-                                        </div>                            
+                                        </div>
                                     </form>
+                                    <div id="viewNoteData" class="d-none">
+
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>                                                        
+                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
-                        </div>                  
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -184,6 +195,7 @@
                         var st_d = '<%- JSON.stringify(st_d) %>'
                         var t_d = '<%- JSON.stringify(t_d) %>'
                         var d = '<%- JSON.stringify(data) %>'
+                        var n_d = '<%- JSON.stringify(n_d) %>'
                         var week = '<%- week %>'
                     </script>
                 </div>
@@ -202,6 +214,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <form action="/pstudent" method="POST">
+                                        <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role" id="role">
                                         <div class="form-group row">
                                             <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-9">
@@ -339,6 +353,13 @@
                                 <div id="profcont">
 
                                 </div>
+                                <hr>
+                                <form action="/deleteS" method="POST">
+                                    <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                    <input type="hidden" value="<%= data.role %>" name="role" id="role">
+                                    <input type="hidden" name="stdPhn" id="stdPhn">
+                                    <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Delete </button>
+                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
@@ -392,10 +413,10 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/dashboard.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-    <script src="dashboard.js"></script>
+    <script src="/dashboard.js"></script>
 </body>
 
 </html>

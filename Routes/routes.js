@@ -49,17 +49,22 @@ router.post('/pstudent', async(req, res) => {
         } else {
             if (foundData.length == 0) {
                 var responseObj = "";
-                await pstudent.save();
+                var saveStu = await pstudent.save();
             } else {
                 var responseObj = foundData;
             }
         }
-        return res.render('mentor');
+        return res.redirect(`/${req.body.role}/${req.body.name}`);
     });
 
 });
 
-
+router.post('/deleteS', function(req, res) {
+    User.pstudent.deleteOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
+        if (err) return handleError(err);
+        else res.redirect(`/${req.body.role}/${req.body.name}`);
+    });
+});
 
 //route to see the data in the database
 router.get('/readTea', function(req, res) {
@@ -148,29 +153,39 @@ router.post('/test', function(req, res) {
         });
 });
 
+router.get('/mentor/:name', function(req, res) {
+    // res.send(`Hello ${req.params.name}`);
+    User.pstudent.find({}, (err, stData) => {
+        User.teacher.find({}, (err, tData) => {
+            User.sessionNote.find({}, (err, nData) => {
+                data = {
+                    name: req.params.name,
+                    role: 'Mentor'
+                }
+                res.render('mentor', { data: data, st_d: stData, t_d: tData, n_d: nData });
+            });
+        });
+    });
+});
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
-    if(req.body.role == "Mentor"){
-        User.pstudent.find({}, (err, stData) => {
-            User.teacher.find({}, (err, tData) => {
-                res.render('mentor', { data: req.body, st_d: stData, t_d: tData });
-            });
-        });
+    if (req.body.role == "Mentor") {
+        res.redirect(`/mentor/${req.body.name}`);
     }
 });
 
 
-router.post('/addnote', function(req, res){
+router.post('/addnote', function(req, res) {
     console.log(req.body);
     const note = new User.sessionNote({
         teacherNumber: parseInt(req.body.teacherNumber),
         studentNumber: parseInt(req.body.studentNumber),
         sessionStartTime: req.body.sessionStartTime,
-        noteValue: req.body.noteValue      
+        noteValue: req.body.noteValue
     });
     var snote = note.save();
-    res.send(snote);
+    res.redirect(`/${req.body.role}/${req.body.name}`);
 });
 
 module.exports = router;

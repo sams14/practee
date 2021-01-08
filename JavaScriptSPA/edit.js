@@ -1,5 +1,8 @@
 var pn, tc;
 t_d = JSON.parse(t_d);
+// n_d = JSON.parse(n_d);
+n_d = JSON.parse(n_d.replace(/[\r]?[\n]/g, ''));
+console.log(n_d);
 st_d = JSON.parse(st_d);
 var paid = new Set();
 var total = new Set();
@@ -13,10 +16,19 @@ t_d.forEach(element => {
 });
 week = week.split(',');
 
-function addNOTE(tn, sn, sst){
+function addNOTE(tn, sn, sst) {
+    document.getElementById('viewNoteData').classList.add('d-none');
+    document.getElementById('addNoteForm').classList.remove('d-none');
     document.getElementById('teacherNumber').value = tn;
     document.getElementById('studentNumber').value = sn;
     document.getElementById('sessionStartTime').value = sst;
+}
+
+function viewNOTE(noteData) {
+    document.getElementById('addNoteForm').classList.add('d-none');
+    document.getElementById('viewNoteData').classList.remove('d-none');
+    document.getElementById('viewNoteData').innerHTML = "<b class = 'a'>Note Data</b> : " + noteData;
+
 }
 
 async function weekdetails(paid, total) {
@@ -48,7 +60,7 @@ async function weekdetails(paid, total) {
                     .then(data => {
                         var addNote = document.getElementById('addNote');
                         data.objects.forEach(function(ob) {
-                            if (ob.call_recording != "" && ob.agent_number.split('+91')[1] == "8130436631") {
+                            if (ob.call_recording != "" && ob.agent_number.split('+91')[1] == pn) {
                                 total.add(ob.customer_number.split('+91')[1]);
                                 st_d.forEach(function(st) {
                                     if (st.phoneNo == ob.customer_number.split('+91')[1]) {
@@ -67,8 +79,15 @@ async function weekdetails(paid, total) {
                                             tt = (ob.start_time.split(" ")[1]).split("+")[0] + " am";
                                         }
                                         tt = ob.start_time.split(" ")[0] + " " + tt;
-                                        var passData = {tp: st.phoneNo, sp: st.phoneNo, sst: ob.start_time};
-                                        nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'addNOTE(\"" + pn + "\",\"" + st.phoneNo + "\",\"" + ob.start_time + "\")' value = 'Add Note' />" + "</td>";
+                                        var i;
+                                        for (i in n_d) {
+                                            if (n_d[i].sessionStartTime == ob.start_time && n_d[i].teacherNumber == pn) {
+                                                nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'viewNOTE(\"" + n_d[i].noteValue + "\")' value = 'View Note' />" + "</td>";
+                                                break;
+                                            } else {
+                                                nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'addNOTE(\"" + pn + "\",\"" + st.phoneNo + "\",\"" + ob.start_time + "\")' value = 'Add Note' />" + "</td>";
+                                            }
+                                        };
                                         addNote.appendChild(nr);
                                     }
                                 });
@@ -123,6 +142,7 @@ function seeProfile(phoneNo) {
     st_d.forEach((std) => {
         if (std.phoneNo == phoneNo) {
             document.getElementById('profcont').innerHTML = "<b class = 'a'>studentSNo</b> : " + std.studentSNo + "<br><b class = 'a'>Name</b> : " + std.name + "<br><b class = 'a'>moodleUN</b> : " + std.moodleUN + "<br><b class = 'a'>courseType</b> : " + std.courseType + "<br><b class = 'a'>PhoneNo</b> : " + std.phoneNo + "<br><b class = 'a'>email</b> : " + std.email + "<br><b class = 'a'>classSD</b> : " + std.classSD + "<br><b class = 'a'>classED</b> : " + std.classED + "<br><b class = 'a'>firstAmount</b> : " + std.firstAmount + "<br><b class = 'a'>secondAmount</b> : " + std.secondAmount + "<br><b class = 'a'>remainingAmount</b> : " + std.remainingAmount + "<br><b class = 'a'>RenewalD</b> : " + std.RenewalD + "<br><b class = 'a'>qualification</b> : " + std.qualification + "<br><b class = 'a'>bandScore</b> : " + std.bandScore + "<br><b class = 'a'>location</b> : " + std.location + "<br> ";
+            document.getElementById('stdPhn').value = std.phoneNo;
         }
     });
 }
@@ -134,7 +154,7 @@ function date_result() {
     const sdatePick = document.getElementById('sdatePick');
     const edatePick = document.getElementById('edatePick');
     var tc;
-    fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B919038715215", {
+    fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn, {
             method: 'GET',
             headers: {
                 "Accept": "application/json",
@@ -149,7 +169,7 @@ function date_result() {
         .then(data => {
             tc = data['meta']['total_count'];
             console.log(tc);
-            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B919038715215&limit=" + tc.toString(), {
+            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn + "&limit=" + tc.toString(), {
                     method: 'GET',
                     headers: {
                         "Accept": "application/json",
@@ -163,7 +183,7 @@ function date_result() {
                 .then(data => {
                     var i, spn, sn, sem, sc, c = 0;
                     for (i = 0; i < data["objects"].length; i++) {
-                        if (data["objects"][i]["call_recording"] != "" && data["objects"][i]["agent_number"].split('+91')[1] == "9038715215") {
+                        if (data["objects"][i]["call_recording"] != "" && data["objects"][i]["agent_number"].split('+91')[1] == pn) {
                             st_d.forEach(function(std) {
                                 if (std.phoneNo == data["objects"][i]["customer_number"].split('+91')[1]) {
                                     spn = std.phoneNo;
