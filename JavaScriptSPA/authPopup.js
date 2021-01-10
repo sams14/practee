@@ -20,7 +20,6 @@ function signIn() {
 }
 
 function signOut() {
-    window.location.href = 'http://localhost:3000/';
     myMSALObj.logout();
 }
 
