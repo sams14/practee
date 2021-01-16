@@ -3,7 +3,6 @@ const path = require('path');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const User = require('../DB/user');
-const { sessionNote } = require('../DB/user');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -16,8 +15,20 @@ router.post('/teacher', async(req, res) => {
         phoneNo: req.body.phoneNo,
         role: req.body.role
     });
-    const savedTeacher = await teacher.save();
-    res.send(savedTeacher);
+    User.teacher.find({ "phoneNo": req.body.phoneNo }, async(err, foundData) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        } else {
+            if (foundData.length == 0) {
+                var responseObj = "";
+                var saveStu = await teacher.save();
+            } else {
+                var responseObj = foundData;
+            }
+        }
+        return res.redirect(`/${req.body.Role}/${req.body.Name}`);
+    });
 });
 
 router.get('/student', function(req, res) {
@@ -54,7 +65,7 @@ router.post('/pstudent', async(req, res) => {
                 var responseObj = foundData;
             }
         }
-        return res.redirect(`/${req.body.role}/${req.body.name}`);
+        return res.redirect(`/${req.body.Role}/${req.body.Name}`);
     });
 
 });
@@ -63,6 +74,13 @@ router.post('/deleteS', function(req, res) {
     User.pstudent.deleteOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
         if (err) return handleError(err);
         else res.redirect(`/${req.body.role}/${req.body.name}`);
+    });
+});
+
+router.post('/deleteT', function(req, res) {
+    User.teacher.deleteOne({ "phoneNo": parseInt(req.body.teaPhn) }, function(err, results) {
+        if (err) return handleError(err);
+        else res.redirect(`/${req.body.Role}/${req.body.Name}`);
     });
 });
 
@@ -168,10 +186,27 @@ router.get('/mentor/:name', function(req, res) {
     });
 });
 
+router.get('/admin/:name', function(req, res) {
+    // res.send(`Hello ${req.params.name}`);
+    User.pstudent.find({}, (err, stData) => {
+        User.teacher.find({}, (err, tData) => {
+            User.sessionNote.find({}, (err, nData) => {
+                data = {
+                    name: req.params.name,
+                    role: 'admin'
+                }
+                res.render('a_vp', { data: data, st_d: stData, t_d: tData, n_d: nData });
+            });
+        });
+    });
+});
+
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
     if (req.body.role == "Mentor") {
         res.redirect(`/mentor/${req.body.name}`);
+    } else if(req.body.role == ("Assistant Vice President " || "Vice President")) {
+        res.redirect(`/admin/${req.body.name}`)
     }
 });
 

@@ -72,9 +72,7 @@
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">
-                  Dashboard
-                </a>
+                                <a class="nav-link active" aria-current="page" href="#"> Dashboard</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" onclick="homePage()">
@@ -82,13 +80,13 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" onclick="studentProf()">
-                                    <span data-feather="users"></span> Student Profile
+                                <a class="nav-link" onclick="teaProf()">
+                                    <span data-feather="users"></span> Teacher Profile
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" onclick="sessionDet()">
-                                    <span data-feather="file"></span> Session Details
+                                <a class="nav-link" onclick="studentProf()">
+                                    <span data-feather="file"></span> Student Profile
                                 </a>
                             </li>
                         </ul>
@@ -144,8 +142,10 @@
                                 <table class="table">
                                     <thead class="table-dark">
                                         <th>Start Time</th>
+                                        <th>Mentor Name</th>
+                                        <th>Mentor Number</th>
                                         <th>Student's Name</th>
-                                        <th>Student's Contact No</th>
+                                        <th>Student Number</th>
                                         <th>Student's Email</th>
                                         <th>Course</th>
                                         <th>Session Link</th>
@@ -165,7 +165,7 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/addnote" class="d-none" method="POST" id="addNoteForm">
+                                    <!-- <form action="/addnote" class="d-none" method="POST" id="addNoteForm">
                                         <input type="hidden" name="teacherNumber" id="teacherNumber">
                                         <input type="hidden" name="studentNumber" id="studentNumber">
                                         <input type="hidden" name="sessionStartTime" id="sessionStartTime">
@@ -178,8 +178,8 @@
                                         <div class="form-group row">
                                             <button type="submit" class="btn btn-primary mx-auto">Submit</button>
                                         </div>
-                                    </form>
-                                    <div id="viewNoteData" class="d-none">
+                                    </form> -->
+                                    <div id="viewNoteData">
 
                                     </div>
                                 </div>
@@ -202,7 +202,104 @@
 
             </div>
 
-            <div class="col-md-9 col-lg-10 d-none" id="profile">
+            <div class="col-md-9 col-lg-10 d-none" id="tprofile" style="height: 100vh;">
+                <div>
+                    <button class="btn btn-primary mt-3 mx-auto px-5" data-toggle="modal" data-target="#myModal1" id="teaFormBtn" style="color: white; font-weight: 700; display: block;" onclick="teaForm()">Add a Teacher</button>
+                    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalLabel" style="color: #e20f0f;">Enter details:</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/teacher" method="POST">
+                                        <input type="hidden" value="<%= data.name %>" name="Name" id="name">
+                                        <input type="hidden" value="<%= data.role %>" name="Role" id="role">
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-3 col-form-label">Name <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="name" placeholder="Enter Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-3 col-form-label">Email <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-9">
+                                                <input type="email" class="form-control" name="email" placeholder="Enter Email Address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-3 col-form-label">Phone No <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-9">
+                                                <input type="tel" class="form-control" name="phoneNo" placeholder="Enter Phone Number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="colFormLabel" class="col-sm-3 col-form-label">Role <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="role" placeholder="Enter the role(in small case)">
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-center mt-3">
+                    <div class="card-header">
+                        <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Teacher List</h6>
+                    </div>
+                    <div class="card-body ">
+                        <div class="my-0 table-responsive table table-striped"><div class="outline-auto">
+                            <table class="table">
+                                <thead class="table-dark">
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Role</th>
+                                    <th>&nbsp;</th>
+                                </thead>
+                                <tbody id="tprofdata">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="fullTeaProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLabel1" style="color: #e20f0f;">Confirm delete?</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="tprofcont">
+
+                                </div>
+                                <hr>
+                                <form action="/deleteT" method="POST">
+                                    <input type="hidden" value="<%= data.name %>" name="Name" id="Name">
+                                    <input type="hidden" value="<%= data.role %>" name="Role" id="Role">
+                                    <input type="hidden" name="teaPhn" id="teaPhn">
+                                    <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Yes </button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-9 col-lg-10 d-none" id="sprofile">
                 <div>
                     <button class="btn btn-primary mt-3 mx-auto px-5" data-toggle="modal" data-target="#myModal" id="stuFormBtn" style="color: white; font-weight: 700; display: block;" onclick="stuForm()">Add a Student</button>
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -214,8 +311,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <form action="/pstudent" method="POST">
-                                        <input type="hidden" value="<%= data.name %>" name="Name" id="name">
-                                        <input type="hidden" value="<%= data.role %>" name="Role" id="role">
+                                        <input type="hidden" value="<%= data.name %>" name="name" id="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role" id="role">
                                         <div class="form-group row">
                                             <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-9">
@@ -324,7 +421,7 @@
                 </div>
                 <div class="card text-center mt-3">
                     <div class="card-header">
-                        <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Notes</h6>
+                        <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Student List</h6>
                     </div>
                     <div class="card-body">
                         <div class="my-0 table-responsive table table-striped">
@@ -368,33 +465,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-9 col-lg-10 d-none" id="session">
-                <div class="container mt-2 text-center">
-                    <label for="sdatePick">Choose your start date:</label>
-                    <input type="date" name="datePick" id="sdatePick"><br>
-                    <label for="edatePick">Choose your end date:</label>
-                    <input type="date" name="datePick" id="edatePick"><br>
-                    <button type="submit" onclick="date_result()">Submit</button>
-                </div>
-                <div id="table_div" class="d-none">
-                    <table border="1" class="mt-3 mb-3">
-                        <tr>
-                            <th>Sl. No.</th>
-                            <th>Start Time</th>
-                            <th>Student's Name</th>
-                            <th>Student's Contact No</th>
-                            <th>Student's Email</th>
-                            <th>Course</th>
-                            <th>Session Link</th>
-                        </tr>
-                        <tbody id="table_data"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
-
 
     <!-- importing app scripts (load order is important) -->
     <script type="text/javascript" src="/authConfig.js"></script>
@@ -407,7 +478,7 @@
     <script type="text/javascript" src="/graph.js"></script>
 
     <!-- manual script -->
-    <script type="text/javascript" src="/edit.js"></script>
+    <script type="text/javascript" src="/edit-avp.js"></script>
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -417,6 +488,5 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
     <script src="/dashboard.js"></script>
-</body>
-
-</html>
+    </body>
+</html>        
