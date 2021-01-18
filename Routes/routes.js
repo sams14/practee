@@ -176,11 +176,13 @@ router.get('/mentor/:name', function(req, res) {
     User.pstudent.find({}, (err, stData) => {
         User.teacher.find({}, (err, tData) => {
             User.sessionNote.find({}, (err, nData) => {
-                data = {
-                    name: req.params.name,
-                    role: 'Mentor'
-                }
-                res.render('mentor', { data: data, st_d: stData, t_d: tData, n_d: nData });
+                User.mappingData.find({}, (err, mData) => {
+                    data = {
+                        name: req.params.name,
+                        role: 'Mentor'
+                    }
+                    res.render('mentor', { data: data, st_d: stData, t_d: tData, n_d: nData, m_d: mData });
+                });
             });
         });
     });
@@ -191,11 +193,13 @@ router.get('/admin/:name', function(req, res) {
     User.pstudent.find({}, (err, stData) => {
         User.teacher.find({}, (err, tData) => {
             User.sessionNote.find({}, (err, nData) => {
-                data = {
-                    name: req.params.name,
-                    role: 'admin'
-                }
-                res.render('a_vp', { data: data, st_d: stData, t_d: tData, n_d: nData });
+                User.mappingData.find({}, (err, mData) => {
+                    data = {
+                        name: req.params.name,
+                        role: 'admin'
+                    }
+                    res.render('a_vp', { data: data, st_d: stData, t_d: tData, n_d: nData, m_d: mData });
+                });
             });
         });
     });
@@ -205,7 +209,7 @@ router.get('/admin/:name', function(req, res) {
 router.post('/redir', function(req, res) {
     if (req.body.role == "Mentor") {
         res.redirect(`/mentor/${req.body.name}`);
-    } else if(req.body.role == ("Assistant Vice President " || "Vice President")) {
+    } else if (req.body.role == ("Assistant Vice President " || "Vice President")) {
         res.redirect(`/admin/${req.body.name}`)
     }
 });
