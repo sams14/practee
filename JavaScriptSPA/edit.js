@@ -1,8 +1,8 @@
 var pn, tc;
 t_d = JSON.parse(t_d);
-// n_d = JSON.parse(n_d);
+m_d = JSON.parse(m_d);
+// console.log(m_d);
 n_d = JSON.parse(n_d.replace(/[\r]?[\n]/g, ''));
-console.log(n_d);
 st_d = JSON.parse(st_d);
 var paid = new Set();
 var total = new Set();
@@ -130,12 +130,24 @@ function studentProf() {
     document.getElementById('session').classList.add('d-none');
     document.getElementById('profile').classList.remove('d-none');
     const profdata = document.getElementById('profdata');
-    var tr;
-    st_d.forEach((std) => {
-        tr = document.createElement('tr');
-        tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>";
-        profdata.appendChild(tr);
+    var tr, students, i = 0;
+    m_d.forEach((iteam) => {
+        if (iteam.Teacher == pn) {
+            students = iteam.StudentNumbers
+        }
     });
+    // console.log(students);
+    st_d.forEach(async(std) => {
+        await students.forEach((student) => {
+            if (std.phoneNo == student) {
+                tr = document.createElement('tr');
+                tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>";
+                profdata.appendChild(tr);
+                i++;
+            }
+        });
+    });
+    console.log(i)
 }
 
 function seeProfile(phoneNo) {

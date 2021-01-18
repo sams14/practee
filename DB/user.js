@@ -120,15 +120,22 @@ const sessionNoteSchema = new mongoose.Schema({
     }
 });
 
+const StudentTeacherMapping = new mongoose.Schema({
+    Teacher: String,
+    StudentNumbers: [String]
+}, { collection: 'StudentTeacherMappings' });
+
 var teacher = mongoose.model('Teacher', teacherSchema);
 var student = mongoose.model('Student', studentSchema);
 var pstudent = mongoose.model('Student Detail', practeeStudentSchema);
 var sessionNote = mongoose.model('Session Note', sessionNoteSchema);
+var mappingData = mongoose.model('StudentTeacherMappings', StudentTeacherMapping);
 module.exports = {
     teacher: teacher,
     student: student,
     pstudent: pstudent,
-    sessionNote: sessionNote
+    sessionNote: sessionNote,
+    mappingData: mappingData
 }
 
 
