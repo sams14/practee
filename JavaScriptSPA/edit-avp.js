@@ -1,6 +1,7 @@
 var paid = new Set();
 var total = new Set();
 t_d = JSON.parse(t_d);
+m_d = JSON.parse(m_d);
 st_d = JSON.parse(st_d);
 n_d = JSON.parse(n_d.replace(/[\r]?[\n]/g, ''));
 d = JSON.parse(d);
@@ -101,13 +102,34 @@ function homePage() {
     document.getElementById('home').classList.remove('d-none');
     document.getElementById('tprofile').classList.add('d-none');
     document.getElementById('sprofile').classList.add('d-none');
+    document.getElementById('session').classList.add('d-none');
 }
 
+function sessionDetail() {
+    document.getElementById('home').classList.add('d-none');
+    document.getElementById('tprofile').classList.add('d-none');
+    document.getElementById('sprofile').classList.add('d-none');
+    document.getElementById('session').classList.remove('d-none');
+    t_d.forEach(function(td){
+        var option = document.createElement('option');
+        option.value = td.name;
+        option.innerHTML = td.name;
+        document.getElementById('tPick').appendChild(option);
+    });
+}
 
 function studentProf() {
+    document.getElementById('teaPick').value = "All";
+    t_d.forEach(function(td){
+        var option = document.createElement('option');
+        option.value = td.name;
+        option.innerHTML = td.name;
+        document.getElementById('teaPick').appendChild(option);
+    });
     document.getElementById('home').classList.add('d-none');
     document.getElementById('tprofile').classList.add('d-none');
     document.getElementById('sprofile').classList.remove('d-none');
+    document.getElementById('session').classList.add('d-none');
     const profdata = document.getElementById('profdata');
     var tr;
     st_d.forEach((std) => {
@@ -117,10 +139,40 @@ function studentProf() {
     });
 }
 
+function show_filtered(){
+    var teaPick = document.getElementById('teaPick');
+    var profdata = document.getElementById('profdata');
+    var phoneNo;
+    if(teaPick.value != "All"){
+        profdata.innerHTML = "";
+        t_d.forEach((td)=>{
+            if(td.name == teaPick.value){
+                phoneNo = td.phoneNo;
+            }
+        });
+        m_d.forEach((md) => {
+            if (md.Teacher == phoneNo) {
+                md.StudentNumbers.forEach(function(ST){
+                    st_d.forEach(function(std){
+                        if(std.phoneNo == parseInt(ST)){
+                            tr = document.createElement('tr');
+                            tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>";
+                            profdata.appendChild(tr);
+                        }
+                    });
+                });
+            }
+        });
+    } else {
+        studentProf();
+    }
+}
+
 function teaProf() {
     document.getElementById('home').classList.add('d-none');
     document.getElementById('sprofile').classList.add('d-none');
     document.getElementById('tprofile').classList.remove('d-none');
+    document.getElementById('session').classList.add('d-none');
     const tprofdata = document.getElementById('tprofdata');
     var tr;
     t_d.forEach((td) => {
@@ -146,4 +198,104 @@ function deleteProfile(phoneNo) {
             document.getElementById('teaPhn').value = td.phoneNo;
         }
     });
+}
+
+// function dispSessData(phoneNo) {
+//     m_d.forEach((md) => {
+//         if (md.Teacher == phoneNo) {
+//             md.StudentNumbers.forEach(function(ST){
+//                 st_d.forEach(function(std){
+//                     if(std.phoneNo == parseInt(ST)){
+//                         var tr = document.createElement('tr');
+//                         tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + std.classSD + "</td>" + "<td>" + std.qualification + "</td>" + "<td>" + std.bandScore + "</td>" + "<td>" + std.location + "</td>";
+//                         document.getElementById('teaStuMapDet').appendChild(tr);
+//                     }
+//                 });
+//             });
+//         }
+//     });
+// }
+
+function date_result() {
+    document.getElementById('table_div').classList.remove('d-none');
+    const table_data = document.getElementById('table_data');
+    table_data.innerHTML = "";
+    const sdatePick = document.getElementById('sdatePick');
+    const edatePick = document.getElementById('edatePick');
+    const tPick = document.getElementById('tPick');
+    var tc, pn;
+    t_d.forEach(function(td){
+        if(td.name == tPick.value){
+            pn = td.phoneNo;
+        }
+    });
+    var url = "https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn;
+    if(tPick.value == "All"){
+        url = "https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30";
+    }
+    fetch(url, {
+            method: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "x-api-key": "xihMXYtXYY0E1v8Vkwai7WW4YmLgCGN5PyN3i8R6",
+                "Authorization": "07a30c67-cd45-4fe9-a874-347260404af9"
+            }
+        })
+        .then(response => {
+            console.log(response);
+            return response.json();
+        })
+        .then(data => {
+            tc = data['meta']['total_count'];
+            console.log(tc);
+            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&limit=" + tc.toString(), {
+                    method: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "x-api-key": "xihMXYtXYY0E1v8Vkwai7WW4YmLgCGN5PyN3i8R6",
+                        "Authorization": "07a30c67-cd45-4fe9-a874-347260404af9"
+                    }
+                })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    var i, spn, sn, sem, sc, c = 0;
+                    for (i = 0; i < data["objects"].length; i++) {
+                        if (data["objects"][i]["call_recording"] != "") {
+                            st_d.forEach(function(std) {
+                                if (std.phoneNo == data["objects"][i]["customer_number"].split('+91')[1]) {
+                                    spn = std.phoneNo;
+                                    sn = std.name;
+                                    sem = std.email;
+                                    sc = std.courseType;
+                                }
+                            });
+                            if (spn === undefined) {
+                                spn = data["objects"][i]["customer_number"].split('+91')[1];
+                                sn = "N/A";
+                                sem = "N/A";
+                                sc = "Free";
+                            }
+                            c += 1;
+                            const nr = document.createElement('tr');
+                            var t = (data["objects"][i]["start_time"].split(" ")[1]).split(":")[0];
+                            var tt = "";
+                            if (parseInt(t) >= 12) {
+                                if (((parseInt(t) - 12)) < 10) {
+                                    tt = "0" + (parseInt(t) - 12).toString();
+                                } else {
+                                    tt = (parseInt(t) - 12).toString();
+                                }
+                                tt += ":" + (data["objects"][i]["start_time"].split(" ")[1]).split(":")[1] + ":" + ((data["objects"][i]["start_time"].split(" ")[1]).split(":")[2]).split("+")[0] + " pm";
+                            } else {
+                                tt = (data["objects"][i]["start_time"].split(" ")[1]).split("+")[0] + " am";
+                            }
+                            tt = data["objects"][i]["start_time"].split(" ")[0] + " " + tt;
+                            nr.innerHTML = "<td>" + c + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>click here</a></td>";
+                            table_data.appendChild(nr);
+                        }
+                    }
+                });
+        });
 }

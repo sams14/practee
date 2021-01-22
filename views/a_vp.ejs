@@ -86,7 +86,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" onclick="studentProf()">
-                                    <span data-feather="file"></span> Student Profile
+                                    <span data-feather="users"></span> Student Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="sessionDetail()">
+                                    <span data-feather="file"></span> Session Details
                                 </a>
                             </li>
                         </ul>
@@ -196,13 +201,14 @@
                         var t_d = '<%- JSON.stringify(t_d) %>'
                         var d = '<%- JSON.stringify(data) %>'
                         var n_d = '<%- JSON.stringify(n_d) %>'
+                        var m_d = '<%- JSON.stringify(m_d) %>'
                         var week = '<%- week %>'
                     </script>
                 </div>
 
             </div>
 
-            <div class="col-md-9 col-lg-10 d-none" id="tprofile" style="height: 100vh;">
+            <div class="col-md-9 col-lg-10 d-none" id="tprofile">
                 <div>
                     <button class="btn btn-primary mt-3 mx-auto px-5" data-toggle="modal" data-target="#myModal1" id="teaFormBtn" style="color: white; font-weight: 700; display: block;" onclick="teaForm()">Add a Teacher</button>
                     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -264,7 +270,7 @@
                                     <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Role</th>
-                                    <th>&nbsp;</th>
+                                    <th>Delete</th>
                                 </thead>
                                 <tbody id="tprofdata">
                                 </tbody>
@@ -297,8 +303,36 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="modal fade bd-example-modal-xl" id="tSessData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLabel1" style="color: #e20f0f;">Students Are</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table" id="teaStuMapDet">
+                                    <thead>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Email</th>
+                                        <th>Course Type</th>
+                                        <th>Class Start Date</th>
+                                        <th>Qualification</th>
+                                        <th>Band Score</th>
+                                        <th>Location</th>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
             </div>
+
             <div class="col-md-9 col-lg-10 d-none" id="sprofile">
                 <div>
                     <button class="btn btn-primary mt-3 mx-auto px-5" data-toggle="modal" data-target="#myModal" id="stuFormBtn" style="color: white; font-weight: 700; display: block;" onclick="stuForm()">Add a Student</button>
@@ -423,6 +457,11 @@
                     <div class="card-header">
                         <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Student List</h6>
                     </div>
+                    <div class="card-header">
+                        <label for="teaPick">Choose the teacher:</label>
+                        <select name="teaPick" id="teaPick"><option value="All" selected>All</option></optgroup></select>
+                        <input type="button" value="Submit" onclick="show_filtered()" class="ml-4">
+                    </div>
                     <div class="card-body">
                         <div class="my-0 table-responsive table table-striped">
                             <table class="table">
@@ -465,6 +504,41 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-9 col-lg-10 d-none" id="session">
+                <div class="container mt-2 text-center">
+                    <label for="sdatePick">Choose your start date:</label>
+                    <input type="date" name="datePick" id="sdatePick"><br>
+                    <label for="edatePick">Choose your end date:</label>
+                    <input type="date" name="datePick" id="edatePick"><br>
+                    <label for="tPick">Choose the teacher:</label>
+                    <select name="tPick" id="tPick"><option value="All" selected>All</option></optgroup></select><br>
+                    <button type="submit" onclick="date_result()">Submit</button>
+                </div>
+                <div id="table_div" class="d-none">
+                    <div class="card text-center mt-3">
+                        <div class="card-header">
+                            <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Details</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="my-0 table-responsive table table-striped">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                        <th>Sl. No.</th>
+                                        <th>Start Time</th>
+                                        <th>Student's Name</th>
+                                        <th>Student's Contact No</th>
+                                        <th>Student's Email</th>
+                                        <th>Course</th>
+                                        <th>Session Link</th>
+                                    </thead>
+                                    <tbody id="table_data"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <!-- importing app scripts (load order is important) -->
@@ -490,3 +564,4 @@
     <script src="/dashboard.js"></script>
     </body>
 </html>        
+
