@@ -109,7 +109,7 @@
                         <div class="col-lg-12 text-center">
                             <% let curr=new Date; %>
                                 <% let week=[]; %>
-                                    <% for (let i=1; i <=7; i++) { %>
+                                    <% for (let i=0; i < 7; i++) { %>
                                         <% let first=curr.getDate() - curr.getDay() + i ; %>
                                             <% let day=new Date(curr.setDate(first)).toLocaleString(); %>
                                                 <% day=day.split(',')[0] %>
