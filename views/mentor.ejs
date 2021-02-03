@@ -325,7 +325,7 @@
                 </div>
                 <div class="card text-center mt-3">
                     <div class="card-header">
-                        <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Students List</h6>
+                        <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Notes</h6>
                     </div>
                     <div class="card-body">
                         <div class="my-0 table-responsive table table-striped">
@@ -370,12 +370,12 @@
                 </div>
             </div>
 
-            <div class="col-md-9 col-lg-10 d-none" id="session">
+            <!-- <div class="col-md-9 col-lg-10 d-none" id="session">
                 <div class="container mt-2 text-center">
                     <label for="sdatePick">Choose your start date:</label>
-                    <input type="date" name="datePick" id="sdatePick"><br>
+                    <input type="date" name="sdatePick" id="sdatePick"><br>
                     <label for="edatePick">Choose your end date:</label>
-                    <input type="date" name="datePick" id="edatePick"><br>
+                    <input type="date" name="edatePick" id="edatePick"><br>
                     <button type="submit" onclick="date_result()">Submit</button>
                 </div>
                 <div id="table_div" class="d-none">
@@ -389,35 +389,74 @@
                             <th>Course</th>
                             <th>Session Link</th>
                         </tr>
-                        <tbody id="table_data"></tbody>
+                        <tbody id="table_data">
+                        </tbody>
                     </table>
+                </div>
+                <button id="export" class="mx-auto py-3 btn btn-primary d-none" onclick='exportTableToExcel("table_div", filename = "<%= data.name %>");'>Download</button>
+            </div> -->
+            <div class="col-md-9 col-lg-10 d-none" id="session">
+                <div class="container mt-2 text-center">
+                    <label for="sdatePick">Choose your start date:</label>
+                    <input type="date" name="datePick" id="sdatePick"><br>
+                    <label for="edatePick">Choose your end date:</label>
+                    <input type="date" name="datePick" id="edatePick"><br>
+                    <button type="submit" onclick="date_result()">Submit</button>
+                </div>
+                <div>
+                    <div class="card text-center mt-3">
+                        <div class="card-header">
+                            <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Details</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="table_div" class="d-none my-0 table-responsive table table-striped">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                        <th>Sl. No.</th>
+                                        <th>Start Time</th>
+                                        <th>Student's Name</th>
+                                        <th>Student's Contact No</th>
+                                        <th>Student's Email</th>
+                                        <th>Course</th>
+                                        <th>Session Link</th>
+                                    </thead>
+                                    <tbody id="table_data"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-block mx-auto py-3">
+                    <button id="export" class="btn btn-primary d-none" onclick='exportTableToExcel("table_div", filename = "<%= data.name %>");'>Download</button>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
 
     <!-- importing app scripts (load order is important) -->
-    <script type="text/javascript" src="/authConfig.js"></script>
-    <script type="text/javascript" src="/graphConfig.js"></script>
-    <script type="text/javascript" src="/ui.js"></script>
+    <script type="text/javascript " src="/authConfig.js "></script>
+    <script type="text/javascript " src="/graphConfig.js "></script>
+    <script type="text/javascript " src="/ui.js "></script>
 
     <!-- replace next line with authRedirect.js if you would like to use the redirect flow -->
-    <!-- <script type="text/javascript" src="./authRedirect.js"></script>   -->
-    <script type="text/javascript" src="/authPopup.js"></script>
-    <script type="text/javascript" src="/graph.js"></script>
+    <!-- <script type="text/javascript " src="./authRedirect.js "></script>   -->
+    <script type="text/javascript " src="/authPopup.js "></script>
+    <script type="text/javascript " src="/graph.js "></script>
 
     <!-- manual script -->
-    <script type="text/javascript" src="/edit.js"></script>
+    <script type="text/javascript " src="/edit.js "></script>
+    <script type="text/javascript " src="/exportExcel.js "></script>
 
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js " integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n " crossorigin="anonymous "></script>
+    <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js " integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW " crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js " integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6 " crossorigin="anonymous "></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-    <script src="/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js " integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js " integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha " crossorigin="anonymous "></script>
+    <script src="/dashboard.js "></script>
 </body>
 
 </html>

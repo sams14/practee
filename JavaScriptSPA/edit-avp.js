@@ -66,12 +66,12 @@ async function weekdetails(paid, total) {
                                         tt = ob.start_time.split(" ")[0] + " " + tt;
                                         var i;
                                         for (i in n_d) {
-                                            t_d.forEach(function(td){
+                                            t_d.forEach(function(td) {
                                                 if (n_d[i].sessionStartTime == ob.start_time && n_d[i].teacherNumber == td.phoneNo) {
-                                                    nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + td.name + "<td>" + td.phoneNo + "</td>" +  "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'viewNOTE(\"" + n_d[i].noteValue + "\")' value = 'View Note' />" + "</td>";                                                   
+                                                    nr.innerHTML = "<td>" + tt + "</td>" + "<td>" + td.name + "<td>" + td.phoneNo + "</td>" + "</td>" + "<td>" + st.name + "</td>" + "<td>" + st.phoneNo + "</td>" + "<td>" + st.email + "</td>" + "<td>" + st.courseType + "</td>" + "<td><a href='" + ob.call_recording + "'>click here</a></td>" + "<td>" + "<input class= 'home' type='button' data-toggle='modal' data-target='#noteModal' onclick = 'viewNOTE(\"" + n_d[i].noteValue + "\")' value = 'View Note' />" + "</td>";
                                                 }
                                             });
-                                            
+
                                         };
                                         addNote.appendChild(nr);
                                     }
@@ -110,7 +110,7 @@ function sessionDetail() {
     document.getElementById('tprofile').classList.add('d-none');
     document.getElementById('sprofile').classList.add('d-none');
     document.getElementById('session').classList.remove('d-none');
-    t_d.forEach(function(td){
+    t_d.forEach(function(td) {
         var option = document.createElement('option');
         option.value = td.name;
         option.innerHTML = td.name;
@@ -120,7 +120,7 @@ function sessionDetail() {
 
 function studentProf() {
     document.getElementById('teaPick').value = "All";
-    t_d.forEach(function(td){
+    t_d.forEach(function(td) {
         var option = document.createElement('option');
         option.value = td.name;
         option.innerHTML = td.name;
@@ -139,22 +139,22 @@ function studentProf() {
     });
 }
 
-function show_filtered(){
+function show_filtered() {
     var teaPick = document.getElementById('teaPick');
     var profdata = document.getElementById('profdata');
     var phoneNo;
-    if(teaPick.value != "All"){
+    if (teaPick.value != "All") {
         profdata.innerHTML = "";
-        t_d.forEach((td)=>{
-            if(td.name == teaPick.value){
+        t_d.forEach((td) => {
+            if (td.name == teaPick.value) {
                 phoneNo = td.phoneNo;
             }
         });
         m_d.forEach((md) => {
             if (md.Teacher == phoneNo) {
-                md.StudentNumbers.forEach(function(ST){
-                    st_d.forEach(function(std){
-                        if(std.phoneNo == parseInt(ST)){
+                md.StudentNumbers.forEach(function(ST) {
+                    st_d.forEach(function(std) {
+                        if (std.phoneNo == parseInt(ST)) {
                             tr = document.createElement('tr');
                             tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>";
                             profdata.appendChild(tr);
@@ -224,13 +224,13 @@ function date_result() {
     const edatePick = document.getElementById('edatePick');
     const tPick = document.getElementById('tPick');
     var tc, pn;
-    t_d.forEach(function(td){
-        if(td.name == tPick.value){
+    t_d.forEach(function(td) {
+        if (td.name == tPick.value) {
             pn = td.phoneNo;
         }
     });
     var url = "https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn;
-    if(tPick.value == "All"){
+    if (tPick.value == "All") {
         url = "https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30";
     }
     fetch(url, {
@@ -298,4 +298,5 @@ function date_result() {
                     }
                 });
         });
+    document.getElementById('export').classList.remove('d-none');
 }

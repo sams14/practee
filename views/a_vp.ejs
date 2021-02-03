@@ -263,47 +263,48 @@
                         <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Teacher List</h6>
                     </div>
                     <div class="card-body ">
-                        <div class="my-0 table-responsive table table-striped"><div class="outline-auto">
-                            <table class="table">
-                                <thead class="table-dark">
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                    <th>Role</th>
-                                    <th>Delete</th>
-                                </thead>
-                                <tbody id="tprofdata">
-                                </tbody>
-                            </table>
+                        <div class="my-0 table-responsive table table-striped">
+                            <div class="outline-auto">
+                                <table class="table">
+                                    <thead class="table-dark">
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Role</th>
+                                        <th>Delete</th>
+                                    </thead>
+                                    <tbody id="tprofdata">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal fade" id="fullTeaProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel1" style="color: #e20f0f;">Confirm delete?</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="tprofcont">
-
+                    <div class="modal fade" id="fullTeaProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalLabel1" style="color: #e20f0f;">Confirm delete?</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
-                                <hr>
-                                <form action="/deleteT" method="POST">
-                                    <input type="hidden" value="<%= data.name %>" name="Name" id="Name">
-                                    <input type="hidden" value="<%= data.role %>" name="Role" id="Role">
-                                    <input type="hidden" name="teaPhn" id="teaPhn">
-                                    <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Yes </button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                                <div class="modal-body">
+                                    <div id="tprofcont">
+
+                                    </div>
+                                    <hr>
+                                    <form action="/deleteT" method="POST">
+                                        <input type="hidden" value="<%= data.name %>" name="Name" id="Name">
+                                        <input type="hidden" value="<%= data.role %>" name="Role" id="Role">
+                                        <input type="hidden" name="teaPhn" id="teaPhn">
+                                        <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Yes </button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- <div class="modal fade bd-example-modal-xl" id="tSessData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                    <!-- <div class="modal fade bd-example-modal-xl" id="tSessData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                     <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -330,7 +331,7 @@
                         </div>
                     </div>
                 </div> -->
-            </div>
+                </div>
             </div>
 
             <div class="col-md-9 col-lg-10 d-none" id="sprofile">
@@ -515,13 +516,13 @@
                     <select name="tPick" id="tPick"><option value="All" selected>All</option></optgroup></select><br>
                     <button type="submit" onclick="date_result()">Submit</button>
                 </div>
-                <div id="table_div" class="d-none">
+                <div>
                     <div class="card text-center mt-3">
                         <div class="card-header">
                             <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Details</h6>
                         </div>
                         <div class="card-body">
-                            <div class="my-0 table-responsive table table-striped">
+                            <div id="table_div" class="d-none my-0 table-responsive table table-striped">
                                 <table class="table">
                                     <thead class="table-dark">
                                         <th>Sl. No.</th>
@@ -538,30 +539,34 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-block mx-auto py-3">
+                    <button id="export" class="btn btn-primary d-none" onclick='exportTableToExcel("table_div", filename = "<%= data.name %>");'>Download</button>
+                </div>
             </div>
-    </div>
+        </div>
 
-    <!-- importing app scripts (load order is important) -->
-    <script type="text/javascript" src="/authConfig.js"></script>
-    <script type="text/javascript" src="/graphConfig.js"></script>
-    <script type="text/javascript" src="/ui.js"></script>
+        <!-- importing app scripts (load order is important) -->
+        <script type="text/javascript" src="/authConfig.js"></script>
+        <script type="text/javascript" src="/graphConfig.js"></script>
+        <script type="text/javascript" src="/ui.js"></script>
 
-    <!-- replace next line with authRedirect.js if you would like to use the redirect flow -->
-    <!-- <script type="text/javascript" src="./authRedirect.js"></script>   -->
-    <script type="text/javascript" src="/authPopup.js"></script>
-    <script type="text/javascript" src="/graph.js"></script>
+        <!-- replace next line with authRedirect.js if you would like to use the redirect flow -->
+        <!-- <script type="text/javascript" src="./authRedirect.js"></script>   -->
+        <script type="text/javascript" src="/authPopup.js"></script>
+        <script type="text/javascript" src="/graph.js"></script>
 
-    <!-- manual script -->
-    <script type="text/javascript" src="/edit-avp.js"></script>
+        <!-- manual script -->
+        <script type="text/javascript" src="/edit-avp.js"></script>
+        <script type="text/javascript " src="/exportExcel.js "></script>
 
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-    <script src="/dashboard.js"></script>
-    </body>
-</html>        
+        <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+        <script src="/dashboard.js"></script>
+</body>
 
+</html>
