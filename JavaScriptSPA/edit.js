@@ -231,6 +231,7 @@ function date_result() {
                     }
                 });
         });
+    document.getElementById('export').classList.remove('d-none');
 }
 
 
