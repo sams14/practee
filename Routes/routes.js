@@ -207,9 +207,10 @@ router.get('/admin/:name', function(req, res) {
 
 // the route for tseting th redirect
 router.post('/redir', function(req, res) {
+    console.log(req.body.role);
     if (req.body.role == "Mentor") {
         res.redirect(`/mentor/${req.body.name}`);
-    } else if (req.body.role == ("Assistant Vice President " || "Vice President")) {
+    } else if (["Assistant Vice President ", "Vice President", "Assistant Vice President"].includes(req.body.role)) {
         res.redirect(`/admin/${req.body.name}`)
     }
 });

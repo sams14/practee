@@ -159,14 +159,14 @@ function seeProfile(phoneNo) {
     });
 }
 
-function date_result() {
+async function date_result() {
     document.getElementById('table_div').classList.remove('d-none');
     const table_data = document.getElementById('table_data');
     table_data.innerHTML = "";
     const sdatePick = document.getElementById('sdatePick');
     const edatePick = document.getElementById('edatePick');
     var tc;
-    fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn, {
+    await fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&agent_number=%2B91" + pn, {
             method: 'GET',
             headers: {
                 "Accept": "application/json",
@@ -231,7 +231,12 @@ function date_result() {
                     }
                 });
         });
-    document.getElementById('export').classList.remove('d-none');
+    const exportToExcel = document.getElementById('export');
+    document.getElementById('button_div').classList.remove('d-none');
+    document.getElementById('button_div').classList.add('d-block');
+    exportToExcel.addEventListener("click", function() {
+        exportTableToExcel("table_div", filename = d.name + ':' + sdatePick.value + ' to ' + edatePick.value);
+    });
 }
 
 

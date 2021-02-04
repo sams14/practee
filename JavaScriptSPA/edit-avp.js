@@ -298,5 +298,10 @@ function date_result() {
                     }
                 });
         });
-    document.getElementById('export').classList.remove('d-none');
+    const exportToExcel = document.getElementById('export');
+    document.getElementById('button_div').classList.remove('d-none');
+    document.getElementById('button_div').classList.add('d-block');
+    exportToExcel.addEventListener("click", function() {
+        exportTableToExcel("table_div", filename = d.name + ':' + sdatePick.value + ' to ' + edatePick.value);
+    });
 }
