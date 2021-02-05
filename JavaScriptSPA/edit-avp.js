@@ -187,8 +187,23 @@ function seeProfile(phoneNo) {
         if (std.phoneNo == phoneNo) {
             document.getElementById('profcont').innerHTML = "<b class = 'a'>studentSNo</b> : " + std.studentSNo + "<br><b class = 'a'>Name</b> : " + std.name + "<br><b class = 'a'>moodleUN</b> : " + std.moodleUN + "<br><b class = 'a'>courseType</b> : " + std.courseType + "<br><b class = 'a'>PhoneNo</b> : " + std.phoneNo + "<br><b class = 'a'>email</b> : " + std.email + "<br><b class = 'a'>classSD</b> : " + std.classSD + "<br><b class = 'a'>classED</b> : " + std.classED + "<br><b class = 'a'>firstAmount</b> : " + std.firstAmount + "<br><b class = 'a'>secondAmount</b> : " + std.secondAmount + "<br><b class = 'a'>remainingAmount</b> : " + std.remainingAmount + "<br><b class = 'a'>RenewalD</b> : " + std.RenewalD + "<br><b class = 'a'>qualification</b> : " + std.qualification + "<br><b class = 'a'>bandScore</b> : " + std.bandScore + "<br><b class = 'a'>location</b> : " + std.location + "<br> ";
             document.getElementById('stdPhn').value = std.phoneNo;
+            document.getElementById('editStdPhn').addEventListener("click", function() {
+                editStudent(std.phoneNo);
+            });
         }
     });
+}
+
+function editStudent(phoneNo) {
+    document.getElementById('Dbutton').classList.add('d-none');
+    document.getElementById('profcont').classList.add('d-none');
+    document.getElementById('editStu').classList.remove('d-none');
+}
+
+function backProfile() {
+    document.getElementById('Dbutton').classList.remove('d-none');
+    document.getElementById('profcont').classList.remove('d-none');
+    document.getElementById('editStu').classList.add('d-none');
 }
 
 function deleteProfile(phoneNo) {
@@ -260,9 +275,16 @@ function date_result() {
                     return response.json();
                 })
                 .then(data => {
-                    var i, spn, sn, sem, sc, c = 0;
+                    var i, spn, sn, sem, sc, c = 0,
+                        t, teacher;
                     for (i = 0; i < data["objects"].length; i++) {
                         if (data["objects"][i]["call_recording"] != "") {
+                            teacher = data["objects"][i]["agent_number"].split('+91')[1];
+                            t_d.forEach(function(t) {
+                                if (t.phoneNo == data["objects"][i]["agent_number"].split('+91')[1]) {
+                                    teacher = t.name;
+                                }
+                            });
                             st_d.forEach(function(std) {
                                 if (std.phoneNo == data["objects"][i]["customer_number"].split('+91')[1]) {
                                     spn = std.phoneNo;
@@ -292,7 +314,7 @@ function date_result() {
                                 tt = (data["objects"][i]["start_time"].split(" ")[1]).split("+")[0] + " am";
                             }
                             tt = data["objects"][i]["start_time"].split(" ")[0] + " " + tt;
-                            nr.innerHTML = "<td>" + c + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>click here</a></td>";
+                            nr.innerHTML = "<td>" + c + "</td>" + "<td>" + teacher + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>" + Math.floor(data["objects"][i]["call_duration"] / 60) + "m " + data["objects"][i]["call_duration"] % 60 + "sec </a></td>";
                             table_data.appendChild(nr);
                         }
                     }
