@@ -198,6 +198,70 @@ function editStudent(phoneNo) {
     document.getElementById('Dbutton').classList.add('d-none');
     document.getElementById('profcont').classList.add('d-none');
     document.getElementById('editStu').classList.remove('d-none');
+    st_d.forEach((std) => {
+        if (std.phoneNo == phoneNo) {
+            document.getElementById('yourText1').value = std.studentSNo;
+            document.getElementById('yourText2').value = std.name;
+            document.getElementById('yourText3').value = std.moodleUN;
+            document.getElementById('yourText4').value = std.courseType;
+            document.getElementById('yourText5').value = std.phoneNo;
+            document.getElementById('yourText6').value = std.email;
+            document.getElementById('yourText7').value = std.classSD;
+            document.getElementById('yourText8').value = std.classED;
+            document.getElementById('yourText9').value = std.firstAmount;
+            document.getElementById('yourText10').value = std.secondAmount;
+            document.getElementById('yourText11').value = std.remainingAmount;
+            document.getElementById('yourText12').value = std.RenewalD;
+            document.getElementById('yourText13').value = std.qualification;
+            document.getElementById('yourText14').value = std.bandScore;
+            document.getElementById('yourText15').value = std.location;
+        }
+    });
+    document.getElementById('yourBox1').onchange = function() {
+        document.getElementById('yourText1').disabled = !this.checked;
+    };
+    document.getElementById('yourBox2').onchange = function() {
+        document.getElementById('yourText2').disabled = !this.checked;
+    };
+    document.getElementById('yourBox3').onchange = function() {
+        document.getElementById('yourText3').disabled = !this.checked;
+    };
+    document.getElementById('yourBox4').onchange = function() {
+        document.getElementById('yourText4').disabled = !this.checked;
+    };
+    document.getElementById('yourBox5').onchange = function() {
+        document.getElementById('yourText5').disabled = !this.checked;
+    };
+    document.getElementById('yourBox6').onchange = function() {
+        document.getElementById('yourText6').disabled = !this.checked;
+    };
+    document.getElementById('yourBox7').onchange = function() {
+        document.getElementById('yourText7').disabled = !this.checked;
+    };
+    document.getElementById('yourBox8').onchange = function() {
+        document.getElementById('yourText8').disabled = !this.checked;
+    };
+    document.getElementById('yourBox9').onchange = function() {
+        document.getElementById('yourText9').disabled = !this.checked;
+    };
+    document.getElementById('yourBox10').onchange = function() {
+        document.getElementById('yourText10').disabled = !this.checked;
+    };
+    document.getElementById('yourBox11').onchange = function() {
+        document.getElementById('yourText11').disabled = !this.checked;
+    };
+    document.getElementById('yourBox12').onchange = function() {
+        document.getElementById('yourText12').disabled = !this.checked;
+    };
+    document.getElementById('yourBox13').onchange = function() {
+        document.getElementById('yourText13').disabled = !this.checked;
+    };
+    document.getElementById('yourBox14').onchange = function() {
+        document.getElementById('yourText14').disabled = !this.checked;
+    };
+    document.getElementById('yourBox15').onchange = function() {
+        document.getElementById('yourText15').disabled = !this.checked;
+    };
 }
 
 function backProfile() {
