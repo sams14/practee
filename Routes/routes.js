@@ -77,6 +77,13 @@ router.post('/deleteS', function(req, res) {
     });
 });
 
+router.post('/editStudent', function(req, res) {
+    // User.pstudent.updateOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
+    //     if (err) return handleError(err);
+    //     else res.redirect(`/${req.body.role}/${req.body.name}`);
+    // });
+});
+
 router.post('/deleteT', function(req, res) {
     User.teacher.deleteOne({ "phoneNo": parseInt(req.body.teaPhn) }, function(err, results) {
         if (err) return handleError(err);

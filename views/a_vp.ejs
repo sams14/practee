@@ -219,9 +219,9 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/teacher" method="POST">
-                                        <input type="hidden" value="<%= data.name %>" name="Name" id="name">
-                                        <input type="hidden" value="<%= data.role %>" name="Role" id="role">
+                                    <form action="/teacher" method="POST" onSubmit="return confirm('Are you sure you wish to insert?');">
+                                        <input type="hidden" value="<%= data.name %>" name="Name">
+                                        <input type="hidden" value="<%= data.role %>" name="Role">
                                         <div class="form-group row">
                                             <label for="colFormLabel" class="col-sm-3 col-form-label">Name <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-9">
@@ -291,9 +291,9 @@
 
                                     </div>
                                     <hr>
-                                    <form action="/deleteT" method="POST">
-                                        <input type="hidden" value="<%= data.name %>" name="Name" id="Name">
-                                        <input type="hidden" value="<%= data.role %>" name="Role" id="Role">
+                                    <form action="/deleteT" method="POST" onSubmit="return confirm('Are you sure you wish to delete?');">
+                                        <input type="hidden" value="<%= data.name %>" name="Name">
+                                        <input type="hidden" value="<%= data.role %>" name="Role">
                                         <input type="hidden" name="teaPhn" id="teaPhn">
                                         <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Yes </button>
                                     </form>
@@ -345,13 +345,13 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/pstudent" method="POST">
-                                        <input type="hidden" value="<%= data.name %>" name="name" id="name">
-                                        <input type="hidden" value="<%= data.role %>" name="role" id="role">
+                                    <form action="/pstudent" method="POST" onSubmit="return confirm('Are you sure you wish to insert?');">
+                                        <input type="hidden" value="<%= data.name %>" name="Name">
+                                        <input type="hidden" value="<%= data.role %>" name="Role">
                                         <div class="form-group row">
                                             <label for="colFormLabel" class="col-sm-3 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="studentSNo" name="studentSNo" placeholder="Enter The Student Sl No">
+                                                <input type="text" class="form-control" name="studentSNo" placeholder="Enter The Student Sl No">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -490,13 +490,166 @@
                                 <div id="profcont">
 
                                 </div>
-                                <hr>
-                                <form action="/deleteS" method="POST">
-                                    <input type="hidden" value="<%= data.name %>" name="name" id="name">
-                                    <input type="hidden" value="<%= data.role %>" name="role" id="role">
-                                    <input type="hidden" name="stdPhn" id="stdPhn">
-                                    <button type="submit" style="display: block;" class="btn btn-primary mx-auto"> Delete </button>
-                                </form>
+                                <div id="Dbutton" class="text-center">
+                                    <hr>
+                                    <form action="/deleteS" method="POST" onSubmit="return confirm('Are you sure you wish to delete?');">
+                                        <input type="hidden" value="<%= data.name %>" name="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role">
+                                        <input type="hidden" name="stdPhn" id="stdPhn">
+                                        <button type="submit" style="float: right;" class="btn btn-primary"> Delete </button>
+                                    </form>
+                                    <button style="float: left;" id="editStdPhn" class="btn btn-primary"> Edit </button>
+                                </div>
+                                <div id="editStu" class="d-none">
+                                    <form action="/editStudent" method="POST" onSubmit="return confirm('Are you sure you wish to edit?');">
+                                        <input type="hidden" value="<%= data.name %>" name="name">
+                                        <input type="hidden" value="<%= data.role %>" name="role">
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox1" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="studentSNo" id="yourText1" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox2" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">Name <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="name" id="yourText2" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox3" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">moodleUN :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="moodleUN" id="yourText3" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox4" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">courseType <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="courseType" id="yourText4" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox5" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">Phone No <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="tel" class="form-control" name="phoneNo" id="yourText5" disabled />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox6" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">Email <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="email" class="form-control" name="email" id="yourText6" disabled />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox7" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">classSD <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="classSD" id="yourText7" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox8" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">classED <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="classED" id="yourText8" disabled />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox9" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">firstAmount <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control" name="firstAmount" id="yourText9" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox10" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">secondAmount <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control" name="secondAmount" id="yourText10" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox11" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">remainingAmount <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control" name="remainingAmount" id="yourText11" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox12" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">RenewalD <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="RenewalD" id="yourText12" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox13" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">qualification <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="qualification" id="yourText13" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox14" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">bandScore <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control" name="bandScore" id="yourText14" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-1 d-flex">
+                                                <input type="checkbox" id="yourBox15" class="mx-auto align-iteams-center h-100" />
+                                            </div>
+                                            <label for="colFormLabel" class="col-sm-4 col-form-label">location <span style="color: red;">*</span> :</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" name="location" id="yourText15" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+
+                                    </form>
+                                    <hr>
+                                    <button id="cancel" style="display: block;" onclick="backProfile()" class="btn btn-primary mx-auto"> Cancel </button>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="subsi btn btn-danger" data-dismiss="modal">Close</button>
@@ -526,6 +679,7 @@
                                 <table class="table">
                                     <thead class="table-dark">
                                         <th>Sl. No.</th>
+                                        <th>Mentor</th>
                                         <th>Start Time</th>
                                         <th>Student's Name</th>
                                         <th>Student's Contact No</th>
