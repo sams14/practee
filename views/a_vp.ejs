@@ -501,16 +501,17 @@
                                     <button style="float: left;" id="editStdPhn" class="btn btn-primary"> Edit </button>
                                 </div>
                                 <div id="editStu" class="d-none">
-                                    <form action="/editStudent" method="POST" onSubmit="return confirm('Are you sure you wish to edit?');">
-                                        <input type="hidden" value="<%= data.name %>" name="name">
-                                        <input type="hidden" value="<%= data.role %>" name="role">
+                                    <form action="/editStudent" method="POST" onSubmit="submitStudent()">
+                                        <input type="hidden" value="<%= data.name %>" name="Name">
+                                        <input type="hidden" value="<%= data.role %>" name="Role">
+                                        <input type="hidden" name="editSPhone" id="editSPhone">
                                         <div class="form-group row">
                                             <div class="col-sm-1 d-flex">
                                                 <input type="checkbox" id="yourBox1" class="mx-auto align-iteams-center h-100" />
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">studentSNo <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="studentSNo" id="yourText1" disabled />
+                                                <input type="text" class="disabled-form form-control" name="studentSNo" id="yourText1" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -519,7 +520,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">Name <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="name" id="yourText2" disabled />
+                                                <input type="text" class="disabled-form form-control" name="name" id="yourText2" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -528,7 +529,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">moodleUN :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="moodleUN" id="yourText3" disabled />
+                                                <input type="text" class="disabled-form form-control" name="moodleUN" id="yourText3" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -537,7 +538,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">courseType <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="courseType" id="yourText4" disabled />
+                                                <input type="text" class="disabled-form form-control" name="courseType" id="yourText4" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -546,7 +547,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">Phone No <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="tel" class="form-control" name="phoneNo" id="yourText5" disabled />
+                                                <input type="tel" class="disabled-form form-control" name="phoneNo" id="yourText5" disabled />
                                             </div>
                                         </div>
 
@@ -556,7 +557,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">Email <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="email" class="form-control" name="email" id="yourText6" disabled />
+                                                <input type="email" class="disabled-form form-control" name="email" id="yourText6" disabled />
                                             </div>
                                         </div>
 
@@ -566,7 +567,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">classSD <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="classSD" id="yourText7" disabled />
+                                                <input type="text" class="disabled-form form-control" name="classSD" id="yourText7" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -575,7 +576,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">classED <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="classED" id="yourText8" disabled />
+                                                <input type="text" class="disabled-form form-control" name="classED" id="yourText8" disabled />
                                             </div>
                                         </div>
 
@@ -585,7 +586,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">firstAmount <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control" name="firstAmount" id="yourText9" disabled />
+                                                <input type="number" class="disabled-form form-control" name="firstAmount" id="yourText9" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -594,7 +595,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">secondAmount <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control" name="secondAmount" id="yourText10" disabled />
+                                                <input type="number" class="disabled-form form-control" name="secondAmount" id="yourText10" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -603,7 +604,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">remainingAmount <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control" name="remainingAmount" id="yourText11" disabled />
+                                                <input type="number" class="disabled-form form-control" name="remainingAmount" id="yourText11" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -612,7 +613,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">RenewalD <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="RenewalD" id="yourText12" disabled />
+                                                <input type="text" class="disabled-form form-control" name="RenewalD" id="yourText12" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -621,7 +622,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">qualification <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="qualification" id="yourText13" disabled />
+                                                <input type="text" class="disabled-form form-control" name="qualification" id="yourText13" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -630,7 +631,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">bandScore <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control" name="bandScore" id="yourText14" disabled />
+                                                <input type="number" class="disabled-form form-control" name="bandScore" id="yourText14" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -639,7 +640,7 @@
                                             </div>
                                             <label for="colFormLabel" class="col-sm-4 col-form-label">location <span style="color: red;">*</span> :</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" name="location" id="yourText15" disabled />
+                                                <input type="text" class="disabled-form form-control" name="location" id="yourText15" disabled />
                                             </div>
                                         </div>
                                         <div class="text-center">

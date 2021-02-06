@@ -72,16 +72,51 @@ router.post('/pstudent', async(req, res) => {
 
 router.post('/deleteS', function(req, res) {
     User.pstudent.deleteOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
-        if (err) return handleError(err);
+        if (err) return console.log(err);
         else res.redirect(`/${req.body.role}/${req.body.name}`);
     });
 });
 
 router.post('/editStudent', function(req, res) {
-    // User.pstudent.updateOne({ "phoneNo": parseInt(req.body.stdPhn) }, function(err, results) {
-    //     if (err) return handleError(err);
-    //     else res.redirect(`/${req.body.role}/${req.body.name}`);
-    // });
+    const updatedUser = {
+        studentSNo: req.body.studentSNo,
+        name: req.body.name,
+        moodleUN: req.body.moodleUN,
+        email: req.body.email,
+        phoneNo: req.body.phoneNo,
+        courseType: req.body.courseType,
+        location: req.body.location,
+        qualification: req.body.qualification,
+        classSD: req.body.classSD,
+        classED: req.body.classED,
+        RenewalD: req.body.RenewalD,
+        firstAmount: req.body.firstAmount,
+        secondAmount: req.body.secondAmount,
+        remainingAmount: req.body.remainingAmount,
+        bandScore: req.body.bandScore
+    };
+    if (req.body.phoneNo != req.body.editSPhone) {
+        User.pstudent.find({ "phoneNo": req.body.phoneNo }, (err, foundData) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            } else {
+                if (foundData.length != 0) {
+                    return res.send("Phone number already exists..");
+                } else {
+                    User.pstudent.updateOne({ "phoneNo": parseInt(req.body.editSPhone) }, updatedUser, function(err, results) {
+                        if (err) return console.log(err);
+                        else return res.redirect(`/${req.body.Role}/${req.body.Name}`);
+                    });
+                }
+            }
+        });
+    } else {
+        User.pstudent.updateOne({ "phoneNo": parseInt(req.body.editSPhone) }, updatedUser, function(err, results) {
+            if (err) return console.log(err);
+            else return res.redirect(`/${req.body.Role}/${req.body.Name}`);
+        });
+    }
 });
 
 router.post('/deleteT', function(req, res) {

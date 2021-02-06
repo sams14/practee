@@ -198,22 +198,23 @@ function editStudent(phoneNo) {
     document.getElementById('Dbutton').classList.add('d-none');
     document.getElementById('profcont').classList.add('d-none');
     document.getElementById('editStu').classList.remove('d-none');
+    document.getElementById('editSPhone').value = phoneNo;
     st_d.forEach((std) => {
         if (std.phoneNo == phoneNo) {
             document.getElementById('yourText1').value = std.studentSNo;
             document.getElementById('yourText2').value = std.name;
             document.getElementById('yourText3').value = std.moodleUN;
             document.getElementById('yourText4').value = std.courseType;
-            document.getElementById('yourText5').value = std.phoneNo;
+            document.getElementById('yourText5').value = parseInt(std.phoneNo);
             document.getElementById('yourText6').value = std.email;
             document.getElementById('yourText7').value = std.classSD;
             document.getElementById('yourText8').value = std.classED;
-            document.getElementById('yourText9').value = std.firstAmount;
-            document.getElementById('yourText10').value = std.secondAmount;
-            document.getElementById('yourText11').value = std.remainingAmount;
+            document.getElementById('yourText9').value = parseInt(std.firstAmount);
+            document.getElementById('yourText10').value = parseInt(std.secondAmount);
+            document.getElementById('yourText11').value = parseInt(std.remainingAmount);
             document.getElementById('yourText12').value = std.RenewalD;
             document.getElementById('yourText13').value = std.qualification;
-            document.getElementById('yourText14').value = std.bandScore;
+            document.getElementById('yourText14').value = parseInt(std.bandScore);
             document.getElementById('yourText15').value = std.location;
         }
     });
@@ -262,6 +263,11 @@ function editStudent(phoneNo) {
     document.getElementById('yourBox15').onchange = function() {
         document.getElementById('yourText15').disabled = !this.checked;
     };
+}
+
+function submitStudent() {
+    $(".disabled-form").prop("disabled", false);
+    return confirm('Are you sure you wish to edit?');
 }
 
 function backProfile() {
