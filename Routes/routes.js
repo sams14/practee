@@ -31,6 +31,69 @@ router.post('/teacher', async(req, res) => {
     });
 });
 
+router.post('/editTeacher', function(req, res) {
+    console.log(req.body);
+    const updatedTeacher = {
+        name: req.body.name,
+        email: req.body.email,
+        phoneNo: req.body.phoneNo,
+        role: req.body.role
+    };
+    if (req.body.phoneNo != req.body.editTeaPhone) {
+        User.teacher.find({ "phoneNo": req.body.phoneNo }, (err, foundData) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            } else {
+                if (foundData.length != 0) {
+                    return res.send("Phone number already exists..");
+                } else {
+                    User.teacher.updateOne({ "phoneNo": req.body.editTeaPhone }, updatedTeacher, function(err, results) {
+                        if (err) return console.log(err);
+                        else return res.redirect(`/${req.body.Role}/${req.body.Name}`);
+                    });
+                }
+            }
+        });
+    } else {
+        User.teacher.updateOne({ "phoneNo": req.body.editTeaPhone }, updatedTeacher, function(err, results) {
+            if (err) return console.log(err);
+            else return res.redirect(`/${req.body.Role}/${req.body.Name}`);
+        });
+    }
+});
+
+router.post('/deleteT', function(req, res) {
+    User.teacher.deleteOne({ "phoneNo": req.body.teaPhn }, function(err, results) {
+        if (err) return handleError(err);
+        else res.redirect(`/${req.body.Role}/${req.body.Name}`);
+    });
+});
+
+//route to see the data in the database
+router.get('/readTea', function(req, res) {
+    var select = req.query.select;
+    User.teacher.find({}, function(err, foundData) {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+        } else {
+            if (foundData.length == 0) {
+                var responseObj = undefined;
+                if (select && select == 'count') {
+                    responseObj = { count: foundData.length };
+                }
+            } else {
+                var responseObj = foundData;
+                if (select && select == 'count') {
+                    responseObj = { count: foundData.length };
+                }
+                res.send(responseObj);
+            }
+        }
+    });
+});
+
 router.get('/student', function(req, res) {
     return res.render('student', { st_data: "first" });
 });
@@ -117,37 +180,6 @@ router.post('/editStudent', function(req, res) {
             else return res.redirect(`/${req.body.Role}/${req.body.Name}`);
         });
     }
-});
-
-router.post('/deleteT', function(req, res) {
-    User.teacher.deleteOne({ "phoneNo": parseInt(req.body.teaPhn) }, function(err, results) {
-        if (err) return handleError(err);
-        else res.redirect(`/${req.body.Role}/${req.body.Name}`);
-    });
-});
-
-//route to see the data in the database
-router.get('/readTea', function(req, res) {
-    var select = req.query.select;
-    User.teacher.find({}, function(err, foundData) {
-        if (err) {
-            console.log(err);
-            res.status(500).send();
-        } else {
-            if (foundData.length == 0) {
-                var responseObj = undefined;
-                if (select && select == 'count') {
-                    responseObj = { count: foundData.length };
-                }
-            } else {
-                var responseObj = foundData;
-                if (select && select == 'count') {
-                    responseObj = { count: foundData.length };
-                }
-                res.send(responseObj);
-            }
-        }
-    });
 });
 
 router.get('/readStu', function(req, res) {

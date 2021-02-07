@@ -177,9 +177,60 @@ function teaProf() {
     var tr;
     t_d.forEach((td) => {
         tr = document.createElement('tr');
-        tr.innerHTML = "<td>" + td.name + "</td>" + "<td>" + td.email + "</td>" + "<td>" + td.phoneNo + "</td>" + "<td>" + td.role + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullTeaProfile' value = 'Delete' onClick = deleteProfile(" + td.phoneNo + ")//>" + "</td>";
+        tr.innerHTML = "<td>" + td.name + "</td>" + "<td>" + td.email + "</td>" + "<td>" + td.phoneNo + "</td>" + "<td>" + td.role + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullTeaProfile' value = 'See Profile' onClick = viewTProfile(" + td.phoneNo + ")//>" + "</td>";
         tprofdata.appendChild(tr);
     });
+}
+
+function viewTProfile(phoneNo) {
+    t_d.forEach((td) => {
+        if (td.phoneNo == phoneNo) {
+            // document.getElementById('tprofcont').innerHTML = "<b class='a'>Name</b>" + td.name + "<br>" + "<b class='a'>Email</b>" + td.email + "<br>" + "<b class='a'>Phone Number</b>" + td.phoneNo + "<br>" + "<b class='a'>Role</b>" + td.role + "<br>";
+            document.getElementById('tprofcont').innerHTML = "<b class = 'a'>Name</b> : " + td.name + "<br><b class = 'a'>Email</b> : " + td.email + "<br><b class = 'a'>Phone Number</b> : " + td.phoneNo + "<br><b class = 'a'>Role</b> : " + td.role + "<br>";
+            document.getElementById('teaPhn').value = td.phoneNo;
+            document.getElementById('editTeaPhn').addEventListener("click", function() {
+                editTeacher(td.phoneNo);
+            });
+        }
+    });
+}
+
+function editTeacher(phoneNo) {
+    document.getElementById('deleteProfButton').classList.add('d-none');
+    document.getElementById('tprofcont').classList.add('d-none');
+    document.getElementById('editTea').classList.remove('d-none');
+    document.getElementById('editTeaPhone').value = phoneNo;
+    t_d.forEach((td) => {
+        if (td.phoneNo == phoneNo) {
+            document.getElementById('TeacherText1').value = td.name;
+            document.getElementById('TeacherText2').value = td.email;
+            document.getElementById('TeacherText3').value = td.phoneNo;
+            document.getElementById('TeacherText4').value = td.role;
+        }
+    });
+    document.getElementById('TeacherBox1').onchange = function() {
+        document.getElementById('TeacherText1').disabled = !this.checked;
+    };
+    document.getElementById('TeacherBox2').onchange = function() {
+        document.getElementById('TeacherText2').disabled = !this.checked;
+    };
+    document.getElementById('TeacherBox3').onchange = function() {
+        document.getElementById('TeacherText3').disabled = !this.checked;
+    };
+    document.getElementById('TeacherBox4').onchange = function() {
+        document.getElementById('TeacherText4').disabled = !this.checked;
+    };
+}
+
+function submitTeacher() {
+    $(".disabled-teacher-form").prop("disabled", false);
+    return confirm('Are you sure you wish to edit?');
+}
+
+function backTeacherProfile() {
+    document.getElementById('deleteProfButton').classList.remove('d-none');
+    document.getElementById('tprofcont').classList.remove('d-none');
+    document.getElementById('editTea').classList.add('d-none');
 }
 
 function seeProfile(phoneNo) {
@@ -276,14 +327,6 @@ function backProfile() {
     document.getElementById('editStu').classList.add('d-none');
 }
 
-function deleteProfile(phoneNo) {
-    t_d.forEach((td) => {
-        if (td.phoneNo == phoneNo) {
-            document.getElementById('tprofcont').innerHTML = "<b class='a'>Name</b>" + td.name + "<br>" + "<b class='a'>Email</b>" + td.email + "<br>" + "<b class='a'>Phone Number</b>" + td.phoneNo + "<br>" + "<b class='a'>Role</b>" + td.role + "<br>";
-            document.getElementById('teaPhn').value = td.phoneNo;
-        }
-    });
-}
 
 // function dispSessData(phoneNo) {
 //     m_d.forEach((md) => {
