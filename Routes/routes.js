@@ -302,4 +302,11 @@ router.post('/addnote', function(req, res) {
     res.redirect(`/${req.body.role}/${req.body.name}`);
 });
 
+router.post('/hook', async function(req, res){
+    console.log(req.body);
+    const WebhookData = new User.WebhookData({any : req.body});
+    const data = await WebhookData.save();
+    res.send(data);
+});
+
 module.exports = router;

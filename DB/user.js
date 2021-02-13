@@ -125,6 +125,9 @@ const StudentTeacherMapping = new mongoose.Schema({
     StudentNumbers: [String]
 }, { collection: 'StudentTeacherMappings' });
 
+const webHook = new mongoose.Schema({any : {}}, { collection: 'WebhookData' });
+
+var WebhookData = mongoose.model('WebhookData', webHook);
 var teacher = mongoose.model('Teacher', teacherSchema);
 var student = mongoose.model('Student', studentSchema);
 var pstudent = mongoose.model('Student Detail', practeeStudentSchema);
@@ -135,7 +138,8 @@ module.exports = {
     student: student,
     pstudent: pstudent,
     sessionNote: sessionNote,
-    mappingData: mappingData
+    mappingData: mappingData,
+    WebhookData: WebhookData
 }
 
 
