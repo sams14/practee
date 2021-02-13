@@ -1,0 +1,10 @@
+<% data.forEach(function(dt){ %>
+    <div style="padding: 1.2rem;">
+        <% if(data.length != 0){ %>
+            <%= JSON.stringify(dt.any) %>
+                <% } else { %>
+                    <%= 'No Data Available'%>
+                        <% } %>
+    </div>
+    <hr>
+    <% }); %>
