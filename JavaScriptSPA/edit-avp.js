@@ -351,6 +351,7 @@ function date_result() {
     const sdatePick = document.getElementById('sdatePick');
     const edatePick = document.getElementById('edatePick');
     const tPick = document.getElementById('tPick');
+    const sessionPick = document.getElementById('sessionPick');
     var tc, pn;
     t_d.forEach(function(td) {
         if (td.name == tPick.value) {
@@ -391,7 +392,7 @@ function date_result() {
                     var i, spn, sn, sem, sc, c = 0,
                         t, teacher;
                     for (i = 0; i < data["objects"].length; i++) {
-                        if (data["objects"][i]["call_recording"] != "") {
+                        if (sessionPick.value === 'All') {
                             teacher = data["objects"][i]["agent_number"].split('+91')[1];
                             t_d.forEach(function(t) {
                                 if (t.phoneNo == data["objects"][i]["agent_number"].split('+91')[1]) {
@@ -429,6 +430,90 @@ function date_result() {
                             tt = data["objects"][i]["start_time"].split(" ")[0] + " " + tt;
                             nr.innerHTML = "<td>" + c + "</td>" + "<td>" + teacher + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>" + Math.floor(data["objects"][i]["call_duration"] / 60) + "m " + data["objects"][i]["call_duration"] % 60 + "sec </a></td>";
                             table_data.appendChild(nr);
+                        } else if (sessionPick.value === 'SessionCalls') {
+                            if (data["objects"][i]["call_recording"] != "" && Math.floor(data["objects"][i]["call_duration"] / 60) >= 8) {
+                                teacher = data["objects"][i]["agent_number"].split('+91')[1];
+                                t_d.forEach(function(t) {
+                                    if (t.phoneNo == data["objects"][i]["agent_number"].split('+91')[1]) {
+                                        teacher = t.name;
+                                    }
+                                });
+                                st_d.forEach(function(std) {
+                                    if (std.phoneNo == data["objects"][i]["customer_number"].split('+91')[1]) {
+                                        spn = std.phoneNo;
+                                        sn = std.name;
+                                        sem = std.email;
+                                        sc = std.courseType;
+                                    }
+                                });
+                                if (spn === undefined) {
+                                    spn = data["objects"][i]["customer_number"].split('+91')[1];
+                                    sn = "N/A";
+                                    sem = "N/A";
+                                    sc = "Free";
+                                }
+                                c += 1;
+                                const nr = document.createElement('tr');
+                                var t = (data["objects"][i]["start_time"].split(" ")[1]).split(":")[0];
+                                var tt = "";
+                                if (parseInt(t) >= 12) {
+                                    if (((parseInt(t) - 12)) < 10) {
+                                        tt = "0" + (parseInt(t) - 12).toString();
+                                    } else {
+                                        tt = (parseInt(t) - 12).toString();
+                                    }
+                                    tt += ":" + (data["objects"][i]["start_time"].split(" ")[1]).split(":")[1] + ":" + ((data["objects"][i]["start_time"].split(" ")[1]).split(":")[2]).split("+")[0] + " pm";
+                                } else {
+                                    tt = (data["objects"][i]["start_time"].split(" ")[1]).split("+")[0] + " am";
+                                }
+                                tt = data["objects"][i]["start_time"].split(" ")[0] + " " + tt;
+                                nr.innerHTML = "<td>" + c + "</td>" + "<td>" + teacher + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td><a href='" + data["objects"][i]["call_recording"] + "'>" + Math.floor(data["objects"][i]["call_duration"] / 60) + "m " + data["objects"][i]["call_duration"] % 60 + "sec </a></td>";
+                                table_data.appendChild(nr);
+                            };
+                        } else if (sessionPick.value === 'None-SessionCalls') {
+                            if (data["objects"][i]["call_recording"] == "" || Math.floor(data["objects"][i]["call_duration"] / 60) < 8) {
+                                teacher = data["objects"][i]["agent_number"].split('+91')[1];
+                                t_d.forEach(function(t) {
+                                    if (t.phoneNo == data["objects"][i]["agent_number"].split('+91')[1]) {
+                                        teacher = t.name;
+                                    }
+                                });
+                                st_d.forEach(function(std) {
+                                    if (std.phoneNo == data["objects"][i]["customer_number"].split('+91')[1]) {
+                                        spn = std.phoneNo;
+                                        sn = std.name;
+                                        sem = std.email;
+                                        sc = std.courseType;
+                                    }
+                                });
+                                if (spn === undefined) {
+                                    spn = data["objects"][i]["customer_number"].split('+91')[1];
+                                    sn = "N/A";
+                                    sem = "N/A";
+                                    sc = "Free";
+                                }
+                                c += 1;
+                                const nr = document.createElement('tr');
+                                var t = (data["objects"][i]["start_time"].split(" ")[1]).split(":")[0];
+                                var tt = "";
+                                if (parseInt(t) >= 12) {
+                                    if (((parseInt(t) - 12)) < 10) {
+                                        tt = "0" + (parseInt(t) - 12).toString();
+                                    } else {
+                                        tt = (parseInt(t) - 12).toString();
+                                    }
+                                    tt += ":" + (data["objects"][i]["start_time"].split(" ")[1]).split(":")[1] + ":" + ((data["objects"][i]["start_time"].split(" ")[1]).split(":")[2]).split("+")[0] + " pm";
+                                } else {
+                                    tt = (data["objects"][i]["start_time"].split(" ")[1]).split("+")[0] + " am";
+                                }
+                                tt = data["objects"][i]["start_time"].split(" ")[0] + " " + tt;
+                                link = "<a href='" + data["objects"][i]["call_recording"] + "'>" + Math.floor(data["objects"][i]["call_duration"] / 60) + "m " + data["objects"][i]["call_duration"] % 60 + "sec </a>";
+                                if (data["objects"][i]["call_recording"] == "") {
+                                    link = Math.floor(data["objects"][i]["call_duration"] / 60) + "m " + data["objects"][i]["call_duration"] % 60 + "sec ";
+                                }
+                                nr.innerHTML = "<td>" + c + "</td>" + "<td>" + teacher + "</td>" + "<td>" + tt + "</td>" + "<td>" + sn + "</td>" + "<td>" + spn + "</td>" + "<td>" + sem + "</td>" + "<td>" + sc + "</td>" + "<td>" + link + "</td>";
+                                table_data.appendChild(nr);
+                            }
                         }
                     }
                 });
