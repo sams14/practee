@@ -362,6 +362,7 @@ function date_result() {
     if (tPick.value == "All") {
         url = "https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30";
     }
+    console.log(url);
     fetch(url, {
             method: 'GET',
             headers: {
@@ -377,7 +378,7 @@ function date_result() {
         .then(data => {
             tc = data['meta']['total_count'];
             console.log(tc);
-            fetch("https://kpi.knowlarity.com/Basic/v1/account/calllog?start_time=" + sdatePick.value + "%2000%3A00%3A01%2B05%3A30&end_time=" + edatePick.value + "%2023%3A23%3A59%2B05%3A30&limit=" + tc.toString(), {
+            fetch(url + "&limit=" + tc.toString(), {
                     method: 'GET',
                     headers: {
                         "Accept": "application/json",
