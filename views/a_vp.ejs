@@ -712,19 +712,32 @@
             </div>
 
             <div class="col-md-9 col-lg-10 d-none" id="session">
-                <div class="container mt-2 text-center">
-                    <label for="sdatePick">Choose your start date:</label>
-                    <input type="date" name="datePick" id="sdatePick"><br>
-                    <label for="edatePick">Choose your end date:</label>
-                    <input type="date" name="datePick" id="edatePick"><br>
-                    <label for="tPick">Choose the teacher:</label>
-                    <select name="tPick" id="tPick"><option value="All" selected>All</option></optgroup></select><br>
-                    <button type="submit" onclick="date_result()">Submit</button>
+                <div class="container p-3 mt-3 text-center d-flex">
+                    <div class="text-left px-5">
+                        <label for="sdatePick">Choose your start date:</label>
+                        <input type="date" name="datePick" id="sdatePick"><br>
+                        <label for="edatePick">Choose your end date:</label>
+                        <input type="date" name="datePick" id="edatePick"><br>
+                    </div>
+                    <div class="text-left px-5">
+                        <label for="tPick">Choose the teacher:</label>
+                        <select name="tPick" id="tPick"><option value="All" selected>All</option></optgroup></select><br>
+                        <label for="tPick">Choose filter:</label>
+                        <select name="sessionPick" id="sessionPick"><option value="All" selected>All</option></optgroup>
+                            <option value="SessionCalls">Session Calls</option></optgroup>
+                            <option value="None-SessionCalls">None-Session Calls</option></optgroup></select>
+                        </optgroup>
+                        </select><br>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-danger" type="submit" onclick="date_result()">Submit</button>
                 </div>
                 <div>
                     <div class="card text-center mt-3">
                         <div class="card-header">
                             <h6 style="margin: 0% ; font-weight: 700; font-size: 18px; color:#d17605;">Session Details</h6>
+
                         </div>
                         <div class="card-body">
                             <div id="table_div" class="d-none my-0 table-responsive table table-striped">
