@@ -3,9 +3,58 @@ const path = require('path');
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const User = require('../DB/user');
+const nodemailer = require('nodemailer');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'asutosh2000ad@gmail.com',
+        pass: 'asu21181981'
+    }
+});
+
+router.post('/mailer', async(req, res) => {
+    var teachers = new Set();
+    User.teacher.find({}, (err, tData) => {
+        User.mappingData.find({}, (err, mData) => {
+            mData.forEach((md) => {
+                if (md.StudentNumbers.includes(req.body.phoneNo)) {
+                    tData.forEach((td) => {
+                        if (td.phoneNo == md.Teacher) {
+                            teachers.add(td.email);
+                        }
+                    });
+                }
+            });
+        });
+    });
+    console.log(teachers);
+    var mailOptions = {
+        from: 'asutosh2000ad@gmail.com',
+        to: 'saminvincible3@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: `Hi Smartherd, thank you for your nice Node.js tutorials.
+                I will donate 50$ for this course. Please send me payment options.`
+            // html: '<h1>Hi Smartherd</h1><p>Your Messsage</p>'        
+    };
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+            const updatedStatus = {
+                reminderStatus: 1
+            };
+            User.pstudent.updateOne({ "phoneNo": req.body.phoneNo }, updatedStatus, function(err, results) {
+                if (err) return console.log(err);
+                else return res.redirect(`/${req.body.Role}/${req.body.Name}`);
+            });
+        }
+    });
+});
 
 //route to post user details to db
 router.post('/teacher', async(req, res) => {
@@ -32,7 +81,6 @@ router.post('/teacher', async(req, res) => {
 });
 
 router.post('/editTeacher', function(req, res) {
-    console.log(req.body);
     const updatedTeacher = {
         name: req.body.name,
         email: req.body.email,
@@ -114,7 +162,8 @@ router.post('/pstudent', async(req, res) => {
         firstAmount: req.body.firstAmount,
         secondAmount: req.body.secondAmount,
         remainingAmount: req.body.remainingAmount,
-        bandScore: req.body.bandScore
+        bandScore: req.body.bandScore,
+        reminderStatus: 0
     });
     User.pstudent.find({ "phoneNo": req.body.phoneNo }, async(err, foundData) => {
         if (err) {

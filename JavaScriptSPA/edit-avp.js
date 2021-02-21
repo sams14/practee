@@ -118,27 +118,6 @@ function sessionDetail() {
     });
 }
 
-function studentProf() {
-    document.getElementById('teaPick').value = "All";
-    t_d.forEach(function(td) {
-        var option = document.createElement('option');
-        option.value = td.name;
-        option.innerHTML = td.name;
-        document.getElementById('teaPick').appendChild(option);
-    });
-    document.getElementById('home').classList.add('d-none');
-    document.getElementById('tprofile').classList.add('d-none');
-    document.getElementById('sprofile').classList.remove('d-none');
-    document.getElementById('session').classList.add('d-none');
-    const profdata = document.getElementById('profdata');
-    var tr;
-    st_d.forEach((std) => {
-        tr = document.createElement('tr');
-        tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'profile' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>";
-        profdata.appendChild(tr);
-    });
-}
-
 function show_filtered() {
     var teaPick = document.getElementById('teaPick');
     var profdata = document.getElementById('profdata');
@@ -233,10 +212,43 @@ function backTeacherProfile() {
     document.getElementById('editTea').classList.add('d-none');
 }
 
+function studentProf() {
+    document.getElementById('teaPick').value = "All";
+    t_d.forEach(function(td) {
+        var option = document.createElement('option');
+        option.value = td.name;
+        option.innerHTML = td.name;
+        document.getElementById('teaPick').appendChild(option);
+    });
+    document.getElementById('home').classList.add('d-none');
+    document.getElementById('tprofile').classList.add('d-none');
+    document.getElementById('sprofile').classList.remove('d-none');
+    document.getElementById('session').classList.add('d-none');
+    const profdata = document.getElementById('profdata');
+    var tr;
+    st_d.forEach((std) => {
+        tr = document.createElement('tr');
+        var d = new Date();
+        var ed = new Date(std.classED);
+        var remain = (ed.getTime() - d.getTime()) / (1000 * 3600 * 24);
+        // d.setDate(d.getDate() + 10);
+        if (!std.reminderStatus && remain <= 10 && remain >= 0) {
+            tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'btn-block btn-success' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>" + "<td>" + "<form action='/mailer' method='post' onSubmit= mailerMsg() > <input type='hidden' value= " + d.name + " name='Name'> <input type='hidden' value= " + d.role + " name='Role'> <input type='hidden' value= " + std.phoneNo + " name='phoneNo'> <input class= 'btn-block btn-info' type='submit' value = 'Mail'//> </form>" + "</td>";
+        } else {
+            tr.innerHTML = "<td>" + std.name + "</td>" + "<td>" + std.phoneNo + "</td>" + "<td>" + std.email + "</td>" + "<td>" + std.courseType + "</td>" + "<td>" + "<input class= 'btn-block btn-success' type='button' data-toggle='modal' data-target='#fullProfile' value = 'See Profile' onClick = seeProfile(" + std.phoneNo + ")//>" + "</td>" + "<td>" + "<input class= 'btn-block Profile' type='button' value = 'Mail' disabled//> </form>" + "</td>";
+        }
+        profdata.appendChild(tr);
+    });
+}
+
+function mailerMsg() {
+    return confirm('Are you sure you wish to send mail?');
+}
+
 function seeProfile(phoneNo) {
     st_d.forEach((std) => {
         if (std.phoneNo == phoneNo) {
-            document.getElementById('profcont').innerHTML = "<b class = 'a'>studentSNo</b> : " + std.studentSNo + "<br><b class = 'a'>Name</b> : " + std.name + "<br><b class = 'a'>moodleUN</b> : " + std.moodleUN + "<br><b class = 'a'>courseType</b> : " + std.courseType + "<br><b class = 'a'>PhoneNo</b> : " + std.phoneNo + "<br><b class = 'a'>email</b> : " + std.email + "<br><b class = 'a'>classSD</b> : " + std.classSD + "<br><b class = 'a'>classED</b> : " + std.classED + "<br><b class = 'a'>firstAmount</b> : " + std.firstAmount + "<br><b class = 'a'>secondAmount</b> : " + std.secondAmount + "<br><b class = 'a'>remainingAmount</b> : " + std.remainingAmount + "<br><b class = 'a'>RenewalD</b> : " + std.RenewalD + "<br><b class = 'a'>qualification</b> : " + std.qualification + "<br><b class = 'a'>bandScore</b> : " + std.bandScore + "<br><b class = 'a'>location</b> : " + std.location + "<br> ";
+            document.getElementById('profcont').innerHTML = "<b class = 'a'>studentSNo</b> : " + std.studentSNo + "<br><b class = 'a'>Name</b> : " + std.name + "<br><b class = 'a'>moodleUN</b> : " + std.moodleUN + "<br><b class = 'a'>courseType</b> : " + std.courseType + "<br><b class = 'a'>PhoneNo</b> : " + std.phoneNo + "<br><b class = 'a'>email</b> : " + std.email + "<br><b class = 'a'>classSD</b> : " + std.classSD + "<br><b class = 'a'>classED</b> : " + std.classED + "<br><b class = 'a'>firstAmount</b> : " + std.firstAmount + "<br><b class = 'a'>secondAmount</b> : " + std.secondAmount + "<br><b class = 'a'>remainingAmount</b> : " + std.remainingAmount + "<br><b class = 'a'>RenewalD</b> : " + std.RenewalD + "<br><b class = 'a'>qualification</b> : " + std.qualification + "<br><b class = 'a'>bandScore</b> : " + std.bandScore + "<br><b class = 'a'>location</b> : " + std.location + "<br><b class = 'a'>reminderStatus</b> : " + std.reminderStatus + "<br> ";
             document.getElementById('stdPhn').value = std.phoneNo;
             document.getElementById('editStdPhn').addEventListener("click", function() {
                 editStudent(std.phoneNo);
