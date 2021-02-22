@@ -98,6 +98,10 @@ const practeeStudentSchema = new mongoose.Schema({
     location: {
         type: String,
         required: true
+    },
+    reminderStatus: {
+        type: Number,
+        required: true
     }
 });
 
@@ -125,7 +129,7 @@ const StudentTeacherMapping = new mongoose.Schema({
     StudentNumbers: [String]
 }, { collection: 'StudentTeacherMappings' });
 
-const webHook = new mongoose.Schema({any : {}}, { collection: 'WebhookData' });
+const webHook = new mongoose.Schema({ any: {} }, { collection: 'WebhookData' });
 
 var WebhookData = mongoose.model('WebhookData', webHook);
 var teacher = mongoose.model('Teacher', teacherSchema);
