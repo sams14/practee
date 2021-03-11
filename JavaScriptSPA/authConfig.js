@@ -2,8 +2,8 @@ const msalConfig = {
     auth: {
         clientId: "1080caff-ccbc-4f86-af01-e7fb4e0c0cb3", //1080caff-ccbc-4f86-af01-e7fb4e0c0cb3 5f955e99-b9da-45c3-8ca9-4ff578e69828
         authority: "https://login.microsoftonline.com/practee.com",
-        redirectUri: "http://localhost:3000/", //www.smilingbuddha.in
-        postLogoutRedirectUri: "http://localhost:3000/", //localhost:3000
+        redirectUri: "http://www.smilingbuddha.in/", //www.smilingbuddha.in
+        postLogoutRedirectUri: "http://www.smilingbuddha.in/", //localhost:3000
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
