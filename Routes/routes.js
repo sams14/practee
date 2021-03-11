@@ -4,9 +4,18 @@ const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const User = require('../DB/user');
 const nodemailer = require('nodemailer');
+const Grammarbot = require('grammarbot');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
+
+
+const bot = new Grammarbot({
+    'api_key' : 'def610595cmshbc7356343999a47p14650ejsn8c9fad9569d9',      // (Optional) defaults to node_default
+    'language': 'en-US',         // (Optional) defaults to en-US
+    'base_uri': 'api.grammarbot.io', // (Optional) defaults to api.grammarbot.io
+  });
+
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -362,6 +371,26 @@ router.get('/hook', async function(req, res) {
     User.WebhookData.find({}, (err, hookData) => {
         res.render('webhook', { data: hookData });
     });
+});
+
+router.get('/grammar', function(req, res){
+    res.render('checkGram');
+});
+
+router.post('/grammar', function(req, res){
+    var sen = req.body.txt;
+  bot.check(sen, function(error, result) {
+    if (!error){
+      var i = 0;
+      result["matches"].forEach(corr => {
+        // sen = sen.eplacer(sen.substring(corr["offset"], corr["offset"]+corr["length"]+), corr["replacements"][0]["value"]);
+        sen = sen.split(sen.substring(corr["offset"]+i, corr["offset"]+corr["length"]+i))[0] + '<span style="background: rgb(236, 247, 109)"><b>' + corr["replacements"][0]["value"] + '</b></span>' + sen.split(sen.substring(corr["offset"]+i, corr["offset"]+corr["length"]+i))[1];
+        i = corr["replacements"][0]["value"].length - corr["length"];  
+      });
+      // res.send(result["matches"]);
+      res.send(sen);
+    } 
+  });
 });
 
 module.exports = router;
