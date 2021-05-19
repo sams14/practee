@@ -49,7 +49,7 @@ app.use('/', function(req, res) {
 
 // zoom - vimeo integration
 const schedular = require('node-schedule');
-const job = schedular.scheduleJob('0 2 * * *', function(){
+const job = schedular.scheduleJob('30 2 * * *', function(){
     const { spawn } = require('child_process');
     const childP = spawn('python', ['vimeo_uploader.py']);
     childP.stdout.on('data', (data)=>{
