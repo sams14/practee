@@ -1,0 +1,24 @@
+{
+    "zoom-token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IlJIUUhDZkRpUkp1QTZhdWczT0xiVGciLCJleHAiOjI1MzQ2NTM4MDAsImlhdCI6MTYxOTQ3ODMxMn0.Lf_3TmayahoiinSwAXBj-qAKq7hu2sq-6AjTDPa-Oh4",
+    "vimeo-token": "d287c2575ecf5ba949efe3eaa4a98b64",
+    "vimeo-user-id": "133815660",
+    "vimeo-preset-id": "120914700",
+    "vimeo-password": {
+        "active": false,
+        "password": "Test@123"
+    },
+    "s3-integrate": {
+        "active": true,
+        "AccessKeyID": "AKIA4H567GFQP3UWMSFI",
+        "SecretAccessKey": "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",
+        "bucket": "zoom-vimeo-back-up"
+    },
+    "min-duration": 2,
+    "zoom-recordings-delete": true,
+    "report-mailer": {
+        "active": true,
+        "mail-to": ["asutosh2000ad@gmail.com", "saminvincible3@gmail.com", "pooja.mishra@practee.com"],
+        "mail-id": "ash2000test@gmail.com",
+        "mail-password": "Test@123user"
+    }
+}

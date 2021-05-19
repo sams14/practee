@@ -5,8 +5,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const authRoute = require('./Routes/routes');
+// const z2vload = require('./zoom-vimeo-integration/load');
 const multer = require('multer');
 const upload = multer();
+
+// z2vload();
 
 dotenv.config();
 
@@ -42,6 +45,21 @@ app.use('/', authRoute);
 app.use('/', function(req, res) {
     res.render('index');
 });
+
+
+// zoom - vimeo integration
+const schedular = require('node-schedule');
+const job = schedular.scheduleJob('0 2 * * *', function(){
+    const { spawn } = require('child_process');
+    const childP = spawn('python', ['vimeo_uploader.py']);
+    childP.stdout.on('data', (data)=>{
+        console.log(`stdout: ${data}`);
+    });
+    childP.stderr.on('data', (data)=>{
+        console.log(`stderr: ${data}`);
+    });
+});
+
 
 // Start the server.
 app.listen(port);

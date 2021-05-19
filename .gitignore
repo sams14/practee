@@ -1,0 +1,7 @@
+.DS_Store
+meetings/
+*.csv
+__pycache__/
+scripts.py
+/reports
+error.txt
