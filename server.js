@@ -5,11 +5,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const authRoute = require('./Routes/routes');
-// const z2vload = require('./zoom-vimeo-integration/load');
 const multer = require('multer');
 const upload = multer();
-
-// z2vload();
 
 dotenv.config();
 
@@ -48,18 +45,36 @@ app.use('/', function(req, res) {
 
 
 // zoom - vimeo integration
-const schedular = require('node-schedule');
-const job = schedular.scheduleJob('30 2 * * *', function(){
-    const { spawn } = require('child_process');
-    const childP = spawn('python', ['vimeo_uploader.py']);
-    childP.stdout.on('data', (data)=>{
-        console.log(`stdout: ${data}`);
-    });
-    childP.stderr.on('data', (data)=>{
-        console.log(`stderr: ${data}`);
-    });
-});
+// const schedular = require('node-schedule');
+// const job = schedular.scheduleJob('30 2 * * *', function(){
+//     const { spawn } = require('child_process');
+//     const childP = spawn('python', ['vimeo_uploader.py']);
+//     childP.stdout.on('data', (data)=>{
+//         console.log(`stdout: ${data}`);
+//     });
+//     childP.stderr.on('data', (data)=>{
+//         console.log(`stderr: ${data}`);
+//     });
+// });
 
+const CronJob = require('cron').CronJob;
+const { spawn } = require('child_process');
+const job = new CronJob({
+    // Run at 05:00 Central time, only on weekdays
+    cronTime: '30 02 * * *',
+    onTick: function() {
+        // Run whatever you like here..
+        const childP = spawn('python3.7', ['vimeo_uploader.py']);
+        childP.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        });
+        childP.stderr.on('data', (data) => {
+            console.log(`stderr: ${data}`);
+        });
+    },
+    start: true,
+    timeZone: 'Asia/Kolkata'
+});
 
 // Start the server.
 app.listen(port);

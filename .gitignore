@@ -5,3 +5,6 @@ __pycache__/
 scripts.py
 /reports
 error.txt
+.env
+config.json
+node_modules

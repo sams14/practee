@@ -135,31 +135,33 @@ def check_upload_videos(records, filename):
 
 		for record in records:
 			if record['file_extension'] == 'MP4':
-				if record['vimeo_status']!='available' and record['vimeo_status']!='error' and record['vimeo_uri'] !='':
-					url = "https://api.vimeo.com/me/"+record['vimeo_uri']
-					print('\n'+' Checking {filename} '.format(filename=record['file_name']).center(100,':'))
-					response = requests.get(url, headers=headers)
-					json_response = json.loads(response.text)
+				transcript_record = Transcript().find_transcript_record(records, record['meeting_uuid'])
+				if transcript_record :
+					if record['vimeo_status']!='available' and record['vimeo_status']!='error' and record['vimeo_uri'] !='':
+						url = "https://api.vimeo.com/me/"+record['vimeo_uri']
+						print('\n'+' Checking {filename} '.format(filename=record['file_name']).center(100,':'))
+						response = requests.get(url, headers=headers)
+						json_response = json.loads(response.text)
 
-					record['vimeo_status'] = json_response['status']
-					if record['vimeo_status'] == 'available' or record['vimeo_status'] == 'transcoding':
-						#print(json_response)
-						if record['vimeo_embedded'] == 'False':
-							record = set_embeded_presets(record)
+						record['vimeo_status'] = json_response['status']
+						if record['vimeo_status'] == 'available' or record['vimeo_status'] == 'transcoding':
+							#print(json_response)
+							if record['vimeo_embedded'] == 'False':
+								record = set_embeded_presets(record)
 
-						if record['vimeo_status'] == 'available':
-							print ('Available %s video!' %record['file_name'])
+							if record['vimeo_status'] == 'available':
+								print ('Available %s video!' %record['file_name'])
+							else:
+								print ('Transcoding video %s... almost ready' %record['file_name'])
+
+						elif record['vimeo_status'] != 'error':
+							if record['vimeo_embedded'] == 'False':
+								record = set_embeded_presets(record)
+
+							print('Not yet available video ' + record['file_name']+' lets try in ' +str(fibo(START_WAIT))+' seconds')
+							unavailablecount += 1
 						else:
-							print ('Transcoding video %s... almost ready' %record['file_name'])
-
-					elif record['vimeo_status'] != 'error':
-						if record['vimeo_embedded'] == 'False':
-							record = set_embeded_presets(record)
-
-						print('Not yet available video ' + record['file_name']+' lets try in ' +str(fibo(START_WAIT))+' seconds')
-						unavailablecount += 1
-					else:
-						print('Error status for video %s' %record['file_name'] )
+							print('Error status for video %s' %record['file_name'] )
 			writer.writerow(utils.get_record_row(record))
 
 		if unavailablecount > 0:
@@ -180,38 +182,40 @@ def upload_zoom_videos(records):
 
 	for record in records:
 		if record['file_extension'] == 'MP4':
-			if record['vimeo_status'] != 'available' and record['vimeo_status'] != 'transcoding' and record['vimeo_status'] != 'transcode_starting':
-				print('\n'+' Uploading {filename} '.format(filename=record['file_name']).center(100,':'))
-				body = {}
-				body['name']=record['topic']+record['recording_start'].split("T")[0]+'.'+record['file_extension']
-				body['description']=VIDEO_DESCRIPTION.format(topic=record['topic'],start_date=record['recording_start'])
+			transcript_record = Transcript().find_transcript_record(records, record['meeting_uuid'])
+			if transcript_record :
+				if record['vimeo_status'] != 'available' and record['vimeo_status'] != 'transcoding' and record['vimeo_status'] != 'transcode_starting':
+					print('\n'+' Uploading {filename} '.format(filename=record['file_name']).center(100,':'))
+					body = {}
+					body['name']=record['topic']+record['recording_start'].split("T")[0]+'.'+record['file_extension']
+					body['description']=VIDEO_DESCRIPTION.format(topic=record['topic'],start_date=record['recording_start'])
 
-				privacy= {}
-				if (utils.vimeo_password["active"]):
-					privacy['view']='password'
-					privacy['password']=utils.vimeo_password["password"]
-				else :
-					privacy['view']='nobody'
-				privacy['embed']='public'
-				privacy['comments']='nobody'
-				privacy['download']='false'
+					privacy= {}
+					if (utils.vimeo_password["active"]):
+						privacy['view']='password'
+						privacy['password']=utils.vimeo_password["password"]
+					else :
+						privacy['view']='nobody'
+					privacy['embed']='public'
+					privacy['comments']='nobody'
+					privacy['download']='false'
 
-				upload = {}
-				upload['approach']='pull'
-				upload['size'] = record['file_size']
-				upload['link']= record['download_url']+"?access_token="+utils.zoom_token
+					upload = {}
+					upload['approach']='pull'
+					upload['size'] = record['file_size']
+					upload['link']= record['download_url']+"?access_token="+utils.zoom_token
 
-				body['upload']=upload
-				body['privacy']=privacy
-				response = requests.request("POST",url, headers=headers, data=json.dumps(body))
-				if response.status_code == 201:
-					json_response = json.loads(response.content)
-					record['vimeo_uri'] = json_response['uri']
-					record['vimeo_status'] = json_response['upload']['status']
-					record['vimeo_transcode_status'] = json_response['transcode']['status']
-					record['vimeo_id']= record['vimeo_uri'][8:len(record['vimeo_uri'])]
-			else:
-				print('\n'+'Record {filename} already or almost uploaded! '.format(filename=record['file_name']))
+					body['upload']=upload
+					body['privacy']=privacy
+					response = requests.request("POST",url, headers=headers, data=json.dumps(body))
+					if response.status_code == 201:
+						json_response = json.loads(response.content)
+						record['vimeo_uri'] = json_response['uri']
+						record['vimeo_status'] = json_response['upload']['status']
+						record['vimeo_transcode_status'] = json_response['transcode']['status']
+						record['vimeo_id']= record['vimeo_uri'][8:len(record['vimeo_uri'])]
+				else:
+					print('\n'+'Record {filename} already or almost uploaded! '.format(filename=record['file_name']))
 
 	return records
 
