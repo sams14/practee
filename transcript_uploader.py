@@ -101,10 +101,10 @@ class Transcript:
 					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
 
 		if failed_list:
-			if not self.utils.s3_integrate["active"]:
-				f = open("error.txt", 'w')
-				f.close()
-			with open("error.txt", 'w+') as f: 
+			# if not self.utils.s3_integrate["active"]:
+			# 	f = open("error.txt", 'w')
+			# 	f.close()
+			with open("error.txt", 'w') as f: 
 				f.write(' Transcript upload Failed !! '.center(100, ':')+"\n")
 				for line in failed_list:
 					f.write(str(line['email'])+"\t"+str(line['topic'])+"\t"+str(line['meeting_id'])+"\n")

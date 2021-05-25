@@ -8,6 +8,25 @@ class S3backup:
 	def __init__(self):
 		self.utils = Utils()
 	
+	def check_record_type(self,record):
+		f_type = ""
+		if record['file_extension'] == 'VTT':
+			if "?type=cc" in record['download_url']:
+				f_type = "ClosedCaption_"
+			else:
+				f_type = "AudioTranscript_"
+		elif record['file_extension'] == 'MP4':
+			f_type = "Video_"
+		elif record['file_extension'] == 'M4A':
+			f_type = "Audio_"
+		elif record['file_extension'] == 'JSON':
+			f_type = "Timestamp_"
+		elif record['file_extension'] == 'TXT':
+			f_type = "Chat_"
+		elif record['file_extension'] == 'CSV':
+			f_type = "PollingData_"
+		return f_type
+
 	def upload(self, records):
 
 		print('\n'+' Backup files from Zoom to AWS S3 '.center(100, ':'))
@@ -16,7 +35,8 @@ class S3backup:
 
 		for record in records:
 			url = record['download_url'] # put your url here
-			key = record['recording_start'].split("T")[0]+'/'+record['topic']+'/'+record['file_name'] #your desired s3 path or filename
+			file_type = self.check_record_type(record)
+			key = record['recording_start'].split("T")[0]+'/'+record['topic']+'/'+file_type+record['file_name'] #your desired s3 path or filename
 			s3=boto3.client('s3', aws_access_key_id = self.utils.s3_integrate["AccessKeyID"], aws_secret_access_key = self.utils.s3_integrate["SecretAccessKey"])
 			http=urllib3.PoolManager()
 			try:

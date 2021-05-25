@@ -9,8 +9,8 @@ import json
 import os.path
 import time
 from os import path
-from datetime import date
-from datetime import timedelta
+from datetime import datetime,timedelta
+import pytz
 from time import time
 from time import sleep
 from utils import Utils
@@ -220,28 +220,33 @@ def upload_zoom_videos(records):
 	return records
 
 if __name__ == "__main__":
-	date = date.today()-timedelta(days=1)
-	arg = ['vimeo_uploader.py', '--daterange', str(date), str(date), '--outputfile', 'outputfile.csv']
+	IST = pytz.timezone('Asia/Kolkata')
+	date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
+	arg = ['vimeo_uploader.py', '--daterange', date, date, '--outputfile', 'outputfile.csv']
 
 	utils = Utils()
 	# files = utils.get_records(sys.argv, 'vimeo_uploader.py')
 	files = utils.get_records(arg, 'vimeo_uploader.py')
 
-	if utils.input_type == 1:
-		files = check_upload_videos(files, utils.input_file)
-
-	if (utils.s3_integrate["active"]):
-		files = S3backup().upload(files)
-
 	files = upload_zoom_videos(files)
-	files = check_upload_videos(files, utils.output_file)
+	files = check_upload_videos(files, utils.output_file)	
 
 	# utils.output_file = 'outputfile.csv'
 	# files = utils.load_videos_data('outputfile.csv')
 
 	files = Transcript().upload_zoom_transcript(files)
-	files = Transcript().update_outputfile(files, utils.output_file)
+	files = Transcript().update_outputfile(files, utils.output_file)	
 	move_videos_to_folder(files)
+
+	if (utils.report_mailer["active"]):
+		try:
+			Mailer().send_mail(utils.report_mailer["mail-to"])
+		except Exception as e:
+			print(' MAIL FAILED '.center(100,':'))
+			print(e)
+
+	if (utils.s3_integrate["active"]):
+		files = S3backup().upload(files)
 
 	if (utils.zoom_recordings_delete):
 		files = Zoom().delete_zoom_files(files)
