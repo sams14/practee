@@ -1,6 +1,8 @@
 import boto3
 import urllib3
 import botocore
+from datetime import datetime,timedelta
+import pytz
 from utils import Utils
 
 class S3backup:
@@ -50,8 +52,10 @@ class S3backup:
 					print('\n'+'Failed to upload for {filename} ! '.format(filename=record['file_name']))
 
 		if failed_list:
-			with open("error.txt", 'w') as f: 
-				f.write(' S3 Back-up Failed !! '.center(100, ':')+"\n")
+			with open("error.txt", 'w+') as f: 
+				IST = pytz.timezone('Asia/Kolkata')
+				date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
+				f.write((' S3 Back-up Failed '+ date +' !! ').center(100, ':')+"\n")
 				for line in failed_list:
 					f.write(line['folder']+"\t"+line['file']+"\n")
 

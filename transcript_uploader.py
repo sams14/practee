@@ -1,6 +1,8 @@
 import requests
 import csv
 import json
+from datetime import datetime,timedelta
+import pytz
 from utils import Utils
 
 
@@ -100,12 +102,14 @@ class Transcript:
 					failed_list.append({'email': record['email'],'topic':record['topic'], 'meeting_id': record['meeting_id']})
 					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
 
+		f = open("error.txt", 'w')
+		f.close()
+
 		if failed_list:
-			# if not self.utils.s3_integrate["active"]:
-			# 	f = open("error.txt", 'w')
-			# 	f.close()
-			with open("error.txt", 'w') as f: 
-				f.write(' Transcript upload Failed !! '.center(100, ':')+"\n")
+			with open("error.txt", 'w+') as f:
+				IST = pytz.timezone('Asia/Kolkata')
+				date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
+				f.write((' Transcript upload Failed '+ date +' !! ').center(100, ':')+"\n")
 				for line in failed_list:
 					f.write(str(line['email'])+"\t"+str(line['topic'])+"\t"+str(line['meeting_id'])+"\n")
 

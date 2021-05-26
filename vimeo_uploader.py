@@ -238,13 +238,6 @@ if __name__ == "__main__":
 	files = Transcript().update_outputfile(files, utils.output_file)	
 	move_videos_to_folder(files)
 
-	if (utils.report_mailer["active"]):
-		try:
-			Mailer().send_mail(utils.report_mailer["mail-to"])
-		except Exception as e:
-			print(' MAIL FAILED '.center(100,':'))
-			print(e)
-
 	if (utils.s3_integrate["active"]):
 		files = S3backup().upload(files)
 
