@@ -102,9 +102,6 @@ class Transcript:
 					failed_list.append({'email': record['email'],'topic':record['topic'], 'meeting_id': record['meeting_id']})
 					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
 
-		f = open("error.txt", 'w')
-		f.close()
-
 		if failed_list:
 			with open("error.txt", 'w+') as f:
 				IST = pytz.timezone('Asia/Kolkata')
@@ -114,4 +111,3 @@ class Transcript:
 					f.write(str(line['email'])+"\t"+str(line['topic'])+"\t"+str(line['meeting_id'])+"\n")
 
 		return records
-

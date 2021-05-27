@@ -225,6 +225,9 @@ if __name__ == "__main__":
 	arg = ['vimeo_uploader.py', '--daterange', date, date, '--outputfile', 'outputfile.csv']
 
 	utils = Utils()
+	with open("error.txt", 'w') as f:
+    	f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
+
 	# files = utils.get_records(sys.argv, 'vimeo_uploader.py')
 	files = utils.get_records(arg, 'vimeo_uploader.py')
 
