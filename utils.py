@@ -16,7 +16,7 @@ class Utils:
 
 	def load_config(self):
 		with open("config.json") as json_data_file:
-		    data = json.load(json_data_file)
+			data = json.load(json_data_file)
 
 		self.zoom_token = data['zoom-token']
 		self.vimeo_token = data['vimeo-token']

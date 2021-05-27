@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
 	utils = Utils()
 	with open("error.txt", 'w') as f:
-    	f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
+		f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
 
 	# files = utils.get_records(sys.argv, 'vimeo_uploader.py')
 	files = utils.get_records(arg, 'vimeo_uploader.py')
