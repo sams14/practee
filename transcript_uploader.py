@@ -56,6 +56,10 @@ class Transcript:
 		failed_list = []
 		for record in records:
 			if record['file_extension'] == 'MP4':
+				if record['vimeo_status'] != 'pending':
+					failed_list.append({'email': record['email'],'topic':record['topic'], 'meeting_id': record['meeting_id']})
+					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
+					continue
 				transcript_record = self.find_transcript_record(records, record['meeting_uuid'])
 				if transcript_record :
 					transcript = self.get_transcript(transcript_record['download_url'], transcript_record['file_name'])
