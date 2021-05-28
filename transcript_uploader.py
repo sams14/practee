@@ -55,7 +55,7 @@ class Transcript:
 		}
 		failed_list = []
 		for record in records:
-			if record['file_extension'] == 'MP4' and record['vimeo_status'] != 'pending' and record['vimeo_status'] != 'error':
+			if record['file_extension'] == 'MP4':
 				transcript_record = self.find_transcript_record(records, record['meeting_uuid'])
 				if transcript_record :
 					transcript = self.get_transcript(transcript_record['download_url'], transcript_record['file_name'])
@@ -96,7 +96,9 @@ class Transcript:
 
 							else: print('\n'+' Failed Post request to texttracks_uri {filename}. Response Status Code : {status}'.format(filename=transcript_record['file_name'], status=response.status_code).center(100, ':'))
 
-						else: print('\n'+'Record {filename} needs to be uploaded first! '.format(filename=record['file_name']))
+						else: 
+							failed_list.append({'email': record['email'],'topic':record['topic'], 'meeting_id': record['meeting_id']})
+							print('\n'+'Record {filename} needs to be uploaded first! '.format(filename=record['file_name']))
 
 				else:
 					failed_list.append({'email': record['email'],'topic':record['topic'], 'meeting_id': record['meeting_id']})
