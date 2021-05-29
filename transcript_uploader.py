@@ -56,7 +56,7 @@ class Transcript:
 		failed_list = []
 		for record in records:
 			if record['file_extension'] == 'MP4':
-				if record['vimeo_status'] != 'pending':
+				if record['vimeo_status'] == 'pending':
 					failed_list.append({'email': record['email'],'topic':record['topic'], 'meeting_id': record['meeting_id']})
 					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
 					continue

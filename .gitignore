@@ -8,3 +8,4 @@ error.txt
 .env
 config.json
 node_modules
+test.py
