@@ -62,6 +62,8 @@ class Transcript:
 					continue
 				transcript_record = self.find_transcript_record(records, record['meeting_uuid'])
 				if transcript_record :
+					if transcript_record['vimeo_status'] == 'active':
+						continue
 					transcript = self.get_transcript(transcript_record['download_url'], transcript_record['file_name'])
 					if (transcript):
 						if (record['vimeo_id']):
@@ -109,7 +111,7 @@ class Transcript:
 					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
 
 		if failed_list:
-			with open("error.txt", 'w+') as f:
+			with open("error.txt", 'a') as f:
 				IST = pytz.timezone('Asia/Kolkata')
 				date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
 				f.write((' Transcript upload Failed '+ date +' !! ').center(100, ':')+"\n")
