@@ -5,8 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const authRoute = require('./Routes/routes');
-const multer = require('multer');
-const upload = multer();
 
 dotenv.config();
 
@@ -34,7 +32,6 @@ app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(upload.array());
 
 //set route middleware
 app.use('/', authRoute);
