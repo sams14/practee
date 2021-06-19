@@ -1,57 +1,43 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
 const authRoute = require('./Routes/routes');
+const cors = require("cors");
+const passport = require("passport");
+const { connect } = require("mongoose");
+const { success, error } = require("consola");
 
-dotenv.config();
+// Bring in the app constants
+const { DB, PORT } = require("./config/index");
 
 //initialize express.
 const app = express();
 
-
+//Serving ejs files in views folder
 app.set('view engine', 'ejs');
-//connect to db
-mongoose.connect(
-    process.env.DB_CONNECT, { useUnifiedTopology: true, useNewUrlParser: true },
-    () => console.log('connected to db')
-);
-
-// Initialize variables.
-const port = 3000; // process.env.PORT || 3000;
 
 // Configure morgan module to log all requests.
 app.use(morgan('dev'));
 
+app.use(bodyParser.json());
+
 // Set the front-end folder to serve public assets.
 app.use(express.static(path.join(__dirname, 'JavaScriptSPA')));
 
-app.use(bodyParser.json());
+// Middlewares
+app.use(cors());
+app.use(passport.initialize());
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+require("./middlewares/passport")(passport);
 
-//set route middleware
-app.use('/', authRoute);
+// User Router Middleware
+app.use("/api/users", require("./routes/users"));
 
-app.use('/', function(req, res) {
-    res.render('index');
-});
+// app.use('/', authRoute);
 
-
-// zoom - vimeo integration
-// const schedular = require('node-schedule');
-// const job = schedular.scheduleJob('30 2 * * *', function(){
-//     const { spawn } = require('child_process');
-//     const childP = spawn('python', ['vimeo_uploader.py']);
-//     childP.stdout.on('data', (data)=>{
-//         console.log(`stdout: ${data}`);
-//     });
-//     childP.stderr.on('data', (data)=>{
-//         console.log(`stderr: ${data}`);
-//     });
+// app.use('/', function(req, res) {
+//     res.render('index');
 // });
 
 const CronJob = require('cron').CronJob;
@@ -73,6 +59,31 @@ const job = new CronJob({
     timeZone: 'Asia/Kolkata'
 });
 
-// Start the server.
-app.listen(port);
-console.log('Listening on port ' + port + '...');
+const startApp = async() => {
+    try {
+        // Connection With DB
+        await connect(DB, {
+            useFindAndModify: true,
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        });
+
+        success({
+            message: `Successfully connected with the Database \n${DB}`,
+            badge: true
+        });
+
+        // Start Listenting for the server on PORT
+        app.listen(PORT, () =>
+            success({ message: `Server started on PORT ${PORT}`, badge: true })
+        );
+    } catch (err) {
+        error({
+            message: `Unable to connect with Database \n${err}`,
+            badge: true
+        });
+        startApp();
+    }
+};
+
+startApp();
