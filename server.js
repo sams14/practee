@@ -1,8 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
-const bodyParser = require('body-parser');
-const authRoute = require('./Routes/routes');
+// const authRoute = require('./Routes/routes');
 const cors = require("cors");
 const passport = require("passport");
 const { connect } = require("mongoose");
@@ -20,10 +19,11 @@ app.set('view engine', 'ejs');
 // Configure morgan module to log all requests.
 app.use(morgan('dev'));
 
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
 
 // Set the front-end folder to serve public assets.
-app.use(express.static(path.join(__dirname, 'JavaScriptSPA')));
+app.use(express.static(path.join(__dirname, 'Public')));
 
 // Middlewares
 app.use(cors());
@@ -32,7 +32,22 @@ app.use(passport.initialize());
 require("./middlewares/passport")(passport);
 
 // User Router Middleware
+app.use("/practee", require("./routes/practee"));
+
 app.use("/api/users", require("./routes/users"));
+
+app.get('/login', function(req, res) {
+    res.sendFile(path.join(__dirname, './Public/pages', 'login.html'))
+});
+app.get('/forgotPassword', function(req, res) {
+    res.sendFile(path.join(__dirname, './Public/pages', 'forgot-password.html'))
+});
+app.get('/signup', function(req, res) {
+    res.sendFile(path.join(__dirname, './Public/pages', 'create-account.html'))
+});
+app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, './Public/pages', '404.html'))
+});
 
 // app.use('/', authRoute);
 
