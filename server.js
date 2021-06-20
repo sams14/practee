@@ -36,17 +36,12 @@ app.use("/practee", require("./routes/practee"));
 
 app.use("/api/users", require("./routes/users"));
 
-app.get('/login', function(req, res) {
-    res.sendFile(path.join(__dirname, './Public/pages', 'login.html'))
-});
 app.get('/forgotPassword', function(req, res) {
-    res.sendFile(path.join(__dirname, './Public/pages', 'forgot-password.html'))
+    res.sendFile(path.join(__dirname, './Public/pages', 'forgot-password.html'));
 });
-app.get('/signup', function(req, res) {
-    res.sendFile(path.join(__dirname, './Public/pages', 'create-account.html'))
-});
+
 app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, './Public/pages', '404.html'))
+    res.render('pages/404');
 });
 
 // app.use('/', authRoute);
