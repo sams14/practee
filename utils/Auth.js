@@ -9,14 +9,6 @@ const { SECRET } = require("../config/index");
  */
 const userRegister = async(userDets, role, res) => {
     try {
-        // Validate the username
-        let usernameNotTaken = await validateUsername(userDets.username);
-        if (!usernameNotTaken) {
-            return res.status(400).json({
-                message: `Username is already taken.`,
-                success: false
-            });
-        }
 
         // validate the email
         let emailNotRegistered = await validateEmail(userDets.email);
@@ -43,6 +35,7 @@ const userRegister = async(userDets, role, res) => {
             success: true
         });
     } catch (err) {
+        console.log(err);
         // Implement logger function (winston)
         return res.status(500).json({
             message: "Unable to create your account.",
@@ -55,12 +48,14 @@ const userRegister = async(userDets, role, res) => {
  * @DESC To Login the user (ADMIN, SUPER_ADMIN, USER)
  */
 const userLogin = async(userCreds, role, res) => {
-    let { username, password } = userCreds;
-    // First Check if the username is in the database
-    const user = await User.findOne({ username });
+    console.log(userCreds);
+    let { email, password } = userCreds;
+    console.log(email);
+    // First Check if the email is in the database
+    const user = await User.findOne({ email });
     if (!user) {
         return res.status(404).json({
-            message: "Username is not found. Invalid login credentials.",
+            message: "Email is not found. Invalid login credentials.",
             success: false
         });
     }
@@ -79,14 +74,13 @@ const userLogin = async(userCreds, role, res) => {
         let token = jwt.sign({
                 user_id: user._id,
                 role: user.role,
-                username: user.username,
                 email: user.email
             },
             SECRET, { expiresIn: "7 days" }
         );
 
         let result = {
-            username: user.username,
+            name: user.name,
             role: user.role,
             email: user.email,
             token: `Bearer ${token}`,
@@ -104,11 +98,6 @@ const userLogin = async(userCreds, role, res) => {
             success: false
         });
     }
-};
-
-const validateUsername = async username => {
-    let user = await User.findOne({ username });
-    return user ? false : true;
 };
 
 /**
@@ -131,7 +120,6 @@ const validateEmail = async email => {
 
 const serializeUser = user => {
     return {
-        username: user.username,
         email: user.email,
         name: user.name,
         _id: user._id,
