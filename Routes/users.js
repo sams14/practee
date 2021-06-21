@@ -29,18 +29,24 @@ router.post("/register-super-admin", async (req, res) => {
 
 // Users Login Route
 router.get('/login-user', async (req, res) => {
-  res.render('pages/login');
+  res.render('pages/login',{role : "user"});
 });
 router.post("/login-user", async (req, res) => {
   await userLogin(req.body, "user", res);
 });
 
 // Admin Login Route
+router.get('/login-admin', async (req, res) => {
+  res.render('pages/login',{role : "admin"});
+});
 router.post("/login-admin", async (req, res) => {
   await userLogin(req.body, "admin", res);
 });
 
 // Super Admin Login Route
+router.get('/login-super-admin', async (req, res) => {
+  res.render('pages/login',{role : "super-admin"});
+});
 router.post("/login-super-admin", async (req, res) => {
   await userLogin(req.body, "superadmin", res);
 });
