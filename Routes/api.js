@@ -1,9 +1,8 @@
 const router = require("express").Router();
-const passport = require("passport");
 
 // Bring in the User Registration function
 const {
-  userAuth,
+  apiAuth,
   userLogin,
   checkRole,
   userRegister,
@@ -28,47 +27,8 @@ router.post("/register-super-admin", async (req, res) => {
   await userRegister(req.body, "superadmin", res);
 });
 
-
-
-
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', 
-    (err, user, info) => {
-      if (info) { return res.redirect(303, '/login'); }
-      if (err) { return next(err); }
-      if (!user) { return res.redirect(303, '/login'); }
-      req.login(user, (err) => {
-          console.log("login");
-          if (err) { return res.send(err) }
-          next();
-      })
-    })(req, res, next);
-  },
-  function(req, res) {
-    res.redirect(303,'/profile');
-});
-
-router.get('/authrequired', (req, res) => {
-  if(req.isAuthenticated()) {
-    res.send('you hit the authentication endpoint\n');
-  } else {
-    res.send('unauthorised\n');
-  }
-})
-
-
-router.get('/logout', function (req, res) {
-  req.logOut();
-  res.status(200).clearCookie('connect.sid', {
-    path: '/'
-  });
-  req.session.destroy(function (err) {
-    res.redirect(303,'/login');
-  });
-});
-
 // Users Login Route
-router.get('/login', async (req, res) => {
+router.get('/login-user', async (req, res) => {
   res.render('pages/login',{role : "user"});
 });
 router.post("/login-user", async (req, res) => {
@@ -92,14 +52,14 @@ router.post("/login-super-admin", async (req, res) => {
 });
 
 // Profile Route
-router.get("/profile", userAuth, async (req, res) => {
+router.get("/profile", apiAuth, async (req, res) => {
   return res.json(serializeUser(req.user));
 });
 
 // Users Protected Route
 router.get(
   "/user-protectd",
-  userAuth,
+  apiAuth,
   checkRole(["user"]),
   async (req, res) => {
     return res.json("Hello User");
@@ -109,7 +69,7 @@ router.get(
 // Admin Protected Route
 router.get(
   "/admin-protectd",
-  userAuth,
+  apiAuth,
   checkRole(["admin"]),
   async (req, res) => {
     return res.json("Hello Admin");
@@ -119,7 +79,7 @@ router.get(
 // Super Admin Protected Route
 router.get(
   "/super-admin-protectd",
-  userAuth,
+  apiAuth,
   checkRole(["superadmin"]),
   async (req, res) => {
     return res.json("Hello Super Admin");
@@ -129,7 +89,7 @@ router.get(
 // Super Admin Protected Route
 router.get(
   "/super-admin-and-admin-protectd",
-  userAuth,
+  apiAuth,
   checkRole(["superadmin", "admin"]),
   async (req, res) => {
     return res.json("Super admin and Admin");

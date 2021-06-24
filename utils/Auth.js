@@ -103,7 +103,18 @@ const userLogin = async(userCreds, role, res) => {
 /**
  * @DESC Passport middleware
  */
-const userAuth = passport.authenticate("jwt", { session: false });
+const userAuth = (req, res, next) => {
+    if(req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect(303,'/login');
+    }
+}
+
+/**
+ * @DESC Passport middleware
+ */
+const apiAuth = passport.authenticate("jwt", { session: false });
 
 /**
  * @DESC Check Role Middleware
@@ -129,6 +140,7 @@ const serializeUser = user => {
 };
 
 module.exports = {
+    apiAuth,
     userAuth,
     checkRole,
     userLogin,

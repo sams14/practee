@@ -1,14 +1,18 @@
 const express = require('express');
+const session = require('express-session')
+// const FileStore = require('session-file-store')(session);
+const MongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
 const path = require('path');
+const uuid = require('uuid').v4;
 // const authRoute = require('./Routes/routes');
 const cors = require("cors");
 const passport = require("passport");
-const { connect } = require("mongoose");
+const { connect, connection } = require("mongoose");
 const { success, error } = require("consola");
 
 // Bring in the app constants
-const { DB, PORT } = require("./config/index");
+const { DB, SECRET, PORT } = require("./config/index");
 
 //initialize express.
 const app = express();
@@ -25,16 +29,51 @@ app.use(express.urlencoded({extended:false}));
 // Set the front-end folder to serve public assets.
 app.use(express.static(path.join(__dirname, 'Public')));
 
-// Middlewares
 app.use(cors());
-app.use(passport.initialize());
 
-require("./middlewares/passport")(passport);
+// Connection With DB
+connect(DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+},function (err) {
+        if(err){
+            error({
+                message: `Unable to connect with Database \n${err}`,
+                badge: true
+            });
+        }
+    }
+)
+
+const sessionStore = new MongoStore({ 
+    mongooseConnection: connection,
+    collection: 'sessions' 
+});
+
+app.use(session({
+    genid: (req) => {
+        return uuid() // use UUIDs for session IDs
+    },
+    secret: SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+        httpOnly: true,
+        sameSite: true,
+        maxAge: 1000 * 60 * 60 * 24 // Equals 1 day (1 day * 24 hr/1 day * 60 min/1 hr * 60 sec/1 min * 1000 ms / 1 sec)
+    }
+}));
+
+// Middlewares
+require("./middlewares/passport");
+app.use(passport.initialize());
+app.use(passport.session());
 
 // User Router Middleware
+app.use("/", require("./Routes/users"));
 app.use("/practee", require("./routes/practee"));
-
-app.use("/api/users", require("./routes/users"));
+app.use("/api/users", require("./Routes/api"));
 
 app.get('/forgotPassword', function(req, res) {
     res.sendFile(path.join(__dirname, './Public/pages', 'forgot-password.html'));
@@ -50,8 +89,11 @@ app.get('*', function(req, res) {
 //     res.render('index');
 // });
 
+
+//Python Job Scheduler
 const CronJob = require('cron').CronJob;
 const { spawn } = require('child_process');
+const mongoose = require('mongoose');
 const job = new CronJob({
     // Run at 05:00 Central time, only on weekdays
     cronTime: '30 02 * * *',
@@ -69,31 +111,18 @@ const job = new CronJob({
     timeZone: 'Asia/Kolkata'
 });
 
-const startApp = async() => {
-    try {
-        // Connection With DB
-        await connect(DB, {
-            useFindAndModify: true,
-            useUnifiedTopology: true,
-            useNewUrlParser: true
-        });
+// Start Listenting for the server on PORT
+const db = mongoose.connection;
 
-        success({
-            message: `Successfully connected with the Database \n${DB}`,
-            badge: true
-        });
+db.on('error', console.error.bind(console, "Error connecting to db"));
 
-        // Start Listenting for the server on PORT
-        app.listen(PORT, () =>
-            success({ message: `Server started on PORT ${PORT}`, badge: true })
-        );
-    } catch (err) {
-        error({
-            message: `Unable to connect with Database \n${err}`,
-            badge: true
-        });
-        startApp();
-    }
-};
-
-startApp();
+db.once('open', function(){
+    success({
+        message: `Successfully connected with the Database \n${DB}`,
+        badge: true
+    });
+}).then(()=>{
+    app.listen(PORT, () =>
+        success({ message: `Server started on PORT ${PORT}`, badge: true })
+    )
+})
