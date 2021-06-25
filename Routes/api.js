@@ -3,7 +3,7 @@ const router = require("express").Router();
 // Bring in the User Registration function
 const {
   apiAuth,
-  userLogin,
+  apiLogin,
   checkRole,
   userRegister,
   serializeUser
@@ -32,7 +32,7 @@ router.get('/login-user', async (req, res) => {
   res.render('pages/login',{role : "user"});
 });
 router.post("/login-user", async (req, res) => {
-  await userLogin(req.body, "user", res);
+  await apiLogin(req.body, "user", res);
 });
 
 // Admin Login Route
@@ -40,7 +40,7 @@ router.get('/login-admin', async (req, res) => {
   res.render('pages/login',{role : "admin"});
 });
 router.post("/login-admin", async (req, res) => {
-  await userLogin(req.body, "admin", res);
+  await apiLogin(req.body, "admin", res);
 });
 
 // Super Admin Login Route
@@ -48,7 +48,7 @@ router.get('/login-super-admin', async (req, res) => {
   res.render('pages/login',{role : "super-admin"});
 });
 router.post("/login-super-admin", async (req, res) => {
-  await userLogin(req.body, "superadmin", res);
+  await apiLogin(req.body, "superadmin", res);
 });
 
 // Profile Route

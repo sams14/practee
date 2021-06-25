@@ -129,7 +129,7 @@ def check_upload_videos(records, filename):
 	unavailablecount = 0
 	headers = headers = {'authorization': 'Bearer '+utils.vimeo_token}
 
-	with open(filename, mode='w') as f:
+	with open(os.path.abspath("Job Scheduler/" + filename), mode='w') as f:
 		writer = csv.writer(f)
 		writer.writerow(utils.CSV_HEADER)
 
@@ -225,7 +225,7 @@ if __name__ == "__main__":
 	arg = ['vimeo_uploader.py', '--daterange', date, date, '--outputfile', 'outputfile.csv']
 
 	utils = Utils()
-	with open("error.txt", 'w') as f:
+	with open(os.path.abspath("Job Scheduler/error.txt"), 'w') as f:
 		f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
 
 	# files = utils.get_records(sys.argv, 'vimeo_uploader.py')

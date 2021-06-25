@@ -36,7 +36,7 @@ const userRegister = async(userDets, role, res) => {
         });
     } catch (err) {
         console.log(err);
-        // Implement logger function (winston)
+        // Implement logger function (morgon)
         return res.status(500).json({
             message: "Unable to create your account.",
             success: false
@@ -45,9 +45,9 @@ const userRegister = async(userDets, role, res) => {
 };
 
 /**
- * @DESC To Login the user (ADMIN, SUPER_ADMIN, USER)
+ * @DESC Api Login the user (ADMIN, SUPER_ADMIN, USER) and generates the access token
  */
-const userLogin = async(userCreds, role, res) => {
+const apiLogin = async(userCreds, role, res) => {
     console.log(userCreds);
     let { email, password } = userCreds;
     console.log(email);
@@ -101,18 +101,49 @@ const userLogin = async(userCreds, role, res) => {
 };
 
 /**
- * @DESC Passport middleware
+ * @DESC To Login the user (ADMIN, SUPER_ADMIN, USER)
+ */
+const userLogin = role => async (req, res, next) => {
+    await passport.authenticate('local', 
+      async (err, user, info) => {
+        if (info) { 
+            console.log(info.message);
+            return res.redirect(303, '/login-'+role); 
+        }
+        if (err) { 
+            console.log(err);
+            return next(err); 
+        }
+        if (!user) { 
+            console.log("No Users Found");
+            return res.redirect(303, '/login-'+role); 
+        }
+        if (role != user.role) { 
+            console.log("Unauthorised Request");
+            return res.redirect(303, '/login-'+role); 
+        }
+        await req.login(user, (error) => {
+            console.log("login");
+            if (error) { return res.send(error) }
+            next();
+        })
+      })(req, res, next);
+}
+
+/**
+ * @DESC Passport user login authentication middleware
  */
 const userAuth = (req, res, next) => {
     if(req.isAuthenticated()) {
         next();
     } else {
-        res.redirect(303,'/login');
+        console.log("Login to see your profile");
+        res.redirect(303,'/login-user');
     }
 }
 
 /**
- * @DESC Passport middleware
+ * @DESC Passport api authentication middleware
  */
 const apiAuth = passport.authenticate("jwt", { session: false });
 
@@ -124,11 +155,28 @@ const checkRole = roles => (req, res, next) =>
     res.status(401).json("Unauthorized") :
     next();
 
+/**
+ * @DESC Check Login Middleware
+ */
+const checkLogin = (req,res,next) => {
+    if(req.isAuthenticated()) {
+      console.log("Already Logged In");
+      return res.redirect(303, '/profile');
+    }
+    else {
+      console.log("Not Yet Logged In")
+      next();
+    }
+  }
+
 const validateEmail = async email => {
     let user = await User.findOne({ email });
     return user ? false : true;
 };
 
+/**
+ * @DESC Extract Logged in user Middleware
+ */
 const serializeUser = user => {
     return {
         email: user.email,
@@ -143,7 +191,9 @@ module.exports = {
     apiAuth,
     userAuth,
     checkRole,
+    checkLogin,
     userLogin,
     userRegister,
+    apiLogin,
     serializeUser
 };

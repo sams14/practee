@@ -15,7 +15,7 @@ class Utils:
 
 
 	def load_config(self):
-		with open("config.json") as json_data_file:
+		with open(os.path.abspath("Job Scheduler/config.json")) as json_data_file:
 			data = json.load(json_data_file)
 
 		self.zoom_token = data['zoom-token']
@@ -179,7 +179,7 @@ class Utils:
 		# 	os.makedirs(str('./reports'))
 
 		file_exists = os.path.isfile(filename)
-		with open(filename, 'w') as f: #'a'
+		with open(os.path.abspath("Job Scheduler/" + filename), 'w') as f: #'a'
 			writer = csv.writer(f)
 			#if not file_exists:
 			writer.writerow(self.CSV_HEADER)

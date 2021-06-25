@@ -3,6 +3,7 @@ const session = require('express-session')
 // const FileStore = require('session-file-store')(session);
 const MongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
+const helmet = require('helmet');
 const path = require('path');
 const uuid = require('uuid').v4;
 // const authRoute = require('./Routes/routes');
@@ -12,7 +13,7 @@ const { connect, connection } = require("mongoose");
 const { success, error } = require("consola");
 
 // Bring in the app constants
-const { DB, SECRET, PORT } = require("./config/index");
+const { ENV, DB, SECRET, PORT } = require("./config/index");
 
 //initialize express.
 const app = express();
@@ -22,6 +23,9 @@ app.set('view engine', 'ejs');
 
 // Configure morgan module to log all requests.
 app.use(morgan('dev'));
+
+//Secure Express app using Helmet Middlewares
+app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -59,9 +63,9 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
+        secure: ENV=="production" ? true : false,
         httpOnly: true,
-        sameSite: true,
-        maxAge: 1000 * 60 * 60 * 24 // Equals 1 day (1 day * 24 hr/1 day * 60 min/1 hr * 60 sec/1 min * 1000 ms / 1 sec)
+        sameSite: true
     }
 }));
 
@@ -73,7 +77,7 @@ app.use(passport.session());
 // User Router Middleware
 app.use("/", require("./Routes/users"));
 app.use("/practee", require("./routes/practee"));
-app.use("/api/users", require("./Routes/api"));
+app.use("/api/v1", require("./Routes/api"));
 
 app.get('/forgotPassword', function(req, res) {
     res.sendFile(path.join(__dirname, './Public/pages', 'forgot-password.html'));
@@ -93,13 +97,12 @@ app.get('*', function(req, res) {
 //Python Job Scheduler
 const CronJob = require('cron').CronJob;
 const { spawn } = require('child_process');
-const mongoose = require('mongoose');
 const job = new CronJob({
-    // Run at 05:00 Central time, only on weekdays
+    // Run at 02:30am Indian Standard time, everyday
     cronTime: '30 02 * * *',
     onTick: function() {
         // Run whatever you like here..
-        const childP = spawn('python3.7', ['vimeo_uploader.py']);
+        const childP = spawn('python3.7', [path.resolve("Job Scheduler","vimeo_uploader.py")]);
         childP.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
@@ -112,7 +115,7 @@ const job = new CronJob({
 });
 
 // Start Listenting for the server on PORT
-const db = mongoose.connection;
+const db = connection;
 
 db.on('error', console.error.bind(console, "Error connecting to db"));
 

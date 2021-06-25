@@ -6,6 +6,7 @@ const {
   userAuth,
   userLogin,
   checkRole,
+  checkLogin,
   userRegister,
   serializeUser
 } = require("../utils/Auth");
@@ -14,82 +15,49 @@ const {
 router.get('/register-user', async (req, res) => {
   res.render('pages/create-account');
 });
-router.post("/register-user", async (req, res) => {
+router.post("/register-user",userAuth, async (req, res) => {
   await userRegister(req.body, "user", res);
 });
 
 // Admin Registration Route
-router.post("/register-admin", async (req, res) => {
+router.post("/register-admin",userAuth, checkRole(["superadmin"]), async (req, res) => {
   await userRegister(req.body, "admin", res);
 });
 
 // Super Admin Registration Route
-router.post("/register-super-admin", async (req, res) => {
+router.post("/register-super-admin",userAuth, checkRole(["superadmin"]), async (req, res) => {
   await userRegister(req.body, "superadmin", res);
 });
 
 
+// Users Login Route
+router.get('/login-user',checkLogin , async (req, res) => {
+    res.render('pages/login',{role : "user"});
+});
 
-
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', 
-    (err, user, info) => {
-      if (info) { return res.redirect(303, '/login'); }
-      if (err) { return next(err); }
-      if (!user) { return res.redirect(303, '/login'); }
-      req.login(user, (err) => {
-          console.log("login");
-          if (err) { return res.send(err) }
-          next();
-      })
-    })(req, res, next);
-  },
+router.post('/login-user', userLogin("user"),
   function(req, res) {
     res.redirect(303,'/profile');
 });
 
-router.get('/authrequired', (req, res) => {
-  if(req.isAuthenticated()) {
-    res.send('you hit the authentication endpoint\n');
-  } else {
-    res.send('unauthorised\n');
-  }
-})
-
-
-router.get('/logout', function (req, res) {
-  req.logOut();
-  res.status(200).clearCookie('connect.sid', {
-    path: '/'
-  });
-  req.session.destroy(function (err) {
-    res.redirect(303,'/login');
-  });
-});
-
-// Users Login Route
-router.get('/login', async (req, res) => {
-  res.render('pages/login',{role : "user"});
-});
-router.post("/login-user", async (req, res) => {
-  await userLogin(req.body, "user", res);
-});
-
 // Admin Login Route
-router.get('/login-admin', async (req, res) => {
+router.get('/login-admin',checkLogin , async (req, res) => {
   res.render('pages/login',{role : "admin"});
 });
-router.post("/login-admin", async (req, res) => {
-  await userLogin(req.body, "admin", res);
+router.post("/login-admin", userLogin("admin"),
+  function(req, res) {
+    res.redirect(303,'/profile');
 });
 
 // Super Admin Login Route
-router.get('/login-super-admin', async (req, res) => {
+router.get('/login-super-admin',checkLogin , async (req, res) => {
   res.render('pages/login',{role : "super-admin"});
 });
-router.post("/login-super-admin", async (req, res) => {
-  await userLogin(req.body, "superadmin", res);
+router.post("/login-super-admin", userLogin("super-admin"),
+  function(req, res) {
+    res.redirect(303,'/profile');
 });
+
 
 // Profile Route
 router.get("/profile", userAuth, async (req, res) => {
@@ -135,5 +103,18 @@ router.get(
     return res.json("Super admin and Admin");
   }
 );
+
+//logout Route
+router.get('/logout',userAuth, function (req, res) {
+  const role = req.user.role;
+  req.logOut();
+  res.status(200).clearCookie('connect.sid', {
+    path: '/'
+  });
+  req.session.destroy(function (err) {
+    res.redirect(303,'/login-' + role);
+  });
+});
+
 
 module.exports = router;
