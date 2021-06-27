@@ -20,14 +20,12 @@ passport.use(
     function (req, email, password, done) {
       process.nextTick(function () {
         User.findOne({ email: email }, function (err, user) {
-          console.log("within local strategy", user);
+
           if (err) {
-            console.log("Error:", err);
             return done(err);
           }
           // First Check if the email is in the database
           if (!user) {
-            console.log("Incorrect username:");
             return done(null, false, { message: "Incorrect username." });
           }
           // Now check for the password

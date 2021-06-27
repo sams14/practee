@@ -30,7 +30,6 @@ const userRegister = async(userDets, role, res) => {
 
         await newUser.save();
         
-        console.log("user created");
         return {
             message: "Hurry! now you are successfully registred. Please nor login.",
             success: true
@@ -107,23 +106,18 @@ const userLogin = role => async (req, res, next) => {
     await passport.authenticate('local', 
       async (err, user, info) => {
         if (info) { 
-            console.log(info.message);
             return res.redirect(303, '/login-'+role); 
         }
         if (err) { 
-            console.log(err);
             return next(err); 
         }
         if (!user) { 
-            console.log("No Users Found");
             return res.redirect(303, '/login-'+role); 
         }
         if (role != user.role) { 
-            console.log("Unauthorised Request");
             return res.redirect(303, '/login-'+role); 
         }
         await req.login(user, (error) => {
-            console.log("login");
             if (error) { return res.send(error) }
             next();
         })
@@ -137,7 +131,6 @@ const userAuth = (req, res, next) => {
     if(req.isAuthenticated()) {
         next();
     } else {
-        console.log("Login to see your profile");
         res.redirect(303,'/login-user');
     }
 }

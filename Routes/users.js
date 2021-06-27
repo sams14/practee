@@ -101,7 +101,7 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
   } else {
     // Get the hashed password
     const newPassword = await bcrypt.hash(password, 12);
-    await User.updateOne({ password : newPassword },(err,success) => {
+    await User.updateOne({ _id : req.user._id }, { password : newPassword },(err,success) => {
       if (err) {
         return res.status(500).json({
             message: "Unable to update your password.",
