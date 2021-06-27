@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const passport = require("passport");
-
-// Bring in the User Registration function
+const bcrypt = require("bcryptjs");
+const User = require("../models/User");
+const { forgotPassword, varifyToken } = require("../utils/password");
 const {
   userAuth,
   userLogin,
@@ -15,18 +15,40 @@ const {
 router.get('/register-user', async (req, res) => {
   res.render('pages/create-account');
 });
-router.post("/register-user",userAuth, async (req, res) => {
-  await userRegister(req.body, "user", res);
+router.post("/register-user", checkLogin, async (req, res, next) => {
+  await userRegister(req.body, "user", res).then((result)=>{
+    result.success ? next() : res.status(500).json({
+      message: "Unable to create your account.",
+      success: false
+    });
+  });
+  },userLogin("user"), (req,res) => {
+    req.user.newUser = true; 
+    res.redirect(303,'/profile');
 });
 
 // Admin Registration Route
-router.post("/register-admin",userAuth, checkRole(["superadmin"]), async (req, res) => {
-  await userRegister(req.body, "admin", res);
+router.post("/register-admin", checkLogin, checkRole(["superadmin"]), async (req, res, next) => {
+  await userRegister(req.body, "admin", res).then((result)=>{
+    result.success ? next() : res.status(500).json({
+      message: "Unable to create your account.",
+      success: false
+    });
+  });
+  }, (req,res) => {
+    res.redirect(303,'/profile');
 });
 
 // Super Admin Registration Route
-router.post("/register-super-admin",userAuth, checkRole(["superadmin"]), async (req, res) => {
-  await userRegister(req.body, "superadmin", res);
+router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), async (req, res, next) => {
+  await userRegister(req.body, "superadmin", res).then((result)=>{
+    result.success ? next() : res.status(500).json({
+      message: "Unable to create your account.",
+      success: false
+    });
+  });
+  }, (req,res) => {
+    res.redirect(303,'/profile');
 });
 
 
@@ -56,6 +78,43 @@ router.get('/login-super-admin',checkLogin , async (req, res) => {
 router.post("/login-super-admin", userLogin("super-admin"),
   function(req, res) {
     res.redirect(303,'/profile');
+});
+
+// Forgot Password Route
+router.get('/forgot-password',checkLogin , async (req, res) => {
+  res.render('pages/forgot-password');
+});
+router.put("/forgot-password", forgotPassword);
+
+// Reset Password Route
+router.get('/reset-password/:token', varifyToken, async (req, res) => {
+  res.render('pages/reset-password');
+});
+router.put('/reset-password/:token', varifyToken, async (req, res) => {
+  const { password } = req.body;
+  let isMatch = await bcrypt.compare(password, req.user.password);
+  if (isMatch) {
+    return res.status(500).json({
+      message: "This is one of the passwords you've previously used !! PLEASE ENTER A NEW ONE",
+      success: false
+    });
+  } else {
+    // Get the hashed password
+    const newPassword = await bcrypt.hash(password, 12);
+    await User.updateOne({ password : newPassword },(err,success) => {
+      if (err) {
+        return res.status(500).json({
+            message: "Unable to update your password.",
+            success: false
+        });
+      } else {
+          return res.status(200).json({
+            message: "Your password has been updated !! Kindly Login",
+            success: true
+        });
+      }
+    })
+  }
 });
 
 

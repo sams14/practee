@@ -30,12 +30,12 @@ const userRegister = async(userDets, role, res) => {
 
         await newUser.save();
         
-        return res.status(201).json({
+        console.log("user created");
+        return {
             message: "Hurry! now you are successfully registred. Please nor login.",
             success: true
-        });
+        };
     } catch (err) {
-        console.log(err);
         // Implement logger function (morgon)
         return res.status(500).json({
             message: "Unable to create your account.",
@@ -48,9 +48,9 @@ const userRegister = async(userDets, role, res) => {
  * @DESC Api Login the user (ADMIN, SUPER_ADMIN, USER) and generates the access token
  */
 const apiLogin = async(userCreds, role, res) => {
-    console.log(userCreds);
+
     let { email, password } = userCreds;
-    console.log(email);
+
     // First Check if the email is in the database
     const user = await User.findOne({ email });
     if (!user) {
@@ -160,11 +160,9 @@ const checkRole = roles => (req, res, next) =>
  */
 const checkLogin = (req,res,next) => {
     if(req.isAuthenticated()) {
-      console.log("Already Logged In");
       return res.redirect(303, '/profile');
     }
     else {
-      console.log("Not Yet Logged In")
       next();
     }
   }

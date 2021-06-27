@@ -15,7 +15,7 @@ passport.use(
     {
       usernameField: "email",
       passwordField: "password",
-	  passReqToCallback: true
+      passReqToCallback: true,
     },
     function (req, email, password, done) {
       process.nextTick(function () {
@@ -31,12 +31,12 @@ passport.use(
             return done(null, false, { message: "Incorrect username." });
           }
           // Now check for the password
-		  bcrypt.compare(password, user.password, function(err,isMatch){
-			if (!isMatch) {
-				return done(null, false, { message: "Incorrect password." });
-			}
-			return done(null, user);
-		  });
+          bcrypt.compare(password, user.password, function (err, isMatch) {
+            if (!isMatch) {
+              return done(null, false, { message: "Incorrect password." });
+            }
+            return done(null, user);
+          });
         });
       });
     }

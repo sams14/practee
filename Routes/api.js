@@ -10,21 +10,33 @@ const {
 } = require("../utils/Auth");
 
 // Users Registeration Route
-router.get('/register-user', async (req, res) => {
-  res.render('pages/create-account');
-});
 router.post("/register-user", async (req, res) => {
-  await userRegister(req.body, "user", res);
+  await userRegister(req.body, "user", res).then((result)=>{
+    result.success ? res.status(500).json(result) : res.status(500).json({
+      message: "Unable to create your account.",
+      success: false
+    });
+  });
 });
 
 // Admin Registration Route
 router.post("/register-admin", async (req, res) => {
-  await userRegister(req.body, "admin", res);
+  await userRegister(req.body, "admin", res).then((result)=>{
+    result.success ? res.status(500).json(result) : res.status(500).json({
+      message: "Unable to create your account.",
+      success: false
+    });
+  });
 });
 
 // Super Admin Registration Route
 router.post("/register-super-admin", async (req, res) => {
-  await userRegister(req.body, "superadmin", res);
+  await userRegister(req.body, "superadmin", res).then((result)=>{
+    result.success ? res.status(500).json(result) : res.status(500).json({
+      message: "Unable to create your account.",
+      success: false
+    });
+  });
 });
 
 // Users Login Route
