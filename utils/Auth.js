@@ -44,7 +44,7 @@ const userRegister = async(userDets, role, res) => {
 };
 
 /**
- * @DESC Api Login the user (ADMIN, SUPER_ADMIN, USER) and generates the access token
+ * @DESC Api Login for the user (ADMIN, SUPER_ADMIN, USER) and generates the access token
  */
 const apiLogin = async(userCreds, role, res) => {
 
@@ -125,7 +125,7 @@ const userLogin = role => async (req, res, next) => {
 }
 
 /**
- * @DESC Passport user login authentication middleware
+ * @DESC To authenticate logged-in user middleware
  */
 const userAuth = (req, res, next) => {
     if(req.isAuthenticated()) {
@@ -141,7 +141,7 @@ const userAuth = (req, res, next) => {
 const apiAuth = passport.authenticate("jwt", { session: false });
 
 /**
- * @DESC Check Role Middleware
+ * @DESC Check User Role Middleware
  */
 const checkRole = roles => (req, res, next) =>
     !roles.includes(req.user.role) ?
@@ -149,7 +149,7 @@ const checkRole = roles => (req, res, next) =>
     next();
 
 /**
- * @DESC Check Login Middleware
+ * @DESC To authenticate logged-out user middleware
  */
 const checkLogin = (req,res,next) => {
     if(req.isAuthenticated()) {
@@ -160,6 +160,11 @@ const checkLogin = (req,res,next) => {
     }
   }
 
+/**
+ * @RETURN {boolean} 
+ * @True Email Has Not Been Registered !! 
+ * @false Email Has Been Registered !!
+ */ 
 const validateEmail = async email => {
     let user = await User.findOne({ email });
     return user ? false : true;

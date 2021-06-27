@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 var nodemailer = require('nodemailer');
 
+/**
+ * @DESC To trigger a mail middleware
+ */
 const mailer = async mailOptions => {
     var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -21,6 +24,9 @@ const mailer = async mailOptions => {
     });
 }
 
+/**
+ * @DESC To sign a password-reset token middleware
+ */
 const forgotPassword = async (req, res)=>{
     let { email } = req.body;
     // First Check if the email is in the database
@@ -66,6 +72,9 @@ const forgotPassword = async (req, res)=>{
     })
 }
 
+/**
+ * @DESC To authenticate password-reset token middleware
+ */
 const varifyToken = (req, res, next) => {
     const { token } = req.params
     if (token){
@@ -102,5 +111,6 @@ const varifyToken = (req, res, next) => {
 
 module.exports = {
     forgotPassword,
-    varifyToken
+    varifyToken,
+    mailer
 }

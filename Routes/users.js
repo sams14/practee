@@ -11,7 +11,9 @@ const {
   serializeUser
 } = require("../utils/Auth");
 
+//___________________________________________________________________________
 // Users Registeration Route
+//---------------------------------------------------------------------------
 router.get('/register-user', async (req, res) => {
   res.render('pages/create-account');
 });
@@ -27,7 +29,9 @@ router.post("/register-user", checkLogin, async (req, res, next) => {
     res.redirect(303,'/profile');
 });
 
+//___________________________________________________________________________
 // Admin Registration Route
+//---------------------------------------------------------------------------
 router.post("/register-admin", checkLogin, checkRole(["superadmin"]), async (req, res, next) => {
   await userRegister(req.body, "admin", res).then((result)=>{
     result.success ? next() : res.status(500).json({
@@ -39,7 +43,9 @@ router.post("/register-admin", checkLogin, checkRole(["superadmin"]), async (req
     res.redirect(303,'/profile');
 });
 
+//___________________________________________________________________________
 // Super Admin Registration Route
+//---------------------------------------------------------------------------
 router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), async (req, res, next) => {
   await userRegister(req.body, "superadmin", res).then((result)=>{
     result.success ? next() : res.status(500).json({
@@ -51,8 +57,9 @@ router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), asyn
     res.redirect(303,'/profile');
 });
 
-
+//___________________________________________________________________________
 // Users Login Route
+//---------------------------------------------------------------------------
 router.get('/login-user',checkLogin , async (req, res) => {
     res.render('pages/login',{role : "user"});
 });
@@ -62,7 +69,9 @@ router.post('/login-user', userLogin("user"),
     res.redirect(303,'/profile');
 });
 
+//___________________________________________________________________________
 // Admin Login Route
+//---------------------------------------------------------------------------
 router.get('/login-admin',checkLogin , async (req, res) => {
   res.render('pages/login',{role : "admin"});
 });
@@ -71,7 +80,9 @@ router.post("/login-admin", userLogin("admin"),
     res.redirect(303,'/profile');
 });
 
+//___________________________________________________________________________
 // Super Admin Login Route
+//---------------------------------------------------------------------------
 router.get('/login-super-admin',checkLogin , async (req, res) => {
   res.render('pages/login',{role : "super-admin"});
 });
@@ -80,13 +91,17 @@ router.post("/login-super-admin", userLogin("super-admin"),
     res.redirect(303,'/profile');
 });
 
+//___________________________________________________________________________
 // Forgot Password Route
+//---------------------------------------------------------------------------
 router.get('/forgot-password',checkLogin , async (req, res) => {
   res.render('pages/forgot-password');
 });
 router.put("/forgot-password", forgotPassword);
 
+//___________________________________________________________________________
 // Reset Password Route
+//---------------------------------------------------------------------------
 router.get('/reset-password/:token', varifyToken, async (req, res) => {
   res.render('pages/reset-password');
 });
@@ -117,13 +132,16 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
   }
 });
 
-
+//___________________________________________________________________________
 // Profile Route
+//---------------------------------------------------------------------------
 router.get("/profile", userAuth, async (req, res) => {
   return res.json(serializeUser(req.user));
 });
 
+//___________________________________________________________________________
 // Users Protected Route
+//---------------------------------------------------------------------------
 router.get(
   "/user-protectd",
   userAuth,
@@ -133,7 +151,9 @@ router.get(
   }
 );
 
+//___________________________________________________________________________
 // Admin Protected Route
+//---------------------------------------------------------------------------
 router.get(
   "/admin-protectd",
   userAuth,
@@ -143,7 +163,9 @@ router.get(
   }
 );
 
+//___________________________________________________________________________
 // Super Admin Protected Route
+//---------------------------------------------------------------------------
 router.get(
   "/super-admin-protectd",
   userAuth,
@@ -153,7 +175,9 @@ router.get(
   }
 );
 
+//___________________________________________________________________________
 // Super Admin Protected Route
+//---------------------------------------------------------------------------
 router.get(
   "/super-admin-and-admin-protectd",
   userAuth,
@@ -163,7 +187,9 @@ router.get(
   }
 );
 
+//___________________________________________________________________________
 //logout Route
+//---------------------------------------------------------------------------
 router.get('/logout',userAuth, function (req, res) {
   const role = req.user.role;
   req.logOut();

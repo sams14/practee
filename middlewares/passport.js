@@ -10,6 +10,9 @@ const opts = {
   secretOrKey: SECRET,
 };
 
+//___________________________________________________________________________
+//User Login Authentication Strategy Middleware
+//---------------------------------------------------------------------------
 passport.use(
   new LocalStrategy(
     {
@@ -41,17 +44,21 @@ passport.use(
   )
 );
 
-// tell passport how to serialize the user
+// Middleware to serialize the user while login
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+// Middleware to deserialize the user while logout
 passport.deserializeUser((id, done) => {
   User.findById(id, function (err, user) {
     done(err, user);
   });
 });
 
+//___________________________________________________________________________
+//Api Authentication Strategy Middleware
+//---------------------------------------------------------------------------
 passport.use(
   new Strategy(opts, async (payload, done) => {
     await User.findById(payload.user_id)
