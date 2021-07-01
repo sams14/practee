@@ -29,12 +29,12 @@ passport.use(
           }
           // First Check if the email is in the database
           if (!user) {
-            return done(null, false, { message: "Incorrect username." });
+            return done(null, false, { message: "This Email-Id Hasn't Been Registered Yet !! Please Create An Account" });
           }
           // Now check for the password
           bcrypt.compare(password, user.password, function (err, isMatch) {
             if (!isMatch) {
-              return done(null, false, { message: "Incorrect password." });
+              return done(null, false, { message: "Invalid Credentials !! Either The Email-Id Or The Password Is In Correct" });
             }
             return done(null, user);
           });

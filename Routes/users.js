@@ -19,9 +19,11 @@ router.get('/register-user', async (req, res) => {
 });
 router.post("/register-user", checkLogin, async (req, res, next) => {
   await userRegister(req.body, "user", res).then((result)=>{
-    result.success ? next() : res.status(500).json({
-      message: "Unable to create your account.",
-      success: false
+    result.success ? next() : res.render('pages/create-account',{ response : 
+      {
+        message: "Unable to create your account",
+        success: false
+      }
     });
   });
   },userLogin("user"), (req,res) => {
@@ -61,7 +63,11 @@ router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), asyn
 // Users Login Route
 //---------------------------------------------------------------------------
 router.get('/login-user',checkLogin , async (req, res) => {
-    res.render('pages/login',{role : "user"});
+    if(Object.keys(req.query).length !== 0){
+      const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+      res.render('pages/login',{role : "user", response : response});
+    }
+    else res.render('pages/login',{role : "user"});
 });
 
 router.post('/login-user', userLogin("user"),
@@ -73,6 +79,10 @@ router.post('/login-user', userLogin("user"),
 // Admin Login Route
 //---------------------------------------------------------------------------
 router.get('/login-admin',checkLogin , async (req, res) => {
+  if(Object.keys(req.query).length !== 0){
+    const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+    res.render('pages/login',{role : "admin", response : response});
+  }
   res.render('pages/login',{role : "admin"});
 });
 router.post("/login-admin", userLogin("admin"),
@@ -84,6 +94,10 @@ router.post("/login-admin", userLogin("admin"),
 // Super Admin Login Route
 //---------------------------------------------------------------------------
 router.get('/login-super-admin',checkLogin , async (req, res) => {
+  if(Object.keys(req.query).length !== 0){
+    const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+    res.render('pages/login',{role : "super-admin", response : response});
+  }
   res.render('pages/login',{role : "super-admin"});
 });
 router.post("/login-super-admin", userLogin("super-admin"),
