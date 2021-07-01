@@ -63,6 +63,7 @@ const forgotPassword = async (req, res)=>{
                 `
                 };
             await mailer(mailOptions);
+            console.log('http://'+req.get('host')+'/reset-password/'+ token);
             return res.status(200).json({
                 message: "Confirmation Mail Has Been Sent To The Email-ID. Kindly Varify !!",
                 success: true
