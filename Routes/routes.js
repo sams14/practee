@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const path = require('path');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const User = require('../DB/user');
 const dotenv = require('dotenv');
