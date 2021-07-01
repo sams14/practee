@@ -13,9 +13,11 @@ const userRegister = async(userDets, role, res) => {
         // validate the email
         let emailNotRegistered = await validateEmail(userDets.email);
         if (!emailNotRegistered) {
-            return res.status(400).json({
-                message: `Email is already registered.`,
-                success: false
+            return res.render('pages/create-account',{ response : 
+                {
+                  message: `Email is already registered`,
+                  success: false
+                }
             });
         }
 
@@ -36,9 +38,11 @@ const userRegister = async(userDets, role, res) => {
         };
     } catch (err) {
         // Implement logger function (morgon)
-        return res.status(500).json({
-            message: "Unable to create your account.",
-            success: false
+        return res.render('pages/create-account',{ response : 
+            {
+              message: `Unable to create your account`,
+              success: false
+            }
         });
     }
 };
@@ -105,17 +109,21 @@ const apiLogin = async(userCreds, role, res) => {
 const userLogin = role => async (req, res, next) => {
     await passport.authenticate('local', 
       async (err, user, info) => {
+        console.log("here..");
+        var message;
         if (info) { 
-            return res.redirect(303, '/login-'+role); 
+            return res.redirect(303, '/login-'+role+'/?success='+false+'&message='+info.message); 
         }
         if (err) { 
             return next(err); 
         }
         if (!user) { 
-            return res.redirect(303, '/login-'+role); 
+            message = "This Email-Id Hasn't Been Registered Yet !! Please Create An Account";
+            return res.redirect(303, '/login-'+role+'/?success='+false+'&message='+message);
         }
         if (role != user.role) { 
-            return res.redirect(303, '/login-'+role); 
+            message = "Please Make Sure You Are Logging In From The Right Portal";
+            return res.redirect(303, '/login-'+role+'/?success='+false+'&message='+message);
         }
         await req.login(user, (error) => {
             if (error) { return res.send(error) }

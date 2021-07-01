@@ -1,6 +1,5 @@
 const express = require('express');
 const session = require('express-session')
-// const FileStore = require('session-file-store')(session);
 const MongoStore = require('connect-mongo')(session);
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -24,8 +23,9 @@ app.set('view engine', 'ejs');
 // Configure morgan module to log all requests.
 app.use(morgan('dev'));
 
-//Secure Express app using Helmet Middlewares
-app.use(helmet());
+// Secure Express app using Helmet Middlewares
+// app.use(helmet());
+app.use(helmet({contentSecurityPolicy : false}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -78,10 +78,6 @@ app.use(passport.session());
 app.use("/", require("./Routes/users"));
 app.use("/practee", require("./routes/practee"));
 app.use("/api/v1", require("./Routes/api"));
-
-app.get('/forgotPassword', function(req, res) {
-    res.sendFile(path.join(__dirname, './Public/pages', 'forgot-password.html'));
-});
 
 app.get('*', function(req, res) {
     res.render('pages/404');
