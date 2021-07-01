@@ -25,7 +25,7 @@ app.set('view engine', 'ejs');
 app.use(morgan('dev'));
 
 //Secure Express app using Helmet Middlewares
-app.use(helmet());
+app.use(helmet({contentSecurityPolicy : false}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));

@@ -136,7 +136,8 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 // Profile Route
 //---------------------------------------------------------------------------
 router.get("/profile", userAuth, async (req, res) => {
-  return res.json(serializeUser(req.user));
+  // return res.json(serializeUser(req.user));
+  res.render("sales/index");
 });
 
 //___________________________________________________________________________
