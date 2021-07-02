@@ -109,7 +109,6 @@ const apiLogin = async(userCreds, role, res) => {
 const userLogin = role => async (req, res, next) => {
     await passport.authenticate('local', 
       async (err, user, info) => {
-        console.log("here..");
         var message;
         if (info) { 
             return res.redirect(303, '/login-'+role+'/?success='+false+'&message='+info.message); 
