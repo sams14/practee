@@ -12,6 +12,7 @@ const {
   userRegister,
   serializeUser
 } = require("../utils/Auth");
+const Slots = require("../models/Slots");
 
 //___________________________________________________________________________
 // Users Registeration Route
@@ -157,6 +158,7 @@ router.get("/profile", userAuth, async (req, res) => {
 });
 router.post("/profile", userAuth, async (req, res) => {
   var zoom = [];
+  var bookedSlots = []
   Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
       if (err) {
           console.log(err);
@@ -167,14 +169,33 @@ router.post("/profile", userAuth, async (req, res) => {
           } else {
             var responseObj = foundData;
             responseObj.forEach(mentor => {
-              var newZoom = {};
-              newZoom["zoomid"] = mentor.zoomID, newZoom["breakHours"] = mentor.breakHours;
-              zoom.append(newZoom);
+              // var newZoom = {};
+              // newZoom["zoomid"] = mentor.zoomID, newZoom["breakHours"] = mentor.breakHours;
+              // zoom.append(newZoom);
+              Slot.findOne({"zoomID": mentor.zoomID}, async(err, foundData) => {
+                if (err) {
+                  console.log(err);
+                  return res.status(500).send();
+                } else {
+                     if (foundData.length == 0) {
+                       return res.status(500).send();
+                     } else {
+                        var slotObj = foundData;
+                        slotObj.T8.forEach(slot => {
+                          var GMT = new Date(slot.start_time);              
+                          var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).split(", ")[1];
+                          GMT.setMinutes(GMT.getMinutes() + slot.duration);
+                          var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).split(", ")[1];
+                          bookedSlots.append(startTime + "-" + endTime);
+                       });
+                     }
+                  }
+              });
             });
           }
       }
   });
-  
+   
 });
 
 //___________________________________________________________________________
