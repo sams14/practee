@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Mentor = require("../models/Mentor");
+const Slot = require("../models/Slots");
 const { forgotPassword, varifyToken } = require("../utils/password");
 const {
   userAuth,
@@ -153,6 +155,57 @@ router.get("/profile", userAuth, async (req, res) => {
   // return res.json(serializeUser(req.user));
   res.render("sales/index");
 });
+router.post("/profile", userAuth, async (req, res) => {
+  var zoom = [];
+  Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
+      if (err) {
+          console.log(err);
+          return res.status(500).send();
+      } else {
+          if (foundData.length == 0) {
+            return res.status(500).send();
+          } else {
+            var responseObj = foundData;
+            responseObj.forEach(mentor => {
+              var newZoom = {};
+              newZoom["zoomid"] = mentor.zoomID, newZoom["breakHours"] = mentor.breakHours;
+              zoom.append(newZoom);
+            });
+          }
+      }
+  });
+  
+});
+
+//___________________________________________________________________________
+// Add Mentor Route
+//---------------------------------------------------------------------------
+router.post("/profile/new-mentor", async(req, res) => {
+  const newMentor = new Mentor({
+    name: req.body.name,
+    email: req.body.email,
+    zoomID: req.body.zoomID,
+    gender: req.body.gender,
+    regionalLang: req.body.regionalLang,
+    workingHour: req.body.workingHour,
+    breakHours: req.body.breakHours
+  });
+  Mentor.find({ "email": req.body.email }, async(err, foundData) => {
+      if (err) {
+          console.log(err);
+          return res.status(500).send();
+      } else {
+          if (foundData.length == 0) {
+              var responseObj = "";
+              var saveStu = await newMentor.save();
+          } else {
+              var responseObj = foundData;
+          }
+      }
+      return res.send("Success!!!");
+  });
+});
+
 
 //___________________________________________________________________________
 // Users Protected Route
@@ -215,6 +268,5 @@ router.get('/logout',userAuth, function (req, res) {
     res.redirect(303,'/login-' + role);
   });
 });
-
 
 module.exports = router;

@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="assets/css/tailwind.output.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="assets/js/init-alpine.js"></script>
-  <script src="assets/js/charts-lines.js" defer></script>
-  <script src="assets/js/charts-pie.js" defer></script>
 </head>
 
 <body>
@@ -481,37 +479,38 @@
             Search For Slots:
           </h2>
           <!-- CTA -->
-          <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
-            <div class="flex items-center">
-              <label class="block px-3 my-4 text-sm">
-                <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Gender</span>
-                <select class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                  <option>Female</option>
-                  <option>Male</option>
-                  <option>Prefer Not To Say</option>
-                </select>
-              </label>
-              <label class="block px-3 my-4 text-sm">
-                <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Regional Language</span>
-                <select class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                  <option>Odia</option>
-                  <option>Hindi</option>
-                  <option>Tamil</option>
-                  <option>Bengoli</option>
-                  <option>Marathi</option>
-                  <option>NA</option>
-                </select>
-              </label>
-              <label class="block px-3 my-4 text-sm">
-                <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Date</span>
-                <input
-                  class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  type="date"
-                />
-              </label>
-            </div>
-            <button>Find Slots &RightArrow;</button>
-          </div>
+          <form action="/profile" method="post" id="slotForm" class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+            <!-- <form action="/profile" method="post" id="slotForm"> -->
+              <div class="flex items-center">
+                <label class="block px-3 my-4 text-sm">
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Gender</span>
+                  <select name="gender" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Prefer Not To Say</option>
+                  </select>
+                </label>
+                <label class="block px-3 my-4 text-sm">
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Regional Language</span>
+                  <select name="lang" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                    <option>Odia</option>
+                    <option>Hindi</option>
+                    <option>Tamil</option>
+                    <option>Bengoli</option>
+                    <option>Marathi</option>
+                    <option>NA</option>
+                  </select>
+                </label>
+                <label class="block px-3 my-4 text-sm">
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Date</span>
+                  <input type="date" name="date" class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
+                    />
+                </label>
+              </div>
+              <button style="outline: none; box-shadow: none;" type="submit">Find Slots &RightArrow;</button>              
+            <!-- </form> -->
+            
+          </form>
 
           <!-- New Table -->
           <div class="w-full overflow-hidden rounded-lg shadow-xs">
