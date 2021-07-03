@@ -26,7 +26,7 @@ const mentorSchema = new Schema(
     },
     workingHour: {
       type: String,
-      default: "08:00-19:35",
+      default: "08:00:00-19:35:00",
       required: true
     },
     breakHours: {

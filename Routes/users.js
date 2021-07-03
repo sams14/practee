@@ -156,9 +156,22 @@ router.get("/profile", userAuth, async (req, res) => {
   // return res.json(serializeUser(req.user));
   res.render("sales/index");
 });
+
+function checkSlot(newSlotST, newSlotET, bookedSlots, breakHours){
+  bookedSots.forEach(bS => {
+    if(newSlotET <= bS.split("-")[0]){
+      breakHours.forEach(bH => {
+        if(newSlotET > bH.split("-")[0] && newSlotET < bH.split("-")[1]){
+          return Date.parse(req.body.date + " " + bH.split("-")[1]); 
+        }
+      });
+      return 0;
+    } else {
+      return bS.split("-")[1];
+    }
+  });
+}
 router.post("/profile", userAuth, async (req, res) => {
-  var zoom = [];
-  var bookedSlots = []
   Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
       if (err) {
           console.log(err);
@@ -169,9 +182,6 @@ router.post("/profile", userAuth, async (req, res) => {
           } else {
             var responseObj = foundData;
             responseObj.forEach(mentor => {
-              // var newZoom = {};
-              // newZoom["zoomid"] = mentor.zoomID, newZoom["breakHours"] = mentor.breakHours;
-              // zoom.append(newZoom);
               Slot.findOne({"zoomID": mentor.zoomID}, async(err, foundData) => {
                 if (err) {
                   console.log(err);
@@ -181,14 +191,35 @@ router.post("/profile", userAuth, async (req, res) => {
                        return res.status(500).send();
                      } else {
                         var slotObj = foundData;
+                        var bookedSlots = [];
                         slotObj.T8.forEach(slot => {
                           var GMT = new Date(slot.start_time);              
-                          var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).split(", ")[1];
+                          var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
                           GMT.setMinutes(GMT.getMinutes() + slot.duration);
-                          var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).split(", ")[1];
-                          bookedSlots.append(startTime + "-" + endTime);
+                          var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
+                          startTime = Date.parse(req.body.date + " " + startTime);
+                          endTime = Date.parse(req.body.date + " " + endTime);
+                          var time = startTime + "-" + endTime;
+                          bookedSlots.push(time);
                        });
+                       mentor.breakHours.forEach(bh => {
+                         bh = Date.parse(req.body.date + " " + bh.split("-")[0]) + Date.parse(req.body.date + " " + bh.split("-")[1]);
+                       });
+                       var availableSlots = [];
+                       var newSlotST = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[0]));
+                       var eTime = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[1]));
+                       while(newSlotST<=eTime.setMinutes(eTime.getMinutes()-30)){
+                        var newSlotET = newSlotST.setMinutes(newSlotST.getMinutes()+30);
+                        if(!checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)){
+                          availableSlots.push(newSlotST + "-" + newSlotET);
+                          newSlotST = newSlotET;
+                        } else {
+                          newSlotST = checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours);
+                        }
+                       }
                      }
+                     console.log(availableSlots);
+                     // res.redirect(303, "/profile", {availableSlots: availableSlots})
                   }
               });
             });
@@ -226,7 +257,27 @@ router.post("/profile/new-mentor", async(req, res) => {
       return res.send("Success!!!");
   });
 });
-
+router.post("/profile/new-slot", async(req, res) => {
+  const newSlot = new Slot({
+    email: req.body.email,
+    zoomID: req.body.zoomID,
+    T8: req.body.T8
+  });
+  Slot.find({ "zoomID": req.body.zoomID }, async(err, foundData) => {
+      if (err) {
+          console.log(err);
+          return res.status(500).send();
+      } else {
+          if (foundData.length == 0) {
+              var responseObj = "";
+              var saveStu = await newSlot.save();
+          } else {
+              var responseObj = foundData;
+          }
+      }
+      return res.send("Success!!!");
+  }); 
+});
 
 //___________________________________________________________________________
 // Users Protected Route
