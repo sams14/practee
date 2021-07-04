@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../DB/user');
+const Vimeo = require('../models/Vimeo');
 const dotenv = require('dotenv');
 const Grammarbot = require('grammarbot');
 const axios = require('axios');
@@ -45,104 +46,122 @@ router.post('/grammar', function(req, res) {
     });
 });
 
-async function get_VimeoFolder(req, res, next) {
-    console.log(req.body);
-    if (!req.body.pass || !req.body.user) {
-        console.log("redirected !!");
-        res.redirect('/vimeo/folder/login');
-    } else {
-        console.log("FETCHING FOLDERS FROM VIMEO");
-        const headers = { "Accept": "application/json", 'authorization': 'Bearer ' + process.env.vimeo_token };
-        const url = 'https://api.vimeo.com/users/' + process.env.vimeo_user_id + '/projects';
-        var folders = {};
-        var folders_counter = 0;
-        var counter = 1;
+async function update_VimeoFolder(req, res, next) {
+    await Vimeo.deleteMany({}).then(function (params) {
+        console.log('all records deleted')
+    }).catch(function (err) {
+        console.log(err)
+    });    
+    console.log("FETCHING FOLDERS FROM VIMEO");
+    const headers = { "Accept": "application/json", 'authorization': 'Bearer ' + process.env.vimeo_token };
+    const url = 'https://api.vimeo.com/users/' + process.env.vimeo_user_id + '/projects';
+    var folder_data = [];
+    var folders_counter = 0;
+    var counter = 1;
 
-        while (true) {
-            var query = { 'per_page': 100, 'page': counter };
-            var json_response;
-            await axios({
-                    method: 'get',
-                    url: url,
-                    headers: headers,
-                    params: query
-                }).then(function(response) {
-                    // handle success
-                    json_response = response['data'];
-                })
-                .catch(function(error) {
-                    // handle error
-                    console.log(error);
-                });
+    while (true) {
+        var query = { 'per_page': 100, 'page': counter };
+        var json_response;
+        await axios({
+                method: 'get',
+                url: url,
+                headers: headers,
+                params: query
+            }).then(function(response) {
+                // handle success
+                json_response = response['data'];
+            })
+            .catch(function(error) {
+                // handle error
+                console.log(error);
+            });
 
-            if (json_response['total'] > 0) {
-                json_response['data'].forEach(record => {
-                    folders[record['name']] = record['uri'].substring(record['uri'].lastIndexOf('/') + 1, (record['uri']).length);
-                });
-            }
-            folders_counter += (json_response['data']).length;
-            counter += 1;
-
-            if (folders_counter >= json_response['total']) {
-                break;
-            }
+        if (json_response['total'] > 0) {
+            json_response['data'].forEach(async record => {
+                try {
+                    if ((record['name']).includes("@")){
+                        var folder = new Vimeo({
+                            "student_email": ((record['name'].split("(")[1]).split(")")[0]).trim(),
+                            "student_name": (record['name'].split("(")[0]).trim(),
+                            "privacy": record['privacy']['view'],
+                            "folder_id": record['uri'].substring(record['uri'].lastIndexOf('/') + 1, (record['uri']).length)
+                        });
+                        const savedFolder = await folder.save()
+                        folder_data.push(savedFolder);
+                    }
+                } catch (error) {
+                    console.log(record['name']);
+                }
+            });
         }
-        req.folders = folders;
-        next();
+        folders_counter += (json_response['data']).length;
+        counter += 1;
+
+        if (folders_counter >= json_response['total']) {
+            break;
+        }
     }
+    req.folders = folder_data;
+    console.log(folder_data);
+    next();
 }
+
+router.post('/vimeo/folder/update',update_VimeoFolder , function(req, res) {
+    return res.status(200).json({
+        message: "Database Has Been Updated !!",
+        success: true
+      });
+});
 
 router.get('/vimeo/folder/login', function(req, res) {
     res.render('vimeoLogin', { Message: "" });
 });
 
-router.post('/vimeo/folder/login', get_VimeoFolder, (req, res) => {
+router.post('/vimeo/folder/login', async (req, res) => {
     // 'Shourya Mishra (dr.reenamishra@gmail.com)': '4587558',
+    if (!req.body.pass || !req.body.user) {
+        console.log("redirected !!");
+        return res.redirect('/vimeo/folder/login');
+    }
     console.log(req.body);
     var mail = req.body.pass;
     var name = req.body.user;
-    var response = req.folders;
-    var folder = [];
-    for (key in response) {
-        try {
-            if ((key.split("(")[1]).split(")")[0] == mail) {
-                folder.push([key, response[key]])
-            }
-        } catch (error) {
-
-        }
-    }
-    console.log(folder);
-    console.log(folder.length);
-    if (folder.length == 0) {
-        res.render('vimeoLogin', { Message: "No Session Folder FOUND For This Credentials !!" });
-    } else if (folder.length == 1) {
-        console.log((folder[0])[1]);
-        res.redirect("https://vimeo.com/user/133815660/folder/" + (folder[0])[1]);
-    } else {
-        folder.forEach((record, index) => {
-            var folderName = record[0];
-            folderName = folderName.toLowerCase();
-            var studentName = name;
-            var regex = new RegExp("[._-]");
-
-            studentName = ((studentName.toLowerCase()).trim()).replace(regex, " ");
-            if (!(studentName.includes(((folderName.split("(")[0]).trim()).replace(regex, " ")))) {
-                if (!((((folderName.split("(")[0]).trim()).replace(regex, " ")).includes(studentName))) {
-                    console.log(record);
-                    folder.splice(index, 1);
+    Vimeo.find({student_email : mail}, (err, folder_data) => {
+        console.log(folder_data);
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        } else {
+            if (folder_data.length == 0) {
+                return res.render('vimeoLogin', { Message: "No Session Folder FOUND For This Credentials !!" });
+            } else if (folder_data.length == 1){
+                return res.redirect("https://vimeo.com/user/133815660/folder/" + folder_data[0]['folder_id']);
+            } else {
+                folder_data.forEach((record, index) => {
+                    var folderName = record['student_name'];
+                    folderName = folderName.toLowerCase();
+                    var studentName = name;
+                    var regex = new RegExp("[._-]");
+                    studentName = ((studentName.toLowerCase()).trim()).replace(regex, " ");
+                    
+                    if (!(studentName.includes((folderName).replace(regex, " ")))) {
+                        if (!(((folderName).replace(regex, " ")).includes(studentName))) {
+                            console.log(record);
+                            folder_data.splice(index, 1);
+                        }
+                    }
+                });
+                if (folder_data.length == 0) {
+                    return res.render('vimeoLogin', { Message: "There Is Multiple Folders Linked With This E-Mail And NAME Has A Conflicting Entry!! CONTACT FOR SUPPORT" });
+                } else if (folder_data.length == 1) {
+                    console.log(folder_data[0]['folder_id']);
+                    return res.redirect("https://vimeo.com/user/133815660/folder/" + folder_data[0]['folder_id']);
+                } else {
+                    return res.redirect("https://vimeo.com/user/133815660/folder/" + folder_data[0]['folder_id']);
                 }
             }
-        });
-        if (folder.length == 0) {
-            res.render('vimeoLogin', { Message: "There Is Multiple Folders Linked With This E-Mail And NAME Has A Conflicting Entry!! CONTACT FOR SUPPORT" });
-        } else if (folder.length == 1) {
-            console.log((folder[0])[1]);
-            res.redirect("https://vimeo.com/user/133815660/folder/" + (folder[0])[1]);
-        } else {
-            res.redirect("https://vimeo.com/user/133815660/folder/" + (folder[0])[1]);
         }
-    }
+    });
 });
 
 
