@@ -32,18 +32,18 @@ class Mailer:
 			files=['outputfile.csv','error.txt']
 			for f in files:
 				part = MIMEBase('application', 'octet-stream')
-				part.set_payload(open(f,"rb").read())
+				part.set_payload(open(os.path.abspath("Job Scheduler/"+f),"rb").read())
 				encoders.encode_base64(part)
 				part.add_header('Content-Disposition',
-							'attachment; filename="%s"' % os.path.basename(f))
+							'attachment; filename="%s"' % os.path.abspath("Job Scheduler/"+f))
 				msg.attach(part)
 		else:
 			f='outputfile.csv'
 			part = MIMEBase('application', 'octet-stream')
-			part.set_payload(open(f,"rb").read())
+			part.set_payload(open(os.path.abspath("Job Scheduler/"+f),"rb").read())
 			encoders.encode_base64(part)
 			part.add_header('Content-Disposition',
-						'attachment; filename="%s"' % os.path.basename(f))
+						'attachment; filename="%s"' % os.path.abspath("Job Scheduler/"+f))
 			msg.attach(part)
 
 		text = msg.as_string()

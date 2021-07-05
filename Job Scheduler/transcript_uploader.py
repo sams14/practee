@@ -1,6 +1,7 @@
 import requests
 import csv
 import json
+import os
 from datetime import datetime,timedelta
 import pytz
 from utils import Utils
@@ -14,7 +15,7 @@ class Transcript:
 	def update_outputfile(self, records, filename):
 		print('\n'+' Checking video status from Vimeo '.center(100, ':'))
 
-		with open(filename, mode='w') as f:
+		with open(os.path.abspath("Job Scheduler/" + filename), mode='w') as f:
 			writer = csv.writer(f)
 			writer.writerow(self.utils.CSV_HEADER)
 
@@ -111,7 +112,7 @@ class Transcript:
 					print('\n'+'No Transcript to upload for {filename} ! '.format(filename=record['file_name']))
 
 		if failed_list:
-			with open("error.txt", 'a') as f:
+			with open(os.path.abspath("Job Scheduler/error.txt"), 'a') as f:
 				IST = pytz.timezone('Asia/Kolkata')
 				date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
 				f.write((' Transcript upload Failed '+ date +' !! ').center(100, ':')+"\n")

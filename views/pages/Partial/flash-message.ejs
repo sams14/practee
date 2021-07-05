@@ -1,0 +1,9 @@
+<script> 
+    var message = '<%- response.message %>';
+</script>
+<% if (response.success === true) { %>
+    <script> Swal.fire('Hurrah !!', message, 'error') </script>
+<% } %>
+<% if (response.success === false) { %>
+    <script> Swal.fire('Oops !!', message, 'error') </script>
+<% } %>

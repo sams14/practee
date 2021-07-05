@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const path = require('path');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const User = require('../DB/user');
 const dotenv = require('dotenv');
@@ -364,22 +364,6 @@ router.post('/addnote', function(req, res) {
     res.redirect(`/${req.body.role}/${req.body.name}`);
 });
 
-router.post('/hook', async function(req, res) {
-    console.log(req.body);
-    const WebhookData = new User.WebhookData({ any: req.body });
-    const data = await WebhookData.save();
-    res.send(data);
-});
-
-router.get('/hook', async function(req, res) {
-    User.WebhookData.find({}, (err, hookData) => {
-        res.render('webhook', { data: hookData });
-    });
-});
-
-router.get('/grammar', function(req, res) {
-    res.render('checkGram');
-});
 
 router.post('/grammar', function(req, res) {
     var sen = req.body.txt;
