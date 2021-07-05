@@ -78,7 +78,7 @@ app.use(passport.session());
 
 // User Router Middleware
 app.use("/", require("./Routes/users"));
-app.use("/practee", require("./routes/practee"));
+app.use("/practee", require("./Routes/practee"));
 app.use("/api/v1", require("./Routes/api"));
 
 app.get('*', function(req, res) {
