@@ -8,11 +8,13 @@ const uuid = require('uuid').v4;
 // const authRoute = require('./Routes/routes');
 const cors = require("cors");
 const passport = require("passport");
+const axios = require('axios');
+const { mailer } = require('./utils/password');
 const { connect, connection } = require("mongoose");
 const { success, error } = require("consola");
 
 // Bring in the app constants
-const { ENV, DB, SECRET, PORT } = require("./config/index");
+const { ENV, URL, DB, SECRET, PORT } = require("./config/index");
 
 //initialize express.
 const app = express();
@@ -98,12 +100,46 @@ const job = new CronJob({
     cronTime: '30 02 * * *',
     onTick: function() {
         // Run whatever you like here..
+        let json_response, error = 'No Error Found !!';
         const childP = spawn('python3.7', [path.resolve("Job Scheduler","vimeo_uploader.py")]);
         childP.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
         childP.stderr.on('data', (data) => {
-            console.log(`stderr: ${data}`);
+            error = data
+        });
+        childP.on('close', async (code) => {
+            await axios({
+                method: 'post',
+                url: URL+'/practee/vimeo/folder/update'
+            }).then(function(response) {
+                // handle success
+                json_response = response['data'];
+                console.log(json_response);
+            })
+            .catch(function(err) {
+                // handle error
+                console.log(err);
+            });
+            console.log(`Job Scheduler error: ${error}`);
+            console.log(`Job Scheduler exited with code: ${code}`);
+            var mailOptions = {
+                from: "ash2000test@gmail.com",
+                to: "asutosh2000ad@gmail.com",
+                cc: "saminvincible3@gmail.com",
+                subject: 'Job Scheduler Status',
+                html: `
+                <h3>Database Updation</h3>
+                <p>Message: ${JSON.stringify(json_response['message'])}</p>
+                <p>Failed Folders: ${JSON.stringify(json_response['failed_folders'])}</p>
+                <p>Status: <strong>${JSON.stringify(json_response['success'])}</strong></p>
+                <br>
+                <h3>Job Scheduler</h3>
+                <p>Job Scheduler Status: <strong>${error}</strong></p>
+                <p>Job Scheduler Exited With Status Code: <strong>${code}</strong></p>
+                `
+                };
+            await mailer(mailOptions);
         });
     },
     start: true,
