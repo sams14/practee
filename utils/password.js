@@ -1,4 +1,4 @@
-const { SECRET } = require("../config/index");
+const { SECRET, USER, PASS } = require("../config/index");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 var nodemailer = require('nodemailer');
@@ -10,8 +10,8 @@ const mailer = async mailOptions => {
     var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: "ash2000test@gmail.com",
-        pass: "Test@123user"
+        user: USER,
+        pass: PASS
     }
     });
 

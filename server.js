@@ -126,7 +126,7 @@ const job = new CronJob({
             var mailOptions = {
                 from: "ash2000test@gmail.com",
                 to: "asutosh2000ad@gmail.com",
-                cc: "saminvincible3@gmail.com",
+                cc: "sambidbharadwaj@gmail.com",
                 subject: 'Job Scheduler Status',
                 html: `
                 <h3>Database Updation</h3>

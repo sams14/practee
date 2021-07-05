@@ -158,16 +158,17 @@ router.get("/profile", userAuth, async (req, res) => {
 });
 
 function checkSlot(newSlotST, newSlotET, bookedSlots, breakHours){
-  bookedSots.forEach(bS => {
-    if(newSlotET <= bS.split("-")[0]){
+  bookedSlots.forEach(bS => {
+    // console.log(newSlotET + "  ===  " + bS);
+    if(newSlotET <= bS){
       breakHours.forEach(bH => {
-        if(newSlotET > bH.split("-")[0] && newSlotET < bH.split("-")[1]){
-          return Date.parse(req.body.date + " " + bH.split("-")[1]); 
+        if(newSlotET > bH.split("-")[0] && newSlotET < bH){
+          return Date(Date.parse(req.body.date + " " + bH)); 
         }
       });
       return 0;
     } else {
-      return bS.split("-")[1];
+      return bS;
     }
   });
 }
@@ -197,19 +198,21 @@ router.post("/profile", userAuth, async (req, res) => {
                           var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
                           GMT.setMinutes(GMT.getMinutes() + slot.duration);
                           var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
-                          startTime = Date.parse(req.body.date + " " + startTime);
-                          endTime = Date.parse(req.body.date + " " + endTime);
-                          var time = startTime + "-" + endTime;
+                          startTime = new Date(Date.parse(req.body.date + " " + startTime));
+                          endTime = new Date(Date.parse(req.body.date + " " + endTime));
+                          var time = (startTime + "-" + endTime);
                           bookedSlots.push(time);
                        });
                        mentor.breakHours.forEach(bh => {
-                         bh = Date.parse(req.body.date + " " + bh.split("-")[0]) + Date.parse(req.body.date + " " + bh.split("-")[1]);
+                         bh = Date(Date.parse(req.body.date + " " + bh.split("-")[0])) + Date(Date.parse(req.body.date + " " + bh.split("-")[1]));
                        });
                        var availableSlots = [];
                        var newSlotST = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[0]));
                        var eTime = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[1]));
-                       while(newSlotST<=eTime.setMinutes(eTime.getMinutes()-30)){
-                        var newSlotET = newSlotST.setMinutes(newSlotST.getMinutes()+30);
+                       eTime.setMinutes(eTime.getMinutes()-30);
+                       while(newSlotST<=eTime){
+                        var newSlotET = newSlotST;
+                        newSlotET.setMinutes(newSlotET.getMinutes()+30);
                         if(!checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)){
                           availableSlots.push(newSlotST + "-" + newSlotET);
                           newSlotST = newSlotET;
@@ -219,6 +222,7 @@ router.post("/profile", userAuth, async (req, res) => {
                        }
                      }
                      console.log(availableSlots);
+                     res.render("sales/index");
                      // res.redirect(303, "/profile", {availableSlots: availableSlots})
                   }
               });
