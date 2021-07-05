@@ -48,14 +48,18 @@ router.post('/grammar', function(req, res) {
 
 async function update_VimeoFolder(req, res, next) {
     await Vimeo.deleteMany({}).then(function (params) {
-        console.log('all records deleted')
+        console.log('All Records Are Deleted !!')
     }).catch(function (err) {
-        console.log(err)
+        return res.status(500).json({
+            message: "Records Deletion Failed !! TypeError :" + err,
+            success: false
+          });
     });    
     console.log("FETCHING FOLDERS FROM VIMEO");
     const headers = { "Accept": "application/json", 'authorization': 'Bearer ' + process.env.vimeo_token };
     const url = 'https://api.vimeo.com/users/' + process.env.vimeo_user_id + '/projects';
     var folder_data = [];
+    var failed = [];
     var folders_counter = 0;
     var counter = 1;
 
@@ -90,6 +94,7 @@ async function update_VimeoFolder(req, res, next) {
                         folder_data.push(savedFolder);
                     }
                 } catch (error) {
+                    failed.push(record['name']);
                     console.log(record['name']);
                 }
             });
@@ -101,14 +106,14 @@ async function update_VimeoFolder(req, res, next) {
             break;
         }
     }
-    req.folders = folder_data;
-    console.log(folder_data);
+    req.failed = failed;
     next();
 }
 
 router.post('/vimeo/folder/update',update_VimeoFolder , function(req, res) {
     return res.status(200).json({
         message: "Database Has Been Updated !!",
+        failed_folders : req.failed,
         success: true
       });
 });
