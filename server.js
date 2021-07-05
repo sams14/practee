@@ -37,6 +37,8 @@ app.use(express.static(path.join(__dirname, 'Public')));
 
 app.use(cors());
 
+app.use("/practee", require("./Routes/practee"));
+
 // Connection With DB
 connect(DB, {
     useNewUrlParser: true,
@@ -78,7 +80,6 @@ app.use(passport.session());
 
 // User Router Middleware
 app.use("/", require("./Routes/users"));
-app.use("/practee", require("./routes/practee"));
 app.use("/api/v1", require("./Routes/api"));
 
 app.get('*', function(req, res) {
