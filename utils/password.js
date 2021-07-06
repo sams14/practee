@@ -1,4 +1,4 @@
-const { SECRET, USER, PASS } = require("../config/index");
+const { SECRET, URL, USER, PASS } = require("../config/index");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 var nodemailer = require('nodemailer');
@@ -59,11 +59,11 @@ const forgotPassword = async (req, res)=>{
                 html: `
                 <h3>Varification Link</h3>
                 <h4>Click on the link below to reset your password. This Link will be activated for 15 mins</h4>
-                <h3><a href="http://${req.get('host')+"/reset-password/"+ token}" >Varify Now!</a><h3>
+                <h3><a href="${URL+"/reset-password/"+ token}" >Varify Now!</a><h3>
                 `
                 };
             await mailer(mailOptions);
-            console.log('http://'+req.get('host')+'/reset-password/'+ token);
+            console.log(URL+'/reset-password/'+ token);
             return res.status(200).json({
                 message: "Confirmation Mail Has Been Sent To The Email-ID. Kindly Varify !!",
                 success: true
