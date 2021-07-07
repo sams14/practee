@@ -159,16 +159,20 @@ router.get("/profile", userAuth, async (req, res) => {
 
 function checkSlot(newSlotST, newSlotET, bookedSlots, breakHours){
   bookedSlots.forEach(bS => {
-    // console.log(newSlotET + "  ===  " + bS);
+    // console.log(newSlotET<=bS);
     if(newSlotET <= bS){
       breakHours.forEach(bH => {
-        if(newSlotET > bH.split("-")[0] && newSlotET < bH){
-          return Date(Date.parse(req.body.date + " " + bH)); 
+        var bH0 = new Date(bH.split("-")[0]);
+        var bH1 = new Date(bH.split("-")[1]);
+        // console.log(bH0, bH1);
+        if(newSlotET > bH0 && newSlotET < bH1){
+          return bH1; 
         }
       });
       return 0;
     } else {
-      return bS;
+      console.log(bS.split("-")[1]);
+      return Date(bS.split("-")[1]);
     }
   });
 }
@@ -203,15 +207,15 @@ router.post("/profile", userAuth, async (req, res) => {
                           var time = (startTime + "-" + endTime);
                           bookedSlots.push(time);
                        });
-                       mentor.breakHours.forEach(bh => {
-                         bh = Date(Date.parse(req.body.date + " " + bh.split("-")[0])) + Date(Date.parse(req.body.date + " " + bh.split("-")[1]));
+                       mentor.breakHours.forEach((bh, i) => {
+                         mentor.breakHours[i] = new Date(Date.parse(req.body.date + "-" + bh.split("-")[0])) + new Date(Date.parse(req.body.date + " " + bh.split("-")[1]));
                        });
                        var availableSlots = [];
                        var newSlotST = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[0]));
                        var eTime = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[1]));
                        eTime.setMinutes(eTime.getMinutes()-30);
                        while(newSlotST<=eTime){
-                        var newSlotET = newSlotST;
+                        var newSlotET = new Date(newSlotST);
                         newSlotET.setMinutes(newSlotET.getMinutes()+30);
                         if(!checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)){
                           availableSlots.push(newSlotST + "-" + newSlotET);
@@ -221,7 +225,7 @@ router.post("/profile", userAuth, async (req, res) => {
                         }
                        }
                      }
-                     console.log(availableSlots);
+                    //  console.log(availableSlots);
                      res.render("sales/index");
                      // res.redirect(303, "/profile", {availableSlots: availableSlots})
                   }

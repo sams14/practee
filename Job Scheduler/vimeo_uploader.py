@@ -228,7 +228,7 @@ if __name__ == "__main__":
 	with open(os.path.abspath("Job Scheduler/error.txt"), 'w') as f:
 		f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
 
-	# files = utils.get_records(sys.argv, 'vimeo_uploader.py')
+	files = utils.get_records(sys.argv, 'vimeo_uploader.py')
 	files = utils.get_records(arg, 'vimeo_uploader.py')
 
 	files = upload_zoom_videos(files)
