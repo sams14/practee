@@ -12,6 +12,7 @@ const axios = require('axios');
 const { mailer } = require('./utils/password');
 const { connect, connection } = require("mongoose");
 const { success, error } = require("consola");
+const { update_VimeoFolder } = require('./utils/vimeoFolder');
 
 // Bring in the app constants
 const { ENV, URL, DB, SECRET, PORT } = require("./config/index");
@@ -86,12 +87,6 @@ app.get('*', function(req, res) {
     res.render('pages/404');
 });
 
-// app.use('/', authRoute);
-
-// app.use('/', function(req, res) {
-//     res.render('index');
-// });
-
 
 //Python Job Scheduler
 const CronJob = require('cron').CronJob;
@@ -102,7 +97,7 @@ const job = new CronJob({
     onTick: function() {
         // Run whatever you like here..
         let json_response, error = 'No Error Found !!';
-        const childP = spawn('python', [path.resolve("Job Scheduler","vimeo_uploader.py")]);
+        const childP = spawn('python3.7', [path.resolve("Job Scheduler","vimeo_uploader.py")]);
         childP.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
@@ -110,12 +105,10 @@ const job = new CronJob({
             error = data
         });
         childP.on('close', async (code) => {
-            await axios({
-                method: 'post',
-                url: URL+'/practee/vimeo/folder/update'
-            }).then(function(response) {
+            await update_VimeoFolder()
+            .then(function(response) {
                 // handle success
-                json_response = response['data'];
+                json_response = response;
                 console.log(json_response);
             })
             .catch(function(err) {

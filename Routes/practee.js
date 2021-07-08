@@ -3,7 +3,7 @@ const User = require('../DB/user');
 const Vimeo = require('../models/Vimeo');
 const dotenv = require('dotenv');
 const Grammarbot = require('grammarbot');
-const axios = require('axios');
+const { update_VimeoFolder } = require('../utils/vimeoFolder');
 
 dotenv.config();
 
@@ -46,76 +46,13 @@ router.post('/grammar', function(req, res) {
     });
 });
 
-async function update_VimeoFolder(req, res, next) {
-    await Vimeo.deleteMany({}).then(function (params) {
-        console.log('All Records Are Deleted !!')
-    }).catch(function (err) {
-        return res.status(500).json({
-            message: "Records Deletion Failed !! TypeError :" + err,
-            success: false
-          });
-    });    
-    console.log("FETCHING FOLDERS FROM VIMEO");
-    const headers = { "Accept": "application/json", 'authorization': 'Bearer ' + process.env.vimeo_token };
-    const url = 'https://api.vimeo.com/users/' + process.env.vimeo_user_id + '/projects';
-    var folder_data = [];
-    var failed = [];
-    var folders_counter = 0;
-    var counter = 1;
 
-    while (true) {
-        var query = { 'per_page': 100, 'page': counter };
-        var json_response;
-        await axios({
-                method: 'get',
-                url: url,
-                headers: headers,
-                params: query
-            }).then(function(response) {
-                // handle success
-                json_response = response['data'];
-            })
-            .catch(function(error) {
-                // handle error
-                console.log(error);
-            });
-
-        if (json_response['total'] > 0) {
-            json_response['data'].forEach(async record => {
-                try {
-                    if ((record['name']).includes("@")){
-                        var folder = new Vimeo({
-                            "student_email": ((record['name'].split("(")[1]).split(")")[0]).trim(),
-                            "student_name": (record['name'].split("(")[0]).trim(),
-                            "privacy": record['privacy']['view'],
-                            "folder_id": record['uri'].substring(record['uri'].lastIndexOf('/') + 1, (record['uri']).length)
-                        });
-                        const savedFolder = await folder.save()
-                        folder_data.push(savedFolder);
-                    }
-                } catch (error) {
-                    failed.push(record['name']);
-                    console.log(record['name']);
-                }
-            });
-        }
-        folders_counter += (json_response['data']).length;
-        counter += 1;
-
-        if (folders_counter >= json_response['total']) {
-            break;
-        }
-    }
-    req.failed = failed;
-    next();
-}
-
-router.post('/vimeo/folder/update',update_VimeoFolder , function(req, res) {
-    return res.status(200).json({
-        message: "Database Has Been Updated !!",
-        failed_folders : req.failed,
-        success: true
-      });
+router.post('/vimeo/folder/update', async function(req, res) {
+    let response = await update_VimeoFolder();
+    if(response['success'])
+        return res.status(200).json(response);
+    else
+        return res.status(500).json(response);
 });
 
 router.get('/vimeo/folder/login', function(req, res) {

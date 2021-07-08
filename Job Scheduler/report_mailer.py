@@ -27,7 +27,7 @@ class Mailer:
 
 		body = 'Successfully Uploaded Zoom recordings to Vimeo.The generated reportfile is attached below.'
 		msg.attach(MIMEText(body, 'plain'))
-		print(os.path.isfile('Job Scheduler/error.txt'))
+		
 		if os.path.isfile('Job Scheduler/error.txt'):
 			files=['outputfile.csv','error.txt']
 			for f in files:

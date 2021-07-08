@@ -178,7 +178,7 @@ class Utils:
 		# if not os.path.exists('./reports'):
 		# 	os.makedirs(str('./reports'))
 
-		file_exists = os.path.isfile(filename)
+		file_exists = os.path.isfile("Job Scheduler/"+filename)
 		with open(os.path.abspath("Job Scheduler/" + filename), 'w') as f: #'a'
 			writer = csv.writer(f)
 			#if not file_exists:
