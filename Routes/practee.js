@@ -66,7 +66,7 @@ router.post('/vimeo/folder/login', async (req, res) => {
         return res.redirect('/vimeo/folder/login');
     }
     console.log(req.body);
-    var mail = req.body.pass;
+    var mail = (req.body.pass).toLowerCase();
     var name = req.body.user;
     Vimeo.find({student_email : mail}, (err, folder_data) => {
         console.log(folder_data);
