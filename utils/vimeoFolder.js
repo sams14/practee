@@ -46,7 +46,7 @@ async function update_VimeoFolder(res) {
                 try {
                     if ((record['name']).includes("@")){
                         var folder = new Vimeo({
-                            "student_email": ((record['name'].split("(")[1]).split(")")[0]).trim(),
+                            "student_email": (((record['name'].split("(")[1]).split(")")[0]).trim()).toLowerCase(),
                             "student_name": (record['name'].split("(")[0]).trim(),
                             "privacy": record['privacy']['view'],
                             "folder_id": record['uri'].substring(record['uri'].lastIndexOf('/') + 1, (record['uri']).length)

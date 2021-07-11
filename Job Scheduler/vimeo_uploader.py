@@ -220,33 +220,33 @@ def upload_zoom_videos(records):
 	return records
 
 if __name__ == "__main__":
-	# IST = pytz.timezone('Asia/Kolkata')
-	# date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
-	# arg = ['vimeo_uploader.py', '--daterange', date, date, '--outputfile', 'outputfile.csv']
+	IST = pytz.timezone('Asia/Kolkata')
+	date = str(datetime.now(IST)-timedelta(days=1)).split(" ")[0]
+	arg = ['vimeo_uploader.py', '--daterange', date, date, '--outputfile', 'outputfile.csv']
 
 	utils = Utils()
-	# with open(os.path.abspath("Job Scheduler/error.txt"), 'w') as f:
-	# 	f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
+	with open(os.path.abspath("Job Scheduler/error.txt"), 'w') as f:
+		f.write((' Zoom Vimeo Integration Report : '+ date +' !! ').center(100, ':')+"\n")
 
 	# files = utils.get_records(sys.argv, 'vimeo_uploader.py')
-	# files = utils.get_records(arg, 'vimeo_uploader.py')
+	files = utils.get_records(arg, 'vimeo_uploader.py')
 
-	# files = upload_zoom_videos(files)
-	# files = check_upload_videos(files, utils.output_file)	
+	files = upload_zoom_videos(files)
+	files = check_upload_videos(files, utils.output_file)	
 
-	# # utils.output_file = 'outputfile.csv'
-	# # files = utils.load_videos_data('outputfile.csv')
+	# utils.output_file = 'outputfile.csv'
+	# files = utils.load_videos_data('outputfile.csv')
 
-	# files = Transcript().upload_zoom_transcript(files)
-	# files = Transcript().update_outputfile(files, utils.output_file)	
-	# move_videos_to_folder(files)
+	files = Transcript().upload_zoom_transcript(files)
+	files = Transcript().update_outputfile(files, utils.output_file)	
+	move_videos_to_folder(files)
 
-	# if (utils.s3_integrate["active"]):
-	# 	files = S3backup().upload(files)
+	if (utils.s3_integrate["active"]):
+		files = S3backup().upload(files)
 
-	# if (utils.zoom_recordings_delete):
-	# 	files = Zoom().delete_zoom_files(files)
-	# 	utils.save_csv(files, utils.output_file)
+	if (utils.zoom_recordings_delete):
+		files = Zoom().delete_zoom_files(files)
+		utils.save_csv(files, utils.output_file)
 
 	if (utils.report_mailer["active"]):
 		try:
