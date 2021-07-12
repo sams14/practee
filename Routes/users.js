@@ -157,22 +157,25 @@ router.get("/profile", userAuth, async (req, res) => {
   res.render("sales/index");
 });
 
-function checkSlot(newSlotST, newSlotET, bookedSlots, breakHours){
+function checkSlot(newSlotET, bookedSlots, breakHours){
   bookedSlots.forEach(bS => {
-    // console.log(newSlotET<=bS);
-    if(newSlotET <= bS){
+    bS0 = new Date(bS.split("-")[0]);
+    bS1 = new Date(bS.split("-")[1]);
+    // console.log(Math.abs(bS0 - newSlotET));
+    if(Math.abs(bS0 - newSlotET) > 0){
       breakHours.forEach(bH => {
         var bH0 = new Date(bH.split("-")[0]);
         var bH1 = new Date(bH.split("-")[1]);
         // console.log(bH0, bH1);
-        if(newSlotET > bH0 && newSlotET < bH1){
+        if(Math.abs(newSlotET - bH0)>0 && Math.abs(bH1 - newSlotET)>0){
+          // console.log("bH1", bH1);
           return bH1; 
         }
       });
-      return 0;
+      return Date(0);
     } else {
-      console.log(bS.split("-")[1]);
-      return Date(bS.split("-")[1]);
+      // console.log("bS1", bS1);
+      return bS1;
     }
   });
 }
@@ -207,21 +210,24 @@ router.post("/profile", userAuth, async (req, res) => {
                           var time = (startTime + "-" + endTime);
                           bookedSlots.push(time);
                        });
+                      //  console.log(bookedSlots);
                        mentor.breakHours.forEach((bh, i) => {
-                         mentor.breakHours[i] = new Date(Date.parse(req.body.date + "-" + bh.split("-")[0])) + new Date(Date.parse(req.body.date + " " + bh.split("-")[1]));
+                         mentor.breakHours[i] = Date(req.body.date + "-" + bh.split("-")[0]) + "-" + Date(req.body.date + " " + bh.split("-")[1]);
                        });
                        var availableSlots = [];
-                       var newSlotST = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[0]));
-                       var eTime = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[1]));
+                       var newSlotST = new Date(req.body.date + " " + mentor.workingHour.split("-")[0]);
+                       var eTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[1]);
                        eTime.setMinutes(eTime.getMinutes()-30);
                        while(newSlotST<=eTime){
                         var newSlotET = new Date(newSlotST);
                         newSlotET.setMinutes(newSlotET.getMinutes()+30);
-                        if(!checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)){
+                        let result = checkSlot(newSlotET, bookedSlots, mentor.breakHours);
+                        console.log(result);
+                        if(!result){
                           availableSlots.push(newSlotST + "-" + newSlotET);
                           newSlotST = newSlotET;
                         } else {
-                          newSlotST = checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours);
+                          newSlotST = result;
                         }
                        }
                      }
