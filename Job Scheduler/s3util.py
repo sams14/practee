@@ -50,6 +50,9 @@ class S3backup:
 				else:
 					failed_list.append({'folder':record['vimeo_folder'], 'file': record['file_name']})
 					print('\n'+'Failed to upload for {filename} ! '.format(filename=record['file_name']))
+			except:
+				failed_list.append({'folder':record['vimeo_folder'], 'file': record['file_name']})
+				print('\n'+'Failed to upload for {filename} ! '.format(filename=record['file_name']))
 
 		if failed_list:
 			with open(os.path.abspath("Job Scheduler/error.txt"), 'a') as f: 
