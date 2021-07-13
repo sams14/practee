@@ -162,17 +162,19 @@ function checkSlot(newSlotET, bS, bH){
     // console.log(bS[j]);
     bS0 = new Date(bS[j].split("-")[0]);
     bS1 = new Date(bS[j].split("-")[1]);
-    // console.log(Math.abs(bS0 - newSlotET));
-    if((bS0 - newSlotET) > 0){
+    // console.log(bS0);
+    // console.log((bS0 > newSlotET));
+    if(newSlotET < bS0){
       for(var i=0; i<bH.length; i++){
         var bH0 = new Date(bH[i].split("-")[0]);
         var bH1 = new Date(bH[i].split("-")[1]);
         // console.log(bH0, bH1);
-        if((newSlotET - bH0)>0 && (bH1 - newSlotET)>0){
+        // console.log((newSlotET > bH0) && (bH1 > newSlotET));
+        if((newSlotET > bH0) && (bH1 > newSlotET)){
           // console.log("bH1");
           return bH1; 
         }
-      }
+      } 
       return 0;
     } else {
       // console.log("bS1");
@@ -202,12 +204,15 @@ router.post("/profile", userAuth, async (req, res) => {
                         var slotObj = foundData;
                         var bookedSlots = [];
                         slotObj.T8.forEach(slot => {
-                          var GMT = new Date(slot.start_time);              
-                          var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
-                          GMT.setMinutes(GMT.getMinutes() + slot.duration);
-                          var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
-                          startTime = new Date(Date.parse(req.body.date + " " + startTime));
-                          endTime = new Date(Date.parse(req.body.date + " " + endTime));
+                          var startTime = new Date(req.body.date + " "+ slot.start_time.split("T")[1]);
+                          var endTime = new Date(startTime);
+                          endTime.setMinutes(endTime.getMinutes() + slot.duration);
+                          // var GMT = new Date(slot.start_time);              
+                          // var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
+                          // GMT.setMinutes(GMT.getMinutes() + slot.duration);
+                          // var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
+                          // startTime = new Date(Date.parse(req.body.date + " " + startTime));
+                          // endTime = new Date(Date.parse(req.body.date + " " + endTime));
                           var time = (startTime + "-" + endTime);
                           bookedSlots.push(time);
                        });
@@ -222,15 +227,18 @@ router.post("/profile", userAuth, async (req, res) => {
                        while(newSlotST<=eTime){
                         var newSlotET = new Date(newSlotST);
                         newSlotET.setMinutes(newSlotET.getMinutes()+30);
+                        // console.log(newSlotET);
                         if(!checkSlot(newSlotET, bookedSlots, mentor.breakHours)){
+                          // console.log(newSlotST + "-" + newSlotET);
                           availableSlots.push(newSlotST + "-" + newSlotET);
                           newSlotST = newSlotET;
+                          // break;
                         } else {
-                          newSlotST = checkSlot(newSlotET, bookedSlots, mentor.breakHours);
+                          newSlotST = new Date(checkSlot(newSlotET, bookedSlots, mentor.breakHours));
                         }
                        }
+                       console.log(availableSlots);
                      }
-                     console.log(availableSlots);
                      res.render("sales/index");
                      // res.redirect(303, "/profile", {availableSlots: availableSlots})
                   }
