@@ -124,9 +124,9 @@ const job = new CronJob({
                 subject: 'Job Scheduler Status',
                 html: `
                 <h3>Database Updation</h3>
-                <p>Message: ${JSON.stringify(json_response['message'])}</p>
-                <p>Failed Folders: ${JSON.stringify(json_response['failed_folders'])}</p>
-                <p>Status: <strong>${JSON.stringify(json_response['success'])}</strong></p>
+                <p>Message: ${json_response['message'] ? JSON.stringify(json_response['message']) : 'something went wrong !!'}</p>
+                <p>Failed Folders: ${json_response['failed_folders'] ? JSON.stringify(json_response['failed_folders']) : 'something went wrong !!'}</p>
+                <p>Status: <strong>${json_response['success'] ? JSON.stringify(json_response['success']) : 'something went wrong !!'}</strong></p>
                 <br>
                 <h3>Job Scheduler</h3>
                 <p>Job Scheduler Status: <strong>${error}</strong></p>
