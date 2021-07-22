@@ -483,3 +483,33 @@ router.post('/vimeo/folder/login', get_VimeoFolder, (req, res) => {
 
 
 module.exports = router;
+
+
+
+
+
+// var newSlotST = new Date(req.body.date + " " + mentor.workingHour.split("-")[0]);
+// var eTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[1]);
+// eTime.setMinutes(eTime.getMinutes()-30);
+// while(newSlotST<=eTime){
+//  var newSlotET = new Date(newSlotST);
+//  newSlotET.setMinutes(newSlotET.getMinutes()+30);
+//  // console.log(newSlotET);
+//  if(!checkSlot(newSlotET, bookedSlots, mentor.breakHours)){
+//    // console.log(newSlotST + "-" + newSlotET);
+//    availableSlots.push(newSlotST + "-" + newSlotET);
+//    newSlotST = newSlotET;
+//    // break;
+//  } else {
+//    newSlotST = new Date(checkSlot(newSlotET, bookedSlots, mentor.breakHours));
+//  }
+
+
+
+
+// var GMT = new Date(slot.start_time);              
+// var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
+// GMT.setMinutes(GMT.getMinutes() + slot.duration);
+// var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
+// startTime = new Date(Date.parse(req.body.date + " " + startTime));
+// endTime = new Date(Date.parse(req.body.date + " " + endTime));
