@@ -157,21 +157,22 @@ router.get("/profile", userAuth, async (req, res) => {
   res.render("sales/index");
 });
 
+// bS0 = new Date(bS[j].split("-")[0]);
+// bS1 = new Date(bS[j].split("-")[1]);
+// var bH0 = new Date(bH[i].split("-")[0]);
+// var bH1 = new Date(bH[i].split("-")[1]);
 function checkSlot(newSlotST, newSlotET, bS, bH){
   for(var j=0; j<bS.length; j++){
-    bS0 = new Date(bS[j].split("-")[0]);
-    bS1 = new Date(bS[j].split("-")[1]);
-    // console.log(bS0, newSlotET);
-    if(newSlotET <= bS0){
+    console.log(bS[0], newSlotET);
+    if(newSlotET <= bS[0]){
       for(var i=0; i<bH.length; i++){
-        var bH0 = new Date(bH[i].split("-")[0]);
-        var bH1 = new Date(bH[i].split("-")[1]);
-        if((newSlotET > bH0) && (bH1 > newSlotET))
-          return {start:bH1, success:0}; 
+        
+        if((newSlotET > bH[0]) && (bH[1] > newSlotET))
+          return {start:bH[1], success:0}; 
       } 
       return {start:newSlotST, success:1};
     } else {
-      newSlotST = new Date(bS1), newSlotET = new Date(bS1); 
+      newSlotST = new Date(bS[1]), newSlotET = new Date(bS[1]); 
       newSlotET.setMinutes(newSlotET.getMinutes()+30);
     }
   }
@@ -202,26 +203,35 @@ router.post("/profile", userAuth, async (req, res) => {
                           var startTime = new Date(req.body.date + " "+ slot.start_time.split("T")[1]);
                           var endTime = new Date(startTime);
                           endTime.setMinutes(endTime.getMinutes() + slot.duration);
-                          var time = (startTime + "-" + endTime);
-                          bookedSlots.add(time);
+                          // console.log(startTime, endTime);
+                          // var time = (startTime + "-" + endTime);
+                          // console.log(time);
+                          bs = []
+                          bs.push(startTime); bs.push(endTime);
+                          bookedSlots.add(bs);
                        });
                        bookedSlots = [...bookedSlots];
-                       bookedSlots = bookedSlots.sort((a, b) => (new Date(a.split("-")[0]) - new Date(b.split("-")[0])));
-                       console.log(bookedSlots);
-                       mentor.breakHours.forEach((bh, i) => {
-                         mentor.breakHours[i] = (new Date(req.body.date + " " + bh.split("-")[0])) + "-" + (new Date(req.body.date + " " + bh.split("-")[1]));
+                       bookedSlots = bookedSlots.sort((a, b) => (a[0] - b[0]));
+                      //  console.log(bookedSlots);
+                       let bH = new Set();
+                       mentor.breakHours.forEach((bh) => {
+                         bhn = [];
+                         bhn.push((new Date(req.body.date + " " + bh.split("-")[0]))); bhn.push((new Date(req.body.date + " " + bh.split("-")[1])));
+                         bH.add(bhn);
                        });
-                      //  console.log(mentor.breakHours);
+                       bH = [...bH];
+                      //  console.log(bH);
                        var availableSlots = [];
                        var sTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[0]);
                        var eTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[1]);
+                      //  console.log(sTime + "-" + eTime);
                        eTime.setMinutes(eTime.getMinutes()-30);
                       //  console.log(sTime, eTime);
                        while(sTime<=eTime){
-                        var newSlotST = new Date(sTime);
-                        var newSlotET = new Date(newSlotST);
+                        let newSlotST = new Date(sTime);
+                        let newSlotET = new Date(newSlotST);
                         newSlotET.setMinutes(newSlotET.getMinutes()+30);
-                        // console.log(newSlotET);
+                        // console.log(newSlotST, newSlotET);
                         let resp = checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)
                         console.log(resp);
                         if(resp.success){
