@@ -161,18 +161,17 @@ router.get("/profile", userAuth, async (req, res) => {
 // bS1 = new Date(bS[j].split("-")[1]);
 // var bH0 = new Date(bH[i].split("-")[0]);
 // var bH1 = new Date(bH[i].split("-")[1]);
-function checkSlot(newSlotST, newSlotET, bS, bH){
-  for(var j=0; j<bS.length; j++){
-    console.log(bS[0], newSlotET);
-    if(newSlotET <= bS[0]){
-      for(var i=0; i<bH.length; i++){
-        
-        if((newSlotET > bH[0]) && (bH[1] > newSlotET))
-          return {start:bH[1], success:0}; 
-      } 
-      return {start:newSlotST, success:1};
+function checkSlot(newSlotST, newSlotET, bS, bH, j){
+  for(; j<bS.length; j++){
+    // console.log("loop- ", bS[j][0], newSlotET);
+    if(newSlotET <= bS[j][0]){
+      // for(var i=0; i<bH.length; i++){
+      //   if((newSlotET > bH[i][0]) && (bH[i][1] >= newSlotET))
+      //     return {start:bH[i][1], success:0, counter:j}; 
+      // } 
+      return {start:newSlotST, success:1, counter:j};
     } else {
-      newSlotST = new Date(bS[1]), newSlotET = new Date(bS[1]); 
+      newSlotST = new Date(bS[j][1]), newSlotET = new Date(bS[j][1]); 
       newSlotET.setMinutes(newSlotET.getMinutes()+30);
     }
   }
@@ -204,8 +203,6 @@ router.post("/profile", userAuth, async (req, res) => {
                           var endTime = new Date(startTime);
                           endTime.setMinutes(endTime.getMinutes() + slot.duration);
                           // console.log(startTime, endTime);
-                          // var time = (startTime + "-" + endTime);
-                          // console.log(time);
                           bs = []
                           bs.push(startTime); bs.push(endTime);
                           bookedSlots.add(bs);
@@ -224,22 +221,35 @@ router.post("/profile", userAuth, async (req, res) => {
                        var availableSlots = [];
                        var sTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[0]);
                        var eTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[1]);
-                      //  console.log(sTime + "-" + eTime);
                        eTime.setMinutes(eTime.getMinutes()-30);
                       //  console.log(sTime, eTime);
+                      var counter = 0;
                        while(sTime<=eTime){
                         let newSlotST = new Date(sTime);
                         let newSlotET = new Date(newSlotST);
                         newSlotET.setMinutes(newSlotET.getMinutes()+30);
                         // console.log(newSlotST, newSlotET);
-                        let resp = checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)
-                        console.log(resp);
+                        let resp = checkSlot(newSlotST, newSlotET, bookedSlots, bH, counter)
+                        // console.log(resp);
                         if(resp.success){
-                          availableSlots.push(newSlotST + "-" + newSlotET);
-                          sTime = resp.start.setMinutes(resp.start.getMinutes()+30);
-                        }
-                        else
+                          // var arr = [];
+                          var slotS = new Date(resp.start);  
+                          // var slotE = new Date(resp.start);
+                          // slotE = slotE.setMinutes(slotE.getMinutes()+30);
+                          // console.log(slotS);
+                          // arr.push(newSlotST); 
+                          // arr.push(newSlotET);
+                          // console.log(arr);
+                          // bookedSlots.push(arr);
+                          // bookedSlots = bookedSlots.sort((a, b) => (a[0] - b[0]));
+                          availableSlots.push(slotS);
                           sTime = resp.start;
+                          sTime = sTime.setMinutes(sTime.getMinutes()+30);
+                          counter = resp.counter
+                        }
+                        else{
+                          sTime = resp.start;
+                        }
                        }
                        
                      }
