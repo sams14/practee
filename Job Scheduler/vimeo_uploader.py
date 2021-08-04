@@ -55,7 +55,7 @@ def get_vimeo_folders():
 	counter = 1
 
 	while True:
-		query = {'per_page':100, 'page':counter}
+		query = {'per_page':50, 'page':counter}
 
 		response = requests.get(url, headers=headers, params=query)
 		json_response = json.loads(response.content)
@@ -65,6 +65,7 @@ def get_vimeo_folders():
 				folders[record['name']] = record['uri'][record['uri'].rindex('/')+1:len(record['uri'])]
 
 		folders_counter += len(json_response['data'])
+		print('IN PROGRESS !! {folders} folders fetched out of {total_folders}'.format(folders=folders_counter, total_folders=json_response['total']))
 		counter += 1
 
 		if (folders_counter >=  json_response['total']):
