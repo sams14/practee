@@ -176,9 +176,11 @@ function checkSlot(newSlotST, newSlotET, bS, bH, j){
     }
   }
   console.log(bS.length);
+  return {start:newSlotET, success:0, counter:j};
 }
 router.post("/profile", userAuth, async (req, res) => {
-  Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
+  let data = [];
+  await Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
       if (err) {
           console.log(err);
           return res.status(500).send();
@@ -192,12 +194,13 @@ router.post("/profile", userAuth, async (req, res) => {
                 if (err) {
                   console.log(err);
                   return res.status(500).send();
-                } else {
+                } else {  
                      if (foundData.length == 0) {
                        return res.status(500).send();
                      } else {
                         var slotObj = foundData;
                         let bookedSlots = new Set();
+                        var availableSlots = [];
                         slotObj.T8.forEach(slot => {
                           var startTime = new Date(req.body.date + " "+ slot.start_time.split("T")[1]);
                           var endTime = new Date(startTime);
@@ -218,7 +221,6 @@ router.post("/profile", userAuth, async (req, res) => {
                        });
                        bH = [...bH];
                       //  console.log(bH);
-                       var availableSlots = [];
                        var sTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[0]);
                        var eTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[1]);
                        eTime.setMinutes(eTime.getMinutes()-30);
@@ -231,7 +233,7 @@ router.post("/profile", userAuth, async (req, res) => {
                         // console.log(newSlotST, newSlotET);
                         let resp = checkSlot(newSlotST, newSlotET, bookedSlots, bH, counter)
                         // console.log(resp);
-                        if(resp.success){
+                        if(resp.success == 1){
                           // var arr = [];
                           var slotS = new Date(resp.start);  
                           // var slotE = new Date(resp.start);
@@ -245,24 +247,36 @@ router.post("/profile", userAuth, async (req, res) => {
                           availableSlots.push(slotS);
                           sTime = resp.start;
                           sTime = sTime.setMinutes(sTime.getMinutes()+30);
-                          counter = resp.counter
+                          counter = resp.counter;
                         }
                         else{
                           sTime = resp.start;
+                          counter = resp.counter;
                         }
                        }
                        
                      }
-                       console.log(availableSlots);
+                      if (availableSlots.length != 0){
+                        let item={}
+                        item['availableSlots'] = availableSlots;
+                        item['name'] = mentor.name;
+                        item['email'] = mentor.email;
+                        item['zoomID'] = mentor.zoomID;
+                        item['breakHours'] = mentor.breakHours;
+                        //  console.log(availableSlots);
+                        data.push(item);
+                      }
                      }
-                     res.render("sales/index");
+                     console.log(data);
+                    //  res.render("sales/index");
                      // res.redirect(303, "/profile", {availableSlots: availableSlots})
               });
             });
           }
       }
+  }).then(()=>{
+    console.log("here",data);
   });
-   
 });
 
 //___________________________________________________________________________
