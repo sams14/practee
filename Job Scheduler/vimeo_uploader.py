@@ -199,7 +199,7 @@ def upload_zoom_videos(records):
 						privacy['view']='nobody'
 					privacy['embed']='public'
 					privacy['comments']='nobody'
-					privacy['download']='false'
+					privacy['download']='true'
 
 					upload = {}
 					upload['approach']='pull'
@@ -236,7 +236,7 @@ if __name__ == "__main__":
 	files = check_upload_videos(files, utils.output_file)	
 
 	# utils.output_file = 'outputfile.csv'
-	# files = utils.load_videos_data('outputfile.csv')
+	# files = utils.load_videos_data('Job Scheduler/outputfile.csv')
 
 	files = Transcript().upload_zoom_transcript(files)
 	files = Transcript().update_outputfile(files, utils.output_file)	
