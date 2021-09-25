@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Mentor = require("../models/Mentor");
 const Slot = require("../models/Slots");
 const { forgotPassword, varifyToken } = require("../utils/password");
+const { getAvailableSlots } = require("../utils/FindSlots");
 const {
   userAuth,
   userLogin,
@@ -84,9 +85,9 @@ router.post('/login-user', userLogin("user"),
 router.get('/login-admin',checkLogin , async (req, res) => {
   if(Object.keys(req.query).length !== 0){
     const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-    res.render('pages/login',{role : "admin", response : response});
+    return res.render('pages/login',{role : "admin", response : response});
   }
-  res.render('pages/login',{role : "admin"});
+  return res.render('pages/login',{role : "admin"});
 });
 router.post("/login-admin", userLogin("admin"),
   function(req, res) {
@@ -154,7 +155,12 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 //---------------------------------------------------------------------------
 router.get("/profile", userAuth, async (req, res) => {
   // return res.json(serializeUser(req.user));
-  res.render("sales/index", {data:"", date:""});
+  if (!req.query.date){
+    return res.render("sales/index", {data:"", date:""});
+  }
+  else {
+    await getAvailableSlots(req, res);
+  }
 });
 
 function checkSlot(newSlotST, newSlotET, bS, bH, j){
@@ -179,101 +185,6 @@ async function asyncForEach(array, callback) {
     await callback(array[index], index, array);
   }
 }
-router.post("/profile", userAuth, async (req, res) => {
-  var obj = {}
-  if (req.body.gender != 'NA') {obj["gender"] = req.body.gender };
-  if (req.body.lang != 'NA') {obj["regionalLang"] = req.body.lang};
-
-  await Mentor.find(obj, async(err, foundData) => {
-      if (err) {
-          console.log(err);
-          return res.status(500).send();
-      } else {
-          if (foundData.length == 0) {
-            console.log("kehi jhia debeni...");
-            return res.status(500).send();
-          } else {
-            var responseObj = foundData;
-            var DATA = [];
-            await asyncForEach(responseObj, async (mentor) => {
-              await Slot.findOne({"zoomID": mentor.zoomID}, async(err, foundData) => {
-                if (err) {
-                  console.log(err);
-                  return res.status(500).send();
-                } else {  
-                     if (foundData.length == 0) {
-                       return res.status(500).send();
-                     } else {
-                        var slotObj = foundData;
-                        let bookedSlots = new Set();
-                        var availableSlots = [];
-                        slotObj.T8.forEach(slot => {
-                          var startTime = new Date(req.body.date + " "+ slot.start_time.split("T")[1]);
-                          var endTime = new Date(startTime);
-                          endTime.setMinutes(endTime.getMinutes() + slot.duration);
-                          // console.log(startTime, endTime);
-                          bs = []
-                          bs.push(startTime); bs.push(endTime);
-                          bookedSlots.add(bs);
-                       });
-                       bookedSlots = [...bookedSlots];
-                       bookedSlots = bookedSlots.sort((a, b) => (a[0] - b[0]));
-                      //  console.log(bookedSlots);
-                       let bH = new Set();
-                       mentor.breakHours.forEach((bh) => {
-                         bhn = [];
-                         bhn.push((new Date(req.body.date + " " + bh.split("-")[0]))); bhn.push((new Date(req.body.date + " " + bh.split("-")[1])));
-                         bH.add(bhn);
-                       });
-                       bH = [...bH];
-                      //  console.log(bH);
-                       var sTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[0]);
-                       var eTime = new Date(req.body.date + " " + mentor.workingHour.split("-")[1]);
-                       eTime.setMinutes(eTime.getMinutes()-30);
-                      //  console.log(sTime, eTime);
-                      var counter = 0;
-                       while(sTime<=eTime){
-                        let newSlotST = new Date(sTime);
-                        let newSlotET = new Date(newSlotST);
-                        newSlotET.setMinutes(newSlotET.getMinutes()+30);
-                        // console.log(newSlotST, newSlotET);
-                        let resp = checkSlot(newSlotST, newSlotET, bookedSlots, bH, counter)
-                        // console.log(resp);
-                        if(resp.success == 1){
-                          // var arr = [];
-                          var slotS = new Date(resp.start);  
-                          availableSlots.push(slotS);
-                          sTime = resp.start;
-                          sTime = sTime.setMinutes(sTime.getMinutes()+30);
-                          counter = resp.counter;
-                        }
-                        else{
-                          sTime = resp.start;
-                          counter = resp.counter;
-                        }
-                       }
-                       
-                        if (availableSlots.length != 0){
-                          let item={}
-                          item['availableSlots'] = availableSlots;
-                          item['name'] = mentor.name;
-                          item['email'] = mentor.email;
-                          item['zoomID'] = mentor.zoomID;
-                          item['breakHours'] = mentor.breakHours;
-                          //  console.log(availableSlots);
-                          DATA.push(item);
-                        }
-                      }
-                    }
-              });
-            });
-            console.log(DATA.length);
-            console.log(DATA);
-            res.render("sales/index", {data:DATA, date:req.body.date});
-          }
-      }
-  });
-});
 
 //___________________________________________________________________________
 // Add Mentor Route
