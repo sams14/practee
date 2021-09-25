@@ -154,43 +154,49 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 //---------------------------------------------------------------------------
 router.get("/profile", userAuth, async (req, res) => {
   // return res.json(serializeUser(req.user));
-  res.render("sales/index");
+  res.render("sales/index", {data:"", date:""});
 });
 
-// bS0 = new Date(bS[j].split("-")[0]);
-// bS1 = new Date(bS[j].split("-")[1]);
-// var bH0 = new Date(bH[i].split("-")[0]);
-// var bH1 = new Date(bH[i].split("-")[1]);
 function checkSlot(newSlotST, newSlotET, bS, bH, j){
   for(; j<bS.length; j++){
     // console.log("loop- ", bS[j][0], newSlotET);
     if(newSlotET <= bS[j][0]){
-      // for(var i=0; i<bH.length; i++){
-      //   if((newSlotET > bH[i][0]) && (bH[i][1] >= newSlotET))
-      //     return {start:bH[i][1], success:0, counter:j}; 
-      // } 
+      for(var i=0; i<bH.length; i++){
+        if((newSlotET > bH[i][0]) && (bH[i][1] >= newSlotET))
+          return {start:bH[i][1], success:0, counter:j}; 
+      } 
       return {start:newSlotST, success:1, counter:j};
     } else {
       newSlotST = new Date(bS[j][1]), newSlotET = new Date(bS[j][1]); 
       newSlotET.setMinutes(newSlotET.getMinutes()+30);
     }
   }
-  console.log(bS.length);
+  // console.log(bS.length);
   return {start:newSlotET, success:0, counter:j};
 }
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
 router.post("/profile", userAuth, async (req, res) => {
-  let data = [];
-  await Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
+  var obj = {}
+  if (req.body.gender != 'NA') {obj["gender"] = req.body.gender };
+  if (req.body.lang != 'NA') {obj["regionalLang"] = req.body.lang};
+
+  await Mentor.find(obj, async(err, foundData) => {
       if (err) {
           console.log(err);
           return res.status(500).send();
       } else {
           if (foundData.length == 0) {
+            console.log("kehi jhia debeni...");
             return res.status(500).send();
           } else {
             var responseObj = foundData;
-            responseObj.forEach(mentor => {
-              Slot.findOne({"zoomID": mentor.zoomID}, async(err, foundData) => {
+            var DATA = [];
+            await asyncForEach(responseObj, async (mentor) => {
+              await Slot.findOne({"zoomID": mentor.zoomID}, async(err, foundData) => {
                 if (err) {
                   console.log(err);
                   return res.status(500).send();
@@ -236,14 +242,6 @@ router.post("/profile", userAuth, async (req, res) => {
                         if(resp.success == 1){
                           // var arr = [];
                           var slotS = new Date(resp.start);  
-                          // var slotE = new Date(resp.start);
-                          // slotE = slotE.setMinutes(slotE.getMinutes()+30);
-                          // console.log(slotS);
-                          // arr.push(newSlotST); 
-                          // arr.push(newSlotET);
-                          // console.log(arr);
-                          // bookedSlots.push(arr);
-                          // bookedSlots = bookedSlots.sort((a, b) => (a[0] - b[0]));
                           availableSlots.push(slotS);
                           sTime = resp.start;
                           sTime = sTime.setMinutes(sTime.getMinutes()+30);
@@ -255,27 +253,25 @@ router.post("/profile", userAuth, async (req, res) => {
                         }
                        }
                        
-                     }
-                      if (availableSlots.length != 0){
-                        let item={}
-                        item['availableSlots'] = availableSlots;
-                        item['name'] = mentor.name;
-                        item['email'] = mentor.email;
-                        item['zoomID'] = mentor.zoomID;
-                        item['breakHours'] = mentor.breakHours;
-                        //  console.log(availableSlots);
-                        data.push(item);
+                        if (availableSlots.length != 0){
+                          let item={}
+                          item['availableSlots'] = availableSlots;
+                          item['name'] = mentor.name;
+                          item['email'] = mentor.email;
+                          item['zoomID'] = mentor.zoomID;
+                          item['breakHours'] = mentor.breakHours;
+                          //  console.log(availableSlots);
+                          DATA.push(item);
+                        }
                       }
-                     }
-                     console.log(data);
-                    //  res.render("sales/index");
-                     // res.redirect(303, "/profile", {availableSlots: availableSlots})
+                    }
               });
             });
+            console.log(DATA.length);
+            console.log(DATA);
+            res.render("sales/index", {data:DATA, date:req.body.date});
           }
       }
-  }).then(()=>{
-    console.log("here",data);
   });
 });
 
