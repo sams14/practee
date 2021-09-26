@@ -20,7 +20,7 @@ async function update_VimeoFolder(res) {
     var counter = 1;
 
     while (true) {
-        var query = { 'per_page': 100, 'page': counter };
+        var query = { 'per_page': 50, 'page': counter };
         var json_response;
         await axios({
                 method: 'get',
