@@ -34,7 +34,7 @@
 }
 
 .dot-pulse::before {
-    box-shadow: 9980px 0 0 -5px #9880ff;
+    box-shadow: 9979px 0 0 -5px #9880ff;
     animation: dotPulseBefore 1.5s infinite linear;
     animation-delay: 0s;
 }
@@ -47,14 +47,14 @@
 
 @keyframes dotPulseBefore {
     0% {
-    box-shadow: 9980px 0 0 -5px #9880ff;
+    box-shadow: 9979px 0 0 -5px #9880ff;
     }
     30% {
-    box-shadow: 9980px 0 0 2px #9880ff;
+    box-shadow: 9979px 0 0 2px #9880ff;
     }
     60%,
     100% {
-    box-shadow: 9980px 0 0 -5px #9880ff;
+    box-shadow: 9979px 0 0 -5px #9880ff;
     }
 }
 

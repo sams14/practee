@@ -29,7 +29,7 @@ const getAvailableSlots =  async (req, res, mentorNames, regionalLang) => {
     var obj = {}
     if (req.query.gender != 'NA' && req.query.gender) {obj["gender"] = req.query.gender }
     if (req.query.mentor != 'NA' && req.query.mentor) {obj["name"] = req.query.mentor }
-    if (req.query.lang != 'NA') {obj["regionalLang"] = req.query.lang}
+    if (req.query.lang != 'NA' && req.query.lang) {obj["regionalLang"] = req.query.lang}
     console.log(obj);
     await Mentor.find(obj, async(err, foundData) => {
       if (err) {
