@@ -26,3 +26,11 @@ $(document).ready(function(){
       $('#preloader').show();
    });
 });
+
+function ExportToExcel(date, type, fn, dl) {
+  var elt = document.getElementById('tbl_exporttable_to_xls');
+  var wb = XLSX.utils.table_to_book(elt, { sheet: date, raw:true });
+  return dl ?
+    XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+    XLSX.writeFile(wb, fn || ('Roster-Report.' + (type || 'xlsx')));
+}

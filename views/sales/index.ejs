@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Windmill Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/css/tailwind.output.css" />
   <link rel="stylesheet" href="assets/css/preloader.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -586,7 +587,7 @@
           <!-- New Table -->
           <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
-              <table class="w-full whitespace-no-wrap">
+              <table id="tbl_exporttable_to_xls" class="w-full whitespace-no-wrap">
                 <thead>
                   <tr
                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -637,12 +638,13 @@
                           <tr style="border: none;" class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">
                               <% e.setMinutes(e.getMinutes()+330); %>
-                              <%= e.toLocaleString()  %> 
+                              <%= e.toLocaleString().toString() %> 
                             </td>
                           </tr>
                         <% }); %> 
                       </tbody>
                     <% }); %> 
+                    
                   <% } %> 
                 <% } %> 
                 <tbody id='preloader' class="hidden bg-white divide-y border-b dark:border-gray-700 dark:divide-gray-700 dark:bg-gray-800">
@@ -661,12 +663,25 @@
               </table>
             </div>
           </div>
+          <% if(data != "" && data != "NO DATA"){ %> 
+            <div class="mb-8"></div>
+            <div class="mx-auto">
+              <button
+                onclick="ExportToExcel('<%=searchData.date%>','xlsx')"
+                class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+              >
+                <span>Export To Excel</span>
+                <i class="ml-2 fa fa-download"></i>
+              </button>
+            </div>
+          <% } %> 
           <div class="mb-8"></div>
         </div>
       </main>
     </div>
   </div>
 </body>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="assets/js/profile-page.js"></script>
 </html>
