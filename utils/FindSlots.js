@@ -1,4 +1,3 @@
-const User = require("../models/User");
 const Mentor = require("../models/Mentor");
 const Slot = require("../models/Slots");
 
@@ -26,18 +25,19 @@ for (let index = 0; index < array.length; index++) {
 }
 }
   
-const getAvailableSlots =  async (req, res) => {
+const getAvailableSlots =  async (req, res, mentorNames, regionalLang) => {
     var obj = {}
-    if (req.query.gender != 'NA') {obj["gender"] = req.query.gender };
-    if (req.query.lang != 'NA') {obj["regionalLang"] = req.query.lang};
+    if (req.query.gender != 'NA' && req.query.gender) {obj["gender"] = req.query.gender }
+    if (req.query.mentor != 'NA' && req.query.mentor) {obj["name"] = req.query.mentor }
+    if (req.query.lang != 'NA') {obj["regionalLang"] = req.query.lang}
+    console.log(obj);
     await Mentor.find(obj, async(err, foundData) => {
       if (err) {
           console.log(err);
           return res.status(500).send();
       } else {
           if (foundData.length == 0) {
-            console.log("kehi jhia debeni...");
-            return res.render("sales/index", {data:"NO DATA", date:req.query.date});
+            return res.render("sales/index", {data:"NO DATA", searchData:req.query, mentors: mentorNames, lang: regionalLang});
           } else {
             var responseObj = foundData;
             var DATA = [];
@@ -114,7 +114,7 @@ const getAvailableSlots =  async (req, res) => {
               });
             });
             console.log(DATA.length);
-            return res.render("sales/index", {data:DATA, date:req.query.date});
+            return res.render("sales/index", {data:DATA, searchData:req.query, mentors: mentorNames, lang: regionalLang});
           }
       }
     });

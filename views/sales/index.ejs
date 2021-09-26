@@ -7,6 +7,7 @@
   <title>Windmill Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/tailwind.output.css" />
+  <link rel="stylesheet" href="assets/css/preloader.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="assets/js/init-alpine.js"></script>
 </head>
@@ -480,7 +481,6 @@
           </h2>
           <!-- CTA -->
           <form action="/profile" method="GET" id="slotForm" class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
-            <!-- <form action="/profile" method="post" id="slotForm"> -->
               <div class="flex items-center">
                 <div class="block px-3 my-4 text-sm">
                   <span class="text-gray-700 dark:text-black-400">
@@ -495,7 +495,9 @@
                         class="text-gray-600 form-radio focus:border-gray-400 focus:outline-none focus:shadow-outline-gray dark:focus:shadow-outline-gray"
                         name="searchType"
                         value="Gender"
-                        checked
+                        <% if (searchData.searchType == "Gender" || searchData == "") { %>
+                          checked
+                        <% } %> 
                       />
                       <span class="ml-2 font-medium">Gender</span>
                     </label>
@@ -507,6 +509,9 @@
                         class="text-gray-600 form-radio focus:border-gray-400 focus:outline-none focus:shadow-outline-gray dark:focus:shadow-outline-gray"
                         name="searchType"
                         value="Mentor"
+                        <% if (searchData.searchType == "Mentor") { %>
+                          checked
+                        <% } %>
                       />
                       <span class="ml-2 font-medium">Mentor</span>
                     </label>
@@ -515,47 +520,67 @@
                 <label class="block px-3 my-4 text-sm">
                   <span class="text-gray-700 dark:text-black-400">&nbsp;Gender</span>
                   <select name="gender" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                    <option>Female</option>
-                    <option>Male</option>
-                    <option>NA</option>
+                    <option
+                    <% if (searchData == "" || searchData.gender == "NA") { %>
+                      selected
+                    <% } %>
+                    >NA</option>
+                    <option 
+                      <% if (searchData.gender == "Female") { %>
+                        selected
+                      <% } %> 
+                    >Female</option>
+                    <option
+                    <% if (searchData.gender == "Male") { %>
+                      selected
+                    <% } %>
+                    >Male</option>
                   </select>
                 </label>
                 <label class="block px-3 my-4 text-sm">
                   <span class="text-gray-700 dark:text-black-400">&nbsp;Mentor</span>
                   <select name="mentor" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" disabled>
-                    <option>Asutosh Das</option>
-                    <option>Sambid Anand Bharadwaj</option>
-                    <option>NA</option>
+                    <option
+                    <% if (searchData == "" || searchData.mentor == "NA") { %>
+                      selected
+                    <% } %>
+                    >NA</option>
+                    <% mentors.forEach((mentor)=>{ %> 
+                      <option
+                      <% if (searchData.mentor == mentor) { %>
+                        selected
+                      <% } %>
+                      ><%= mentor %> </option>
+                    <% }); %> 
                   </select>
                 </label>
                 <label class="block px-3 my-4 text-sm">
                   <span class="text-gray-700 dark:text-black-400">&nbsp;Regional Language</span>
                   <select name="lang" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                    <option>Odia</option>
-                    <option>Hindi</option>
-                    <option>Tamil</option>
-                    <option>Bengali</option>
-                    <option>Marathi</option>
-                    <option>Telegu</option>
-                    <option>Malayalam</option>
-                    <option>Kannada</option>
-                    <option>Punjabi</option>
-                    <option>Urdu</option>
-                    <option>NA</option>
+                    <option
+                    <% if (searchData == "" || searchData.lang == "NA") { %>
+                      selected
+                    <% } %>
+                    >NA</option>
+                    <% lang.forEach((language)=>{ %> 
+                      <option
+                      <% if (searchData.lang == language) { %>
+                        selected
+                      <% } %>
+                      ><%= language %> </option>
+                    <% }); %> 
                   </select>
                 </label>
                 <label class="block px-3 my-4 text-sm">
                   <span class="text-gray-700 dark:text-black-400">&nbsp;Date</span>
                   <input type="date" name="date" class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
-                  <% if (date) { %>
-                   value = <%= date %> 
+                  <% if (searchData.date) { %>
+                   value = <%= searchData.date %> 
                   <% } %>  
                   />
                 </label>
               </div>
-              <button style="outline: none; box-shadow: none;" type="submit">Find Slots &RightArrow;</button>              
-            <!-- </form> -->
-            
+              <button id="submit_button" style="outline: none; box-shadow: none;" type="submit">Find Slots &RightArrow;</button>              
           </form>
 
           <!-- New Table -->
@@ -566,7 +591,6 @@
                   <tr
                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                     <th class="px-4 py-3">Mentor Name</th>
-                    <!-- <th class="px-4 py-3">Date</th> -->
                     <th class="px-4 py-3">Available Slots Start Time</th>
                   </tr>
                 </thead>
@@ -621,30 +645,28 @@
                     <% }); %> 
                   <% } %> 
                 <% } %> 
+                <tbody id='preloader' class="hidden bg-white divide-y border-b dark:border-gray-700 dark:divide-gray-700 dark:bg-gray-800">
+                  <tr class="text-gray-700 dark:text-gray-400">
+                    <td colspan="2" class="py-4 text-center text-sm font-medium"> 
+                      <div class="row examples">
+                        <div class="col-4">
+                          <div class="stage">
+                            <div class="dot-pulse"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td> 
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
-          <div class="mb-8">
-            
-          </div>
+          <div class="mb-8"></div>
         </div>
       </main>
     </div>
   </div>
 </body>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script>
-  $(function() {
-    $('input[name="searchType"]').on('click', function() {
-        if ($(this).val() == 'Mentor') {
-            $('select[name="gender"]').attr("disabled",true);
-            $('select[name="mentor"]').attr("disabled",false);
-        }
-        else if ($(this).val() == 'Gender') {
-          $('select[name="gender"]').attr("disabled",false);
-          $('select[name="mentor"]').attr("disabled",true);
-        }
-    });
-  });
-</script>
+<script type="text/javascript" src="assets/js/profile-page.js"></script>
 </html>

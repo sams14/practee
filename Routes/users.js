@@ -13,7 +13,6 @@ const {
   userRegister,
   serializeUser
 } = require("../utils/Auth");
-const Slots = require("../models/Slots");
 
 //___________________________________________________________________________
 // Users Registeration Route
@@ -154,37 +153,30 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 // Profile Route
 //---------------------------------------------------------------------------
 router.get("/profile", userAuth, async (req, res) => {
-  // return res.json(serializeUser(req.user));
-  if (!req.query.date){
-    return res.render("sales/index", {data:"", date:""});
-  }
-  else {
-    await getAvailableSlots(req, res);
-  }
-});
-
-function checkSlot(newSlotST, newSlotET, bS, bH, j){
-  for(; j<bS.length; j++){
-    // console.log("loop- ", bS[j][0], newSlotET);
-    if(newSlotET <= bS[j][0]){
-      for(var i=0; i<bH.length; i++){
-        if((newSlotET > bH[i][0]) && (bH[i][1] >= newSlotET))
-          return {start:bH[i][1], success:0, counter:j}; 
-      } 
-      return {start:newSlotST, success:1, counter:j};
+  var mentorNames = new Set();
+  var regionalLang = new Set();
+  await Mentor.find({}, async(err, foundData) => {
+    if (err) {
+        console.log(err);
+        return res.status(500).send();
     } else {
-      newSlotST = new Date(bS[j][1]), newSlotET = new Date(bS[j][1]); 
-      newSlotET.setMinutes(newSlotET.getMinutes()+30);
+        if (foundData.length != 0) {
+          foundData.forEach(mentor => {
+            mentorNames.add(mentor.name);
+            mentor.regionalLang.forEach(lang => {
+              regionalLang.add(lang);
+            });
+          });
+        }
+      if (!req.query.date){
+        return res.render("sales/index", {data:"", searchData:"", mentors: mentorNames, lang: regionalLang});
+      }
+      else {
+        await getAvailableSlots(req, res, mentorNames, regionalLang);
+      }
     }
-  }
-  // console.log(bS.length);
-  return {start:newSlotET, success:0, counter:j};
-}
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
+  });
+});
 
 //___________________________________________________________________________
 // Add Mentor Route
