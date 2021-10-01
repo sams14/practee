@@ -91,7 +91,7 @@ app.get('*', function(req, res) {
 //Python Job Scheduler
 const CronJob = require('cron').CronJob;
 const { spawn } = require('child_process');
-const job = new CronJob({
+const zoomRecordingsHandler = new CronJob({
     // Run at 02:30am Indian Standard time, everyday
     cronTime: '30 02 * * *',
     onTick: function() {
@@ -134,6 +134,42 @@ const job = new CronJob({
                 `
                 };
             await mailer(mailOptions);
+        });
+    },
+    start: true,
+    timeZone: 'Asia/Kolkata'
+});
+
+const zoomAttendanceReport = new CronJob({
+    // Run at 06:00am Indian Standard time, everyday
+    cronTime: '00 06 * * *',
+    onTick: function() {
+        // Run whatever you like here..
+        let error = 'No Error Found !!';
+        const childP = spawn('python3.7', [path.resolve("Zoom Attendance","report_generator.py")]);
+        childP.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        });
+        childP.stderr.on('data', (data) => {
+            error = data
+        });
+        childP.on('close', async (code) => {
+            console.log(`Zoom Attendace Report error: ${error}`);
+            console.log(`Zoom Attendace Report exited with code: ${code}`);
+            if (code) {
+                var mailOptions = {
+                    from: "ash2000test@gmail.com",
+                    to: "asutosh2000ad@gmail.com",
+                    cc: "sambidbharadwaj@gmail.com",
+                    subject: 'Zoom Attendace Report Status',
+                    html: `
+                    <h3>Job Scheduler</h3>
+                    <p>Job Scheduler Status: <strong>${error}</strong></p>
+                    <p>Job Scheduler Exited With Status Code: <strong>${code}</strong></p>
+                    `
+                    };
+                await mailer(mailOptions);
+            }
         });
     },
     start: true,
