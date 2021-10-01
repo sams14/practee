@@ -66,11 +66,12 @@ router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), asyn
 // Users Login Route
 //---------------------------------------------------------------------------
 router.get('/login-user',checkLogin , async (req, res) => {
-    if(Object.keys(req.query).length !== 0){
-      const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-      res.render('pages/login',{role : "user", response : response});
-    }
-    else res.render('pages/login',{role : "user"});
+    return res.redirect(303,'/login-admin');
+    // if(Object.keys(req.query).length !== 0){
+    //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+    //   res.render('pages/login',{role : "user", response : response});
+    // }
+    // else res.render('pages/login',{role : "user"});
 });
 
 router.post('/login-user', userLogin("user"),
@@ -97,11 +98,12 @@ router.post("/login-admin", userLogin("admin"),
 // Super Admin Login Route
 //---------------------------------------------------------------------------
 router.get('/login-super-admin',checkLogin , async (req, res) => {
-  if(Object.keys(req.query).length !== 0){
-    const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-    res.render('pages/login',{role : "super-admin", response : response});
-  }
-  res.render('pages/login',{role : "super-admin"});
+  return res.redirect(303,'/login-admin');
+  // if(Object.keys(req.query).length !== 0){
+  //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+  //   res.render('pages/login',{role : "super-admin", response : response});
+  // }
+  // res.render('pages/login',{role : "super-admin"});
 });
 router.post("/login-super-admin", userLogin("super-admin"),
   function(req, res) {
