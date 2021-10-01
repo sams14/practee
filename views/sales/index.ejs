@@ -7,6 +7,7 @@
   <title>Windmill Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="dist/datepicker.min.css">
   <link rel="stylesheet" href="assets/css/tailwind.output.css" />
   <link rel="stylesheet" href="assets/css/preloader.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -574,7 +575,7 @@
                 </label>
                 <label class="block px-3 my-4 text-sm">
                   <span class="text-gray-700 dark:text-black-400">&nbsp;Date</span>
-                  <input type="date" name="date" class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
+                  <input type="text" data-toggle="datepicker" autocomplete="off" name="date" class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
                   <% if (searchData.date) { %>
                    value = <%= searchData.date %> 
                   <% } %>  
@@ -684,4 +685,6 @@
 <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="assets/js/profile-page.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="dist/datepicker.min.js"></script>
 </html>
