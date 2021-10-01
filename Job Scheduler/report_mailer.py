@@ -35,7 +35,7 @@ class Mailer:
 				part.set_payload(open(os.path.abspath("Job Scheduler/"+f),"rb").read())
 				encoders.encode_base64(part)
 				part.add_header('Content-Disposition',
-							'attachment; filename="%s"' % os.path.abspath("Job Scheduler/"+f))
+							'attachment; filename="%s"' % f)
 				msg.attach(part)
 		else:
 			f='outputfile.csv'
@@ -43,7 +43,7 @@ class Mailer:
 			part.set_payload(open(os.path.abspath("Job Scheduler/"+f),"rb").read())
 			encoders.encode_base64(part)
 			part.add_header('Content-Disposition',
-						'attachment; filename="%s"' % os.path.abspath("Job Scheduler/"+f))
+						'attachment; filename="%s"' % f)
 			msg.attach(part)
 
 		text = msg.as_string()
