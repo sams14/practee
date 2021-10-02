@@ -45,7 +45,7 @@ class Utils:
 		IST = pytz.timezone('Asia/Kolkata')
 		email_user = self.report_mailer["mail-id"]
 		email_password = self.report_mailer["mail-password"]
-		subject = str(datetime.now(IST)).split(" ")[0]+'ZOOM ATTENDANCE REPORT'
+		subject = 'ZOOM ATTENDANCE REPORT : ' + str(datetime.now(IST)-timedelta(days=1)).split(" ")[0] 
 
 		msg = MIMEMultipart()
 		msg['From'] = email_user
@@ -55,7 +55,7 @@ class Utils:
 			msg['To'] = email_send
 		msg['Subject'] = subject
 
-		body = 'Successfully Uploaded Zoom recordings to Vimeo.The generated reportfile is attached below.'
+		body = 'The generated Zoom Attendance Report of '+ str(datetime.now(IST)-timedelta(days=1)).split(" ")[0] +' is attached below.'
 		msg.attach(MIMEText(body, 'plain'))
 
 		f='Zoom_Attandance_file.csv'
