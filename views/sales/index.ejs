@@ -6,7 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Windmill Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="dist/datepicker.min.css">
   <link rel="stylesheet" href="assets/css/tailwind.output.css" />
+  <link rel="stylesheet" href="assets/css/preloader.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="assets/js/init-alpine.js"></script>
 </head>
@@ -457,7 +460,7 @@
                   </li>
                   <li class="flex">
                     <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                      href="#">
+                      href="/logout">
                       <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path
@@ -476,88 +479,212 @@
       <main class="h-full overflow-y-auto">
         <div class="container px-6 mx-auto grid">
           <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Search For Slots:
+            &nbsp;Search For Slots:
           </h2>
           <!-- CTA -->
-          <form action="/profile" method="post" id="slotForm" class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
-            <!-- <form action="/profile" method="post" id="slotForm"> -->
+          <form action="/profile" method="GET" id="slotForm" class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
               <div class="flex items-center">
+                <div class="block px-3 my-4 text-sm">
+                  <span class="text-gray-700 dark:text-black-400">
+                    Search Type :
+                  </span>
+                  <div class="mt-4">
+                    <label
+                      class="inline-flex items-center text-white-600 dark:text-white-400"
+                    >
+                      <input
+                        type="radio"
+                        class="text-gray-600 form-radio focus:border-gray-400 focus:outline-none focus:shadow-outline-gray dark:focus:shadow-outline-gray"
+                        name="searchType"
+                        value="Gender"
+                        <% if (searchData.searchType == "Gender" || searchData == "") { %>
+                          checked
+                        <% } %> 
+                      />
+                      <span class="ml-2 font-medium">Gender</span>
+                    </label>
+                    <label
+                      class="inline-flex items-center ml-3 text-white-600 dark:text-white-400"
+                    >
+                      <input
+                        type="radio"
+                        class="text-gray-600 form-radio focus:border-gray-400 focus:outline-none focus:shadow-outline-gray dark:focus:shadow-outline-gray"
+                        name="searchType"
+                        value="Mentor"
+                        <% if (searchData.searchType == "Mentor") { %>
+                          checked
+                        <% } %>
+                      />
+                      <span class="ml-2 font-medium">Mentor</span>
+                    </label>
+                  </div>
+                </div>
                 <label class="block px-3 my-4 text-sm">
-                  <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Gender</span>
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;Gender</span>
                   <select name="gender" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                    <option>Female</option>
-                    <option>Male</option>
-                    <option>Prefer Not To Say</option>
+                    <option
+                    <% if (searchData == "" || searchData.gender == "NA") { %>
+                      selected
+                    <% } %>
+                    >NA</option>
+                    <option 
+                      <% if (searchData.gender == "Female") { %>
+                        selected
+                      <% } %> 
+                    >Female</option>
+                    <option
+                    <% if (searchData.gender == "Male") { %>
+                      selected
+                    <% } %>
+                    >Male</option>
                   </select>
                 </label>
                 <label class="block px-3 my-4 text-sm">
-                  <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Regional Language</span>
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;Mentor</span>
+                  <select name="mentor" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" disabled>
+                    <option
+                    <% if (searchData == "" || searchData.mentor == "NA") { %>
+                      selected
+                    <% } %>
+                    >NA</option>
+                    <% mentors.forEach((mentor)=>{ %> 
+                      <option
+                      <% if (searchData.mentor == mentor) { %>
+                        selected
+                      <% } %>
+                      ><%= mentor %> </option>
+                    <% }); %> 
+                  </select>
+                </label>
+                <label class="block px-3 my-4 text-sm">
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;Regional Language</span>
                   <select name="lang" class="block w-full mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                    <option>Odia</option>
-                    <option>Hindi</option>
-                    <option>Tamil</option>
-                    <option>Bengoli</option>
-                    <option>Marathi</option>
-                    <option>NA</option>
+                    <option
+                    <% if (searchData == "" || searchData.lang == "NA") { %>
+                      selected
+                    <% } %>
+                    >NA</option>
+                    <% lang.forEach((language)=>{ %> 
+                      <option
+                      <% if (searchData.lang == language) { %>
+                        selected
+                      <% } %>
+                      ><%= language %> </option>
+                    <% }); %> 
                   </select>
                 </label>
                 <label class="block px-3 my-4 text-sm">
-                  <span class="text-gray-700 dark:text-black-400">&nbsp;&nbsp;Date</span>
-                  <input type="date" name="date" class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
-                    />
+                  <span class="text-gray-700 dark:text-black-400">&nbsp;Date</span>
+                  <input type="text" data-toggle="datepicker" autocomplete="off" name="date" class="block w-full mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
+                  <% if (searchData.date) { %>
+                   value = <%= searchData.date %> 
+                  <% } %>  
+                  />
                 </label>
               </div>
-              <button style="outline: none; box-shadow: none;" type="submit">Find Slots &RightArrow;</button>              
-            <!-- </form> -->
-            
+              <button id="submit_button" style="outline: none; box-shadow: none;" type="submit">Find Slots &RightArrow;</button>              
           </form>
 
           <!-- New Table -->
           <div class="w-full overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-x-auto">
-              <table class="w-full whitespace-no-wrap">
+              <table id="tbl_exporttable_to_xls" class="w-full whitespace-no-wrap">
                 <thead>
                   <tr
                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                     <th class="px-4 py-3">Mentor Name</th>
-                    <th class="px-4 py-3">Mail Id</th>
-                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Available Slots Start Time</th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                <% if(data == ""){ %> 
+                  <tbody class="bg-white divide-y border-b dark:border-gray-700 dark:divide-gray-700 dark:bg-gray-800">
+                    <tr class="text-gray-700 dark:text-gray-400">
+                      <td colspan="2" class="py-4 text-center text-sm font-medium"> 
+                        Please Select A Date To View Results !! 
+                      </td> 
+                    </tr>
+                  </tbody>
+                <% } else { %>
+                  <% if(data == "NO DATA"){ %> 
+                    <tbody class="bg-white divide-y border-b dark:border-gray-700 dark:divide-gray-700 dark:bg-gray-800">
+                      <tr class="text-gray-700 dark:text-gray-400">
+                        <td colspan="2" class="py-4 text-center text-sm font-medium"> 
+                          No Data Found For The Combination...
+                        </td> 
+                      </tr>
+                    </tbody> 
+                  <% } else { %> 
+                    <% data.forEach((record)=>{ %> 
+                      <tbody class="bg-white divide-y border-b dark:border-gray-700 dark:divide-gray-700 dark:bg-gray-800">
+                        <tr class="text-gray-700 dark:text-gray-400">
+                          <td rowspan="<%= record.availableSlots.length + 1 %>"  class="px-4 py-3 text-sm">
+                            <div class="flex items-center text-sm">
+                              <!-- Avatar with inset shadow -->
+                              <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                                <img class="object-cover w-full h-full rounded-full"
+                                  src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
+                                  alt="" loading="lazy" />
+                                <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                              </div>
+                              <div>
+                                <p class="font-semibold"><%= record.name %> </p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">
+                                  <%= record.email %>
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <% record.availableSlots.forEach(e => { %>
+                          <tr style="border: none;" class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm">
+                              <% e.setMinutes(e.getMinutes()+330); %>
+                              <%= e.toLocaleString().toString() %> 
+                            </td>
+                          </tr>
+                        <% }); %> 
+                      </tbody>
+                    <% }); %> 
+                    
+                  <% } %> 
+                <% } %> 
+                <tbody id='preloader' class="hidden bg-white divide-y border-b dark:border-gray-700 dark:divide-gray-700 dark:bg-gray-800">
                   <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-semibold">Hans Burger</p>
-                          <p class="text-xs text-gray-600 dark:text-gray-400">
-                            10x Developer
-                          </p>
+                    <td colspan="2" class="py-4 text-center text-sm font-medium"> 
+                      <div class="row examples">
+                        <div class="col-4">
+                          <div class="stage">
+                            <div class="dot-pulse"></div>
+                          </div>
                         </div>
                       </div>
-                    </td>
-                    <td class="px-4 py-3 text-sm">
-                      $ 863.45
-                    </td>
-                    <td class="px-4 py-3 text-sm">
-                      6/10/2020
-                    </td>
+                    </td> 
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
+          <% if(data != "" && data != "NO DATA"){ %> 
+            <div class="mb-8"></div>
+            <div class="mx-auto">
+              <button
+                onclick="ExportToExcel('<%=searchData.date%>','xlsx')"
+                class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+              >
+                <span>Export To Excel</span>
+                <i class="ml-2 fa fa-download"></i>
+              </button>
+            </div>
+          <% } %> 
+          <div class="mb-8"></div>
         </div>
       </main>
     </div>
   </div>
 </body>
-
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/profile-page.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="dist/datepicker.min.js"></script>
 </html>

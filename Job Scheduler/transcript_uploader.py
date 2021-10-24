@@ -29,9 +29,9 @@ class Transcript:
 		sub_str = "?type=cc"
 		transcript = {}
 		for record in records:
-			if record['meeting_uuid'] == meeting and record['file_extension'] == 'VTT' and sub_str in record['download_url']:
+			if record['meeting_uuid'] == meeting and record['file_extension'] == 'VTT' and not sub_str in record['download_url']:
 				return record
-			elif record['meeting_uuid'] == meeting and record['file_extension'] == 'VTT' and not sub_str in record['download_url']:
+			elif record['meeting_uuid'] == meeting and record['file_extension'] == 'VTT' and sub_str in record['download_url']:
 				transcript = record
 		return transcript
 

@@ -20,9 +20,8 @@ const mentorSchema = new Schema(
         default: "Prefer Not To Say"
     },
     regionalLang: {
-        type: String,
-        required: true,
-        default: "N/A"
+        type: [String],
+        required: true
     },
     workingHour: {
       type: String,

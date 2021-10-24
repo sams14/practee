@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Mentor = require("../models/Mentor");
 const Slot = require("../models/Slots");
 const { forgotPassword, varifyToken } = require("../utils/password");
+const { getAvailableSlots } = require("../utils/FindSlots");
 const {
   userAuth,
   userLogin,
@@ -12,7 +13,6 @@ const {
   userRegister,
   serializeUser
 } = require("../utils/Auth");
-const Slots = require("../models/Slots");
 
 //___________________________________________________________________________
 // Users Registeration Route
@@ -66,11 +66,12 @@ router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), asyn
 // Users Login Route
 //---------------------------------------------------------------------------
 router.get('/login-user',checkLogin , async (req, res) => {
-    if(Object.keys(req.query).length !== 0){
-      const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-      res.render('pages/login',{role : "user", response : response});
-    }
-    else res.render('pages/login',{role : "user"});
+    return res.redirect(303,'/login-admin');
+    // if(Object.keys(req.query).length !== 0){
+    //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+    //   res.render('pages/login',{role : "user", response : response});
+    // }
+    // else res.render('pages/login',{role : "user"});
 });
 
 router.post('/login-user', userLogin("user"),
@@ -84,9 +85,9 @@ router.post('/login-user', userLogin("user"),
 router.get('/login-admin',checkLogin , async (req, res) => {
   if(Object.keys(req.query).length !== 0){
     const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-    res.render('pages/login',{role : "admin", response : response});
+    return res.render('pages/login',{role : "admin", response : response});
   }
-  res.render('pages/login',{role : "admin"});
+  return res.render('pages/login',{role : "admin"});
 });
 router.post("/login-admin", userLogin("admin"),
   function(req, res) {
@@ -97,11 +98,12 @@ router.post("/login-admin", userLogin("admin"),
 // Super Admin Login Route
 //---------------------------------------------------------------------------
 router.get('/login-super-admin',checkLogin , async (req, res) => {
-  if(Object.keys(req.query).length !== 0){
-    const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-    res.render('pages/login',{role : "super-admin", response : response});
-  }
-  res.render('pages/login',{role : "super-admin"});
+  return res.redirect(303,'/login-admin');
+  // if(Object.keys(req.query).length !== 0){
+  //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
+  //   res.render('pages/login',{role : "super-admin", response : response});
+  // }
+  // res.render('pages/login',{role : "super-admin"});
 });
 router.post("/login-super-admin", userLogin("super-admin"),
   function(req, res) {
@@ -153,88 +155,29 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 // Profile Route
 //---------------------------------------------------------------------------
 router.get("/profile", userAuth, async (req, res) => {
-  // return res.json(serializeUser(req.user));
-  res.render("sales/index");
-});
-
-function checkSlot(newSlotST, newSlotET, bookedSlots, breakHours){
-  bookedSlots.forEach(bS => {
-    // console.log(newSlotET<=bS);
-    if(newSlotET <= bS){
-      breakHours.forEach(bH => {
-        var bH0 = new Date(bH.split("-")[0]);
-        var bH1 = new Date(bH.split("-")[1]);
-        // console.log(bH0, bH1);
-        if(newSlotET > bH0 && newSlotET < bH1){
-          return bH1; 
-        }
-      });
-      return 0;
+  var mentorNames = new Set();
+  var regionalLang = new Set();
+  await Mentor.find({}, async(err, foundData) => {
+    if (err) {
+        console.log(err);
+        return res.status(500).send();
     } else {
-      console.log(bS.split("-")[1]);
-      return Date(bS.split("-")[1]);
+        if (foundData.length != 0) {
+          foundData.forEach(mentor => {
+            mentorNames.add(mentor.name);
+            mentor.regionalLang.forEach(lang => {
+              regionalLang.add(lang);
+            });
+          });
+        }
+      if (!req.query.date){
+        return res.render("sales/index", {data:"", searchData:"", mentors: mentorNames, lang: regionalLang});
+      }
+      else {
+        await getAvailableSlots(req, res, mentorNames, regionalLang);
+      }
     }
   });
-}
-router.post("/profile", userAuth, async (req, res) => {
-  Mentor.find({ "gender": req.body.gender, "regionalLang": req.body.lang }, async(err, foundData) => {
-      if (err) {
-          console.log(err);
-          return res.status(500).send();
-      } else {
-          if (foundData.length == 0) {
-            return res.status(500).send();
-          } else {
-            var responseObj = foundData;
-            responseObj.forEach(mentor => {
-              Slot.findOne({"zoomID": mentor.zoomID}, async(err, foundData) => {
-                if (err) {
-                  console.log(err);
-                  return res.status(500).send();
-                } else {
-                     if (foundData.length == 0) {
-                       return res.status(500).send();
-                     } else {
-                        var slotObj = foundData;
-                        var bookedSlots = [];
-                        slotObj.T8.forEach(slot => {
-                          var GMT = new Date(slot.start_time);              
-                          var startTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
-                          GMT.setMinutes(GMT.getMinutes() + slot.duration);
-                          var endTime = GMT.toLocaleString(undefined, {timeZone: 'Asia/Kolkata', hour12: false}).split(", ")[1];
-                          startTime = new Date(Date.parse(req.body.date + " " + startTime));
-                          endTime = new Date(Date.parse(req.body.date + " " + endTime));
-                          var time = (startTime + "-" + endTime);
-                          bookedSlots.push(time);
-                       });
-                       mentor.breakHours.forEach((bh, i) => {
-                         mentor.breakHours[i] = new Date(Date.parse(req.body.date + "-" + bh.split("-")[0])) + new Date(Date.parse(req.body.date + " " + bh.split("-")[1]));
-                       });
-                       var availableSlots = [];
-                       var newSlotST = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[0]));
-                       var eTime = new Date(Date.parse(req.body.date + " " + mentor.workingHour.split("-")[1]));
-                       eTime.setMinutes(eTime.getMinutes()-30);
-                       while(newSlotST<=eTime){
-                        var newSlotET = new Date(newSlotST);
-                        newSlotET.setMinutes(newSlotET.getMinutes()+30);
-                        if(!checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours)){
-                          availableSlots.push(newSlotST + "-" + newSlotET);
-                          newSlotST = newSlotET;
-                        } else {
-                          newSlotST = checkSlot(newSlotST, newSlotET, bookedSlots, mentor.breakHours);
-                        }
-                       }
-                     }
-                    //  console.log(availableSlots);
-                     res.render("sales/index");
-                     // res.redirect(303, "/profile", {availableSlots: availableSlots})
-                  }
-              });
-            });
-          }
-      }
-  });
-   
 });
 
 //___________________________________________________________________________
@@ -350,3 +293,7 @@ router.get('/logout',userAuth, function (req, res) {
 });
 
 module.exports = router;
+
+
+
+
