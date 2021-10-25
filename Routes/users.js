@@ -154,7 +154,7 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 //___________________________________________________________________________
 // Profile Route
 //---------------------------------------------------------------------------
-router.get("/profile", userAuth, async (req, res) => {
+router.get("/profile", userAuth, checkRole(["admin"]), async (req, res) => {
   var mentorNames = new Set();
   var regionalLang = new Set();
   await Mentor.find({}, async(err, foundData) => {
@@ -178,6 +178,25 @@ router.get("/profile", userAuth, async (req, res) => {
       }
     }
   });
+});
+
+
+//___________________________________________________________________________
+// Update Mentor Route
+//---------------------------------------------------------------------------
+router.get("/mentor", userAuth, checkRole(["admin"]), async (req, res) => {
+  Mentor.find({}, async(err, mentors) => {
+    if (err) {
+        console.log(err);
+        return res.status(500).send();
+    } else {
+        if (mentors.length == 0) {
+          return res.render("sales/mentor", { mentors: '' });
+        } else {
+          return res.render("sales/mentor", { mentors: mentors });
+        }
+    }
+});
 });
 
 //___________________________________________________________________________
