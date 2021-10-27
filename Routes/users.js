@@ -227,6 +227,25 @@ router.post("/profile/new-mentor", async(req, res) => {
       return res.send("Success!!!");
   });
 });
+
+router.post("/profile/updateMentor", async(req, res) => {
+  console.log(req.body);
+  updatedMentor = {
+    name: req.body.name,
+    gender: req.body.gender,
+    regionalLang: req.body.regionalLang,
+    workingHour: req.body.workingHour,
+    breakHours: req.body.breakHours
+  }
+  Mentor.updateOne({ _id: req.body._id }, updatedMentor, function(err, results) {
+    if (err) return console.log(err);
+    else {
+      return res.redirect(303,`/mentor`);
+    }
+  });
+});
+
+
 router.post("/profile/new-slot", async(req, res) => {
   const newSlot = new Slot({
     email: req.body.email,
