@@ -233,9 +233,9 @@ router.post("/profile/updateMentor", async(req, res) => {
   updatedMentor = {
     name: req.body.name,
     gender: req.body.gender,
-    regionalLang: req.body.regionalLang,
+    regionalLang: req.body.regionalLang.split(","),
     workingHour: req.body.workingHour,
-    breakHours: req.body.breakHours
+    breakHours: req.body.breakHours.split(",")
   }
   Mentor.updateOne({ _id: req.body._id }, updatedMentor, function(err, results) {
     if (err) return console.log(err);
