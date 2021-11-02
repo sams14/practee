@@ -429,7 +429,6 @@
                         <% record.availableSlots.forEach(e => { %>
                           <tr style="border: none;" class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-sm">
-                              <% e.setMinutes(e.getMinutes()+330); %>
                               <%= e.toLocaleString().toString() %> 
                             </td>
                           </tr>
