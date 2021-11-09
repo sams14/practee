@@ -113,7 +113,7 @@ const getAvailableSlots =  async (req, res, mentorNames, regionalLang) => {
                     }
               });
             });
-            console.log(DATA.length);
+            console.log(DATA);
             return res.render("sales/index", {data:DATA, searchData:req.query, mentors: mentorNames, lang: regionalLang});
           }
       }
