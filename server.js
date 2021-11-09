@@ -97,7 +97,7 @@ const zoomRecordingsHandler = new CronJob({
     onTick: function() {
         // Run whatever you like here..
         let json_response, error = 'No Error Found !!';
-        const childP = spawn('python3.7', [path.resolve("Job Scheduler","vimeo_uploader.py")]);
+        const childP = spawn('python', [path.resolve("Job Scheduler","vimeo_uploader.py")]);
         childP.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
@@ -146,7 +146,7 @@ const zoomAttendanceReport = new CronJob({
     onTick: function() {
         // Run whatever you like here..
         let error = 'No Error Found !!';
-        const childP = spawn('python3.7', [path.resolve("Zoom Attendance","report_generator.py")]);
+        const childP = spawn('python', [path.resolve("Zoom Attendance","report_generator.py")]);
         childP.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
