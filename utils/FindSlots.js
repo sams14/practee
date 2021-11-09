@@ -68,7 +68,10 @@ const getAvailableSlots =  async (req, res, mentorNames, regionalLang) => {
                        let bH = new Set();
                        mentor.breakHours.forEach((bh) => {
                          bhn = [];
-                         bhn.push((new Date(req.query.date + " " + bh.split("-")[0]))); bhn.push((new Date(req.query.date + " " + bh.split("-")[1])));
+                         bhStartTime = new Date(req.query.date + " " + bh.split("-")[0])
+                         bhEndTime = new Date(req.query.date + " " + bh.split("-")[1])
+                         bhn.push((bhStartTime.setMinutes(bhStartTime.getMinutes() - 330))); 
+                         bhn.push((bhEndTime.setMinutes(bhEndTime.getMinutes() - 330)));
                          bH.add(bhn);
                        });
                        bH = [...bH];
