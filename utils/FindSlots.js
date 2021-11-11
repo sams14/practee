@@ -77,8 +77,10 @@ const getAvailableSlots =  async (req, res, mentorNames, regionalLang) => {
                        bH = [...bH];
                       //  console.log(bH);
                        var sTime = new Date(req.query.date + " " + mentor.workingHour.split("-")[0]);
+                       sTime.setMinutes(sTime.getMinutes() - 330);
                        var eTime = new Date(req.query.date + " " + mentor.workingHour.split("-")[1]);
-                       eTime.setMinutes(eTime.getMinutes()-30);
+                       eTime.setMinutes(eTime.getMinutes() - 330);
+                       eTime.setMinutes(eTime.getMinutes() - 30);
                       //  console.log(sTime, eTime);
                       var counter = 0;
                        while(sTime<=eTime){
