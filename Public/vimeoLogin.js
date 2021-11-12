@@ -48,9 +48,7 @@ $(document).ready(function() {
     $("#login_form input").keyup(function() {
         $(this).parent().find('span').css("display", "none");
     });
-
-    openLoginInfo();
-    setTimeout(closeLoginInfo, 1000);
+    
 });
 
 function openLoginInfo() {

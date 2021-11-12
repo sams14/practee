@@ -28,7 +28,10 @@ app.use(morgan('dev'));
 
 // Secure Express app using Helmet Middlewares
 // app.use(helmet());
-app.use(helmet({contentSecurityPolicy : false}));
+app.use(helmet({
+    contentSecurityPolicy : false,
+    referrerPolicy: { policy: "no-referrer" },
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -37,8 +40,6 @@ app.use(express.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'Public')));
 
 app.use(cors());
-
-app.use("/practee", require("./Routes/practee"));
 
 // Connection With DB
 connect(DB, {
@@ -81,10 +82,15 @@ app.use(passport.session());
 
 // User Router Middleware
 app.use("/", require("./Routes/users"));
+app.use("/practee", require("./Routes/practee"));
 app.use("/api/v1", require("./Routes/api"));
 
+app.get('/', function(req, res) {
+    return res.redirect('/profile');
+});
+
 app.get('*', function(req, res) {
-    res.render('pages/404');
+    return res.render('pages/404');
 });
 
 
