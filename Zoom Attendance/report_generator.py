@@ -13,7 +13,7 @@ from datetime import datetime
 from datetime import timedelta
 
 class Utils:
-	ZOOM_REPORT_HEADER = ["HOST", "EMAIL", "ACTUAL SESSIONS", "BLANK SESSIONS", "TOTAL ACTUAL SESSIONS"]
+	ZOOM_REPORT_HEADER = ["HOST", "EMAIL", "ACTUAL SESSIONS", "BLANK SESSIONS", "TOTAL BLANK SESSIONS", "TOTAL ACTUAL SESSIONS"]
 
 	def __init__(self):
 		self.load_config()
@@ -117,6 +117,7 @@ class Utils:
 							item['email'] = meeting['email']
 							item['actual_sessions'] = (meeting['topic'].split('(')[0]).strip()+', '
 							item['blank_sessions'] = ''
+							item['total_blank_sessions'] = 0
 							item['total_actual_sessions'] = 1
 							meetings_list.append(item)
 
@@ -142,6 +143,7 @@ class Utils:
 								if meeting['email'] == record['email']:
 									if not (meeting['topic'].split('(')[0]).strip()+', ' in record['actual_sessions']:
 										record['blank_sessions'] += (meeting['topic'].split('(')[0]).strip()+', '
+										record['total_blank_sessions'] += 1
 						else:
 							item = {}
 							emails_list.append(meeting['email'])
@@ -149,6 +151,7 @@ class Utils:
 							item['email'] = meeting['email']
 							item['actual_sessions'] = ''
 							item['blank_sessions'] = (meeting['topic'].split('(')[0]).strip()+', '
+							item['total_blank_sessions'] = 1
 							item['total_actual_sessions'] = 0
 							meetings_list.append(item)
 
