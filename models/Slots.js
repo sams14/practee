@@ -21,9 +21,12 @@ const slotSchema = new Schema(
       zoomID: {
         type: String,
         required: true
+      },
+      date: {
+        type: [String],
+        required: true
       }
-    },
-    { timestamps: true }
+    }
   );
 
   module.exports = model("mentorSlot", slotSchema);
