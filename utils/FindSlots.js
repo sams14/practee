@@ -2,6 +2,13 @@ const Mentor = require("../models/Mentor");
 const Slot = require("../models/Slots");
 
 async function checkSlot(newSlotST, newSlotET, bS, bH, j){
+    if (bS.length == 0) {
+      for(var i=0; i<bH.length; i++){
+        if((newSlotET > bH[i][0]) && (bH[i][1] >= newSlotET))
+          return {start:bH[i][1], success:0, counter:j}; 
+      } 
+      return {start:newSlotST, success:1, counter:j};
+    }
     for(; j<bS.length; j++){
       // console.log("loop- ", bS[j][0], newSlotET);
       if(newSlotET <= bS[j][0]){
