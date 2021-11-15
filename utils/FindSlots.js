@@ -52,12 +52,14 @@ const getAvailableSlots =  async (req, res, mentorNames, regionalLang) => {
                   var availableSlots = [];
                   await asyncForEach(slotObj.T8, async (slot) => {
                     var startTime = new Date(req.query.date + " "+ slot.start_time.split("T")[1]);
-                    var endTime = new Date(startTime);
-                    endTime.setMinutes(endTime.getMinutes() + slot.duration);
-                    // console.log(startTime, endTime);
-                    bs = []
-                    bs.push(startTime); bs.push(endTime);
-                    bookedSlots.add(bs);
+                    if (new Date(slot.end_time) >= startTime) {
+                      var endTime = new Date(startTime);
+                      endTime.setMinutes(endTime.getMinutes() + slot.duration);
+                      // console.log(startTime, endTime);
+                      bs = []
+                      bs.push(startTime); bs.push(endTime);
+                      bookedSlots.add(bs);
+                    }
                   });
                   bookedSlots = [...bookedSlots];
                   bookedSlots = bookedSlots.sort((a, b) => (a[0] - b[0]));
