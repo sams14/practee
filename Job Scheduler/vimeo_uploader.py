@@ -93,7 +93,7 @@ def move_videos_to_folder(records):
 	folders = get_vimeo_folders()
 	videos_list = {}
 	for record in records:
-		if record['file_extension'] == 'MP4':
+		if record['file_extension'] == 'MP4' and record['vimeo_uri'] != '':
 			if record['vimeo_folder'] not in videos_list:
 				videos_list[record['vimeo_folder'].rstrip()] = []
 			videos_list[record['vimeo_folder'].rstrip()].append(record['vimeo_uri'])
