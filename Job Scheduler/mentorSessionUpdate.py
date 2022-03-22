@@ -7,10 +7,13 @@ try:
 	import requests
 	from bson.objectid import ObjectId
 	import numpy as np
+	from dotenv import load_dotenv
+	import os
 except Exception as e:
 	print("Some Modules are Missing ")
 
-zoom_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IlJIUUhDZkRpUkp1QTZhdWczT0xiVGciLCJleHAiOjI1MzQ2NTM4MDAsImlhdCI6MTYxOTQ3ODMxMn0.Lf_3TmayahoiinSwAXBj-qAKq7hu2sq-6AjTDPa-Oh4'
+load_dotenv()
+zoom_token = os.environ.get("zoom-token")
 
 class MongoDB(object):
 
@@ -19,8 +22,7 @@ class MongoDB(object):
 		self.dBName = dBName
 		self.collectionName = collectionName
 
-		self.client = MongoClient("mongodb+srv://testuser:testuser@practeeusers.iwbdk.mongodb.net/users?retryWrites=true&w=majority",
-								  27017, maxPoolSize=50)
+		self.client = MongoClient(os.environ.get("mongodb-uri"), 27017, maxPoolSize=50)
 
 		self.DB = self.client[self.dBName]
 		self.collection = self.DB[self.collectionName]
@@ -96,6 +98,8 @@ def GetMentorRecords():
 
 if __name__ == "__main__":
 	mongodb = MongoDB(dBName = 'users', collectionName='mentorslots')
+	print("Database connection Successfull !!")
 	records = GetMentorRecords()
 	print("records are ready !!")
+	mongodb.collection.drop()
 	mongodb.InsertData(records)
