@@ -32,7 +32,7 @@ def get_vimeo_folders():
                         ],
                         "name": record["name"],
                         "privacy": record["privacy"]["view"],
-                        "modified_time": record["modified_time"],
+                        "modified_time": record["created_time"],
                     }
                 )
 
@@ -57,9 +57,9 @@ def filter_oldfolders(folders):
         folder_modified = datetime.datetime.fromisoformat(
             folder_details["modified_time"]
         )
-        if (date_now - folder_modified).days >= 186:
-            if folder_details["privacy"] == "nobody":
-                records.append(folder_details)
+        if (date_now - folder_modified).days >= 248:
+            # if folder_details["privacy"] == "nobody":
+            records.append(folder_details)
     return records
 
 
