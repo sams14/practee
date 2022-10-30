@@ -31,7 +31,7 @@ router.post("/register-user", checkLogin, async (req, res, next) => {
   });
   },userLogin("user"), (req,res) => {
     req.user.newUser = true; 
-    res.redirect(303,'/profile');
+    res.redirect(303,'/utility/profile');
 });
 
 //___________________________________________________________________________
@@ -45,7 +45,7 @@ router.post("/register-admin", checkLogin, checkRole(["superadmin"]), async (req
     });
   });
   }, (req,res) => {
-    res.redirect(303,'/profile');
+    res.redirect(303,'/utility/profile');
 });
 
 //___________________________________________________________________________
@@ -59,14 +59,14 @@ router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), asyn
     });
   });
   }, (req,res) => {
-    res.redirect(303,'/profile');
+    res.redirect(303,'/utility/profile');
 });
 
 //___________________________________________________________________________
 // Users Login Route
 //---------------------------------------------------------------------------
 router.get('/login-user',checkLogin , async (req, res) => {
-    return res.redirect(303,'/login-admin');
+    return res.redirect(303,'/utility/login-admin');
     // if(Object.keys(req.query).length !== 0){
     //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
     //   res.render('pages/login',{role : "user", response : response});
@@ -76,7 +76,7 @@ router.get('/login-user',checkLogin , async (req, res) => {
 
 router.post('/login-user', userLogin("user"),
   function(req, res) {
-    res.redirect(303,'/profile');
+    res.redirect(303,'/utility/profile');
 });
 
 //___________________________________________________________________________
@@ -91,14 +91,14 @@ router.get('/login-admin',checkLogin , async (req, res) => {
 });
 router.post("/login-admin", userLogin("admin"),
   function(req, res) {
-    res.redirect(303,'/profile');
+    res.redirect(303,'/utility/profile');
 });
 
 //___________________________________________________________________________
 // Super Admin Login Route
 //---------------------------------------------------------------------------
 router.get('/login-super-admin',checkLogin , async (req, res) => {
-  return res.redirect(303,'/login-admin');
+  return res.redirect(303,'/utility/login-admin');
   // if(Object.keys(req.query).length !== 0){
   //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
   //   res.render('pages/login',{role : "super-admin", response : response});
@@ -107,7 +107,7 @@ router.get('/login-super-admin',checkLogin , async (req, res) => {
 });
 router.post("/login-super-admin", userLogin("super-admin"),
   function(req, res) {
-    res.redirect(303,'/profile');
+    res.redirect(303,'/utility/profile');
 });
 
 //___________________________________________________________________________
@@ -154,30 +154,14 @@ router.put('/reset-password/:token', varifyToken, async (req, res) => {
 //___________________________________________________________________________
 // Profile Route
 //---------------------------------------------------------------------------
-router.get("/profile", userAuth, checkRole(["admin"]), async (req, res) => {
-  var mentorNames = new Set();
-  var regionalLang = new Set();
-  await Mentor.find({}, async(err, foundData) => {
-    if (err) {
-        console.log(err);
-        return res.status(500).send();
-    } else {
-        if (foundData.length != 0) {
-          foundData.forEach(mentor => {
-            mentorNames.add(mentor.name);
-            mentor.regionalLang.forEach(lang => {
-              regionalLang.add(lang);
-            });
-          });
-        }
-      if (!req.query.date){
-        return res.render("sales/index", {data:"", searchData:"", mentors: mentorNames, lang: regionalLang});
-      }
-      else {
-        await getAvailableSlots(req, res, mentorNames, regionalLang);
-      }
-    }
-  });
+router.get("/profile", userAuth, checkRole(["admin", "user"]), async (req, res) => {
+  res.render('pip-tool/index', {page: "Dashboard"})
+});
+router.get("/new-form", userAuth, checkRole(["admin", "user"]), async (req, res) => {
+  res.render('pip-tool/index', {page: "New Forms"})
+});
+router.get("/history", userAuth, checkRole(["admin", "user"]), async (req, res) => {
+  res.render('pip-tool/index', {page: "History"})
 });
 
 
@@ -240,7 +224,7 @@ router.post("/profile/updateMentor", async(req, res) => {
   Mentor.updateOne({ _id: req.body._id }, updatedMentor, function(err, results) {
     if (err) return console.log(err);
     else {
-      return res.redirect(303,`/mentor`);
+      return res.redirect(303,`/utility/mentor`);
     }
   });
 });
@@ -326,9 +310,24 @@ router.get('/logout',userAuth, function (req, res) {
     path: '/'
   });
   req.session.destroy(function (err) {
-    res.redirect(303,'/login-' + role);
+    res.redirect(303,'/utility/login-' + role);
   });
 });
+
+
+// ---------------------------------------------------
+// PIP Form Routes
+// ---------------------------------------------------
+router.get('/pip', function(req, res) {
+  res.render('pip-tool/user-login')
+});
+router.post('/pip', function(req, res) {
+  console.log(req.body);
+  res.render('pip-tool/dashboard')
+});
+
+
+
 
 
 module.exports = router;

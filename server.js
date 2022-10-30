@@ -91,6 +91,7 @@ app.use(passport.session());
 app.use("/", require("./Routes/users"));
 app.use("/practee", require("./Routes/practee"));
 app.use("/api/v1", require("./Routes/api"));
+app.use("/utility", require("./Routes/pip"));
 
 app.get("/", function (req, res) {
   return res.redirect("/profile");
