@@ -11,182 +11,231 @@ const {
   checkRole,
   checkLogin,
   userRegister,
-  serializeUser
+  serializeUser,
 } = require("../utils/Auth");
 
 //___________________________________________________________________________
 // Users Registeration Route
 //---------------------------------------------------------------------------
-router.get('/register-user', async (req, res) => {
-  res.render('pages/create-account');
+router.get("/register-user", async (req, res) => {
+  res.render("pages/create-account");
 });
-router.post("/register-user", checkLogin, async (req, res, next) => {
-  await userRegister(req.body, "user", res).then((result)=>{
-    result.success ? next() : res.render('pages/create-account',{ response : 
-      {
-        message: "Unable to create your account",
-        success: false
-      }
+router.post(
+  "/register-user",
+  checkLogin,
+  async (req, res, next) => {
+    await userRegister(req.body, "user", res).then((result) => {
+      result.success
+        ? next()
+        : res.render("pages/create-account", {
+            response: {
+              message: "Unable to create your account",
+              success: false,
+            },
+          });
     });
-  });
-  },userLogin("user"), (req,res) => {
-    req.user.newUser = true; 
-    res.redirect(303,'/utility/profile');
-});
+  },
+  userLogin("user"),
+  (req, res) => {
+    req.user.newUser = true;
+    res.redirect(303, "/utility/profile");
+  }
+);
 
 //___________________________________________________________________________
 // Admin Registration Route
 //---------------------------------------------------------------------------
-router.post("/register-admin", checkLogin, checkRole(["superadmin"]), async (req, res, next) => {
-  await userRegister(req.body, "admin", res).then((result)=>{
-    result.success ? next() : res.status(500).json({
-      message: "Unable to create your account.",
-      success: false
+router.post(
+  "/register-admin",
+  checkLogin,
+  checkRole(["superadmin"]),
+  async (req, res, next) => {
+    await userRegister(req.body, "admin", res).then((result) => {
+      result.success
+        ? next()
+        : res.status(500).json({
+            message: "Unable to create your account.",
+            success: false,
+          });
     });
-  });
-  }, (req,res) => {
-    res.redirect(303,'/utility/profile');
-});
+  },
+  (req, res) => {
+    res.redirect(303, "/utility/profile");
+  }
+);
 
 //___________________________________________________________________________
 // Super Admin Registration Route
 //---------------------------------------------------------------------------
-router.post("/register-super-admin", checkLogin, checkRole(["superadmin"]), async (req, res, next) => {
-  await userRegister(req.body, "superadmin", res).then((result)=>{
-    result.success ? next() : res.status(500).json({
-      message: "Unable to create your account.",
-      success: false
+router.post(
+  "/register-super-admin",
+  checkLogin,
+  checkRole(["superadmin"]),
+  async (req, res, next) => {
+    await userRegister(req.body, "superadmin", res).then((result) => {
+      result.success
+        ? next()
+        : res.status(500).json({
+            message: "Unable to create your account.",
+            success: false,
+          });
     });
-  });
-  }, (req,res) => {
-    res.redirect(303,'/utility/profile');
-});
+  },
+  (req, res) => {
+    res.redirect(303, "/utility/profile");
+  }
+);
 
 //___________________________________________________________________________
 // Users Login Route
 //---------------------------------------------------------------------------
-router.get('/login-user',checkLogin , async (req, res) => {
-    return res.redirect(303,'/utility/login-admin');
-    // if(Object.keys(req.query).length !== 0){
-    //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-    //   res.render('pages/login',{role : "user", response : response});
-    // }
-    // else res.render('pages/login',{role : "user"});
+router.get("/login-user", checkLogin, async (req, res) => {
+  // return res.redirect(303,'/utility/login-admin');
+  if (Object.keys(req.query).length !== 0) {
+    const response = {
+      message: req.query.message,
+      success: req.query.success === "false" ? false : true,
+    };
+    res.render("pages/login", { role: "user", response: response });
+  } else res.render("pages/login", { role: "user" });
 });
 
-router.post('/login-user', userLogin("user"),
-  function(req, res) {
-    res.redirect(303,'/utility/profile');
+router.post("/login-user", userLogin("user"), function (req, res) {
+  res.redirect(303, "/utility/profile");
 });
 
 //___________________________________________________________________________
 // Admin Login Route
 //---------------------------------------------------------------------------
-router.get('/login-admin',checkLogin , async (req, res) => {
-  if(Object.keys(req.query).length !== 0){
-    const response = { message : req.query.message, success : req.query.success==="false"? false : true};
-    return res.render('pages/login',{role : "admin", response : response});
+router.get("/login-admin", checkLogin, async (req, res) => {
+  if (Object.keys(req.query).length !== 0) {
+    const response = {
+      message: req.query.message,
+      success: req.query.success === "false" ? false : true,
+    };
+    return res.render("pages/login", { role: "admin", response: response });
   }
-  return res.render('pages/login',{role : "admin"});
+  return res.render("pages/login", { role: "admin" });
 });
-router.post("/login-admin", userLogin("admin"),
-  function(req, res) {
-    res.redirect(303,'/utility/profile');
+router.post("/login-admin", userLogin("admin"), function (req, res) {
+  res.redirect(303, "/utility/profile");
 });
 
 //___________________________________________________________________________
 // Super Admin Login Route
 //---------------------------------------------------------------------------
-router.get('/login-super-admin',checkLogin , async (req, res) => {
-  return res.redirect(303,'/utility/login-admin');
+router.get("/login-super-admin", checkLogin, async (req, res) => {
+  return res.redirect(303, "/utility/login-admin");
   // if(Object.keys(req.query).length !== 0){
   //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
   //   res.render('pages/login',{role : "super-admin", response : response});
   // }
   // res.render('pages/login',{role : "super-admin"});
 });
-router.post("/login-super-admin", userLogin("super-admin"),
-  function(req, res) {
-    res.redirect(303,'/utility/profile');
-});
+router.post(
+  "/login-super-admin",
+  userLogin("super-admin"),
+  function (req, res) {
+    res.redirect(303, "/utility/profile");
+  }
+);
 
 //___________________________________________________________________________
 // Forgot Password Route
 //---------------------------------------------------------------------------
-router.get('/forgot-password',checkLogin , async (req, res) => {
-  res.render('pages/forgot-password');
+router.get("/forgot-password", checkLogin, async (req, res) => {
+  res.render("pages/forgot-password");
 });
 router.put("/forgot-password", forgotPassword);
 
 //___________________________________________________________________________
 // Reset Password Route
 //---------------------------------------------------------------------------
-router.get('/reset-password/:token', varifyToken, async (req, res) => {
-  res.render('pages/reset-password');
+router.get("/reset-password/:token", varifyToken, async (req, res) => {
+  res.render("pages/reset-password");
 });
-router.put('/reset-password/:token', varifyToken, async (req, res) => {
+router.put("/reset-password/:token", varifyToken, async (req, res) => {
   const { password } = req.body;
   let isMatch = await bcrypt.compare(password, req.user.password);
   if (isMatch) {
     return res.status(500).json({
-      message: "This is one of the passwords you've previously used !! PLEASE ENTER A NEW ONE",
-      success: false
+      message:
+        "This is one of the passwords you've previously used !! PLEASE ENTER A NEW ONE",
+      success: false,
     });
   } else {
     // Get the hashed password
     const newPassword = await bcrypt.hash(password, 12);
-    await User.updateOne({ _id : req.user._id }, { password : newPassword },(err,success) => {
-      if (err) {
-        return res.status(500).json({
+    await User.updateOne(
+      { _id: req.user._id },
+      { password: newPassword },
+      (err, success) => {
+        if (err) {
+          return res.status(500).json({
             message: "Unable to update your password.",
-            success: false
-        });
-      } else {
+            success: false,
+          });
+        } else {
           return res.status(200).json({
             message: "Your password has been updated !! Kindly Login",
-            success: true
-        });
+            success: true,
+          });
+        }
       }
-    })
+    );
   }
 });
 
 //___________________________________________________________________________
 // Profile Route
 //---------------------------------------------------------------------------
-router.get("/profile", userAuth, checkRole(["admin", "user"]), async (req, res) => {
-  res.render('pip-tool/index', {page: "Dashboard"})
-});
-router.get("/new-form", userAuth, checkRole(["admin", "user"]), async (req, res) => {
-  res.render('pip-tool/index', {page: "New Forms"})
-});
-router.get("/history", userAuth, checkRole(["admin", "user"]), async (req, res) => {
-  res.render('pip-tool/index', {page: "History"})
-});
-
+router.get(
+  "/profile",
+  userAuth,
+  checkRole(["admin", "user"]),
+  async (req, res) => {
+    res.render("pip-tool/index", { page: "Dashboard" });
+  }
+);
+router.get(
+  "/new-form",
+  userAuth,
+  checkRole(["admin", "user"]),
+  async (req, res) => {
+    res.render("pip-tool/index", { page: "New Forms" });
+  }
+);
+router.get(
+  "/history",
+  userAuth,
+  checkRole(["admin", "user"]),
+  async (req, res) => {
+    res.render("pip-tool/index", { page: "History" });
+  }
+);
 
 //___________________________________________________________________________
 // Update Mentor Route
 //---------------------------------------------------------------------------
 router.get("/mentor", userAuth, checkRole(["admin"]), async (req, res) => {
-  Mentor.find({}, async(err, mentors) => {
+  Mentor.find({}, async (err, mentors) => {
     if (err) {
-        console.log(err);
-        return res.status(500).send();
+      console.log(err);
+      return res.status(500).send();
     } else {
-        if (mentors.length == 0) {
-          return res.render("sales/mentor", { mentors: '' });
-        } else {
-          return res.render("sales/mentor", { mentors: mentors });
-        }
+      if (mentors.length == 0) {
+        return res.render("sales/mentor", { mentors: "" });
+      } else {
+        return res.render("sales/mentor", { mentors: mentors });
+      }
     }
-});
+  });
 });
 
 //___________________________________________________________________________
 // Add Mentor Route
 //---------------------------------------------------------------------------
-router.post("/profile/new-mentor", async(req, res) => {
+router.post("/profile/new-mentor", async (req, res) => {
   const newMentor = new Mentor({
     name: req.body.name,
     email: req.body.email,
@@ -194,62 +243,65 @@ router.post("/profile/new-mentor", async(req, res) => {
     gender: req.body.gender,
     regionalLang: req.body.regionalLang,
     workingHour: req.body.workingHour,
-    breakHours: req.body.breakHours
+    breakHours: req.body.breakHours,
   });
-  Mentor.find({ "email": req.body.email }, async(err, foundData) => {
-      if (err) {
-          console.log(err);
-          return res.status(500).send();
+  Mentor.find({ email: req.body.email }, async (err, foundData) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send();
+    } else {
+      if (foundData.length == 0) {
+        var responseObj = "";
+        var saveStu = await newMentor.save();
       } else {
-          if (foundData.length == 0) {
-              var responseObj = "";
-              var saveStu = await newMentor.save();
-          } else {
-              var responseObj = foundData;
-          }
+        var responseObj = foundData;
       }
-      return res.send("Success!!!");
+    }
+    return res.send("Success!!!");
   });
 });
 
-router.post("/profile/updateMentor", async(req, res) => {
+router.post("/profile/updateMentor", async (req, res) => {
   console.log(req.body);
   updatedMentor = {
     name: req.body.name,
     gender: req.body.gender,
     regionalLang: req.body.regionalLang.split(","),
     workingHour: req.body.workingHour,
-    breakHours: req.body.breakHours.split(",")
-  }
-  Mentor.updateOne({ _id: req.body._id }, updatedMentor, function(err, results) {
-    if (err) return console.log(err);
-    else {
-      return res.redirect(303,`/utility/mentor`);
+    breakHours: req.body.breakHours.split(","),
+  };
+  Mentor.updateOne(
+    { _id: req.body._id },
+    updatedMentor,
+    function (err, results) {
+      if (err) return console.log(err);
+      else {
+        return res.redirect(303, `/utility/mentor`);
+      }
     }
-  });
+  );
 });
 
-
-router.post("/profile/new-slot", async(req, res) => {
+router.post("/profile/new-slot", async (req, res) => {
   const newSlot = new Slot({
     email: req.body.email,
     zoomID: req.body.zoomID,
-    T8: req.body.T8
+    T8: req.body.T8,
   });
-  Slot.find({ "zoomID": req.body.zoomID }, async(err, foundData) => {
-      if (err) {
-          console.log(err);
-          return res.status(500).send();
+  Slot.find({ zoomID: req.body.zoomID }, async (err, foundData) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send();
+    } else {
+      if (foundData.length == 0) {
+        var responseObj = "";
+        var saveStu = await newSlot.save();
       } else {
-          if (foundData.length == 0) {
-              var responseObj = "";
-              var saveStu = await newSlot.save();
-          } else {
-              var responseObj = foundData;
-          }
+        var responseObj = foundData;
       }
-      return res.send("Success!!!");
-  }); 
+    }
+    return res.send("Success!!!");
+  });
 });
 
 //___________________________________________________________________________
@@ -303,35 +355,26 @@ router.get(
 //___________________________________________________________________________
 //logout Route
 //---------------------------------------------------------------------------
-router.get('/logout',userAuth, function (req, res) {
+router.get("/logout", userAuth, function (req, res) {
   const role = req.user.role;
   req.logOut();
-  res.status(200).clearCookie('connect.sid', {
-    path: '/'
+  res.status(200).clearCookie("connect.sid", {
+    path: "/",
   });
   req.session.destroy(function (err) {
-    res.redirect(303,'/utility/login-' + role);
+    res.redirect(303, "/utility/login-" + role);
   });
 });
-
 
 // ---------------------------------------------------
 // PIP Form Routes
 // ---------------------------------------------------
-router.get('/pip', function(req, res) {
-  res.render('pip-tool/user-login')
+router.get("/pip", function (req, res) {
+  res.render("pip-tool/user-login");
 });
-router.post('/pip', function(req, res) {
+router.post("/pip", function (req, res) {
   console.log(req.body);
-  res.render('pip-tool/dashboard')
+  res.render("pip-tool/dashboard");
 });
-
-
-
-
 
 module.exports = router;
-
-
-
-

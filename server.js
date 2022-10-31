@@ -88,7 +88,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // User Router Middleware
-app.use("/", require("./Routes/users"));
+// app.use("/", require("./Routes/users"));
 app.use("/practee", require("./Routes/practee"));
 app.use("/api/v1", require("./Routes/api"));
 app.use("/utility", require("./Routes/pip"));
