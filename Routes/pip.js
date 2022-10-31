@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const axios = require("axios").default;
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Mentor = require("../models/Mentor");
@@ -202,7 +203,28 @@ router.get(
   userAuth,
   checkRole(["admin", "user"]),
   async (req, res) => {
-    res.render("pip-tool/index", { page: "New Forms" });
+    var options = {
+      method: "GET",
+      url: "https://api.zoom.us/v2/users",
+      params: { page_size: "50", status: "active" },
+      headers: {
+        Authorization: "Bearer " + process.env.zoom_token,
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data.users);
+        return res.render("pip-tool/index", {
+          page: "New Forms",
+          mentors: response.data.users,
+        });
+      })
+      .catch(function (error) {
+        console.error(error);
+        return res.status(500).send("Failed To Fetch Mentor Details !!");
+      });
   }
 );
 router.get(
