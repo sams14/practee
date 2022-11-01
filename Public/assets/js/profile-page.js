@@ -52,28 +52,34 @@ function addDays(date, days) {
 const createForm = document.getElementById("createPipForm");
 createForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  formData = {
-    mentor: $('select[name="mentor"]').val(),
-    mentorMail: $('input[name="mentorMail"]').val(),
-    pipStartDate: $('input[name="pipStartDate"]').val(),
-    pipDuration: $('select[name="pipDuration"]').val(),
-    pipEndDate: $('input[name="pipEndDate"]').val(),
-    improvmentObjectives: $('textarea[name="improvmentObjectives"]').val(),
-    successCriteria: $('textarea[name="successCriteria"]').val(),
-    additionalSupportRequired: $(
-      'textarea[name="additionalSupportRequired"]'
-    ).val(),
-    reviewSchedule: $('textarea[name="reviewSchedule"]').val(),
-    objectiveOutcome: $('textarea[name="objectiveOutcome"]').val(),
-  };
-
-  console.log(formData);
-  axios
-    .post("/utility/new-form", formData)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if ($('select[name="mentor"]').val() && $('input[name="mentorMail"]').val() && $('input[name="pipStartDate"]').val() && $('select[name="pipDuration"]').val() && $('input[name="pipEndDate"]').val() && $('textarea[name="improvmentObjectives"]').val() && $('textarea[name="successCriteria"]').val() && $('textarea[name="reviewSchedule"]').val() && $('textarea[name="objectiveOutcome"]').val() && $('textarea[name="additionalSupportRequired"]').val()){
+    formData = {
+      mentor: $('select[name="mentor"]').val(),
+      mentorMail: $('input[name="mentorMail"]').val(),
+      pipStartDate: $('input[name="pipStartDate"]').val(),
+      pipDuration: $('select[name="pipDuration"]').val(),
+      pipEndDate: $('input[name="pipEndDate"]').val(),
+      improvmentObjectives: $('textarea[name="improvmentObjectives"]').val(),
+      successCriteria: $('textarea[name="successCriteria"]').val(),
+      additionalSupportRequired: $(
+        'textarea[name="additionalSupportRequired"]'
+      ).val(),
+      reviewSchedule: $('textarea[name="reviewSchedule"]').val(),
+      objectiveOutcome: $('textarea[name="objectiveOutcome"]').val(),
+    };
+    console.log(formData);
+    axios
+      .post("/utility/new-form", formData)
+      .then((res) => {
+        Swal.fire("Done!", res.data, "success").then((res) => {
+          location.reload();
+        });
+      })
+      .catch((err) => {
+        Swal.fire('Oops...',err, 'error');
+      });
+  }
+  else {
+    alert("Please Fill All Fields");
+  }
 });

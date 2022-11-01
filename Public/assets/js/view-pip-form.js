@@ -19,10 +19,10 @@ $(document).ready(function () {
         },
       })
       .then((res) => {
-        console.log(res);
+        Swal.fire('Done !',res.data.message,'success' );
       })
       .catch((err) => {
-        console.log(err);
+        Swal.fire('Oops...',err, 'error');
       });
   });
 });

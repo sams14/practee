@@ -23,6 +23,7 @@ router.get("/pip-form/:id", async (req, res) => {
       console.log(err);
       return res.render("pages/404");
     } else {
+      console.log(formData.comments)
       if (formData) return res.render("pip-tool/view-form", { formData });
       return res.render("pages/404");
     }
@@ -33,9 +34,10 @@ router.put("/pip-form/:id", async (req, res) => {
   const formData = await pipForm.findOne({ _id: req.params.id });
 
   if (formData) {
+    console.log(req.body)
     pipForm.updateOne(
-      { _id: req.params._id },
-      req.body,
+      { _id: req.params.id },
+      req.body ,
       function (err, result) {
         if (err) {
           return res.status(500).json({
@@ -286,7 +288,7 @@ router.post(
     console.log(formInfo);
 
     var mailOptions = {
-      from: "Practee Technologies",
+      from: "practeetechnology@gmail.com",
       to: "ashutosh.das@practee.com",
       subject: "Performance Improvement Plan - Acknowledge Now!",
       html: `
@@ -309,7 +311,7 @@ router.post(
     await mailer(mailOptions);
     return res
       .status(200)
-      .send("Mail Has been Sent Successfully to" + req.body.mentorMail);
+      .send("Mail Has been Sent Successfully to " + req.body.mentorMail);
   }
 );
 

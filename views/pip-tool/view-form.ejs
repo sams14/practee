@@ -9,6 +9,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/tailwind.output.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.10/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="/assets/js/init-alpine.js"></script>
 </head>
@@ -98,9 +99,9 @@
           </div>
           <!-- General elements -->
           <div class=" p-4 border-t-2 bg-opacity-5 border-indigo-400 rounded-t-lg text-lg font-semibold bg-gray-800  dark:bg-gray-700" style="box-shadow: 0 0px 6px -1px rgb(0 0 0 / 0.1), 0 0px 4px -2px rgb(0 0 0 / 0.1);">
-            <div class="max-w-sm mx-auto md:w-full md:mx-0">
+            <div class="max-w-sm mx-auto md:w-full">
               <div class="inline-flex items-center space-x-4">
-                <img class="w-10 h-10 object-cover rounded-full" alt="User avatar" src="https://avatars3.githubusercontent.com/u/72724639?s=400&u=964a4803693899ad66a9229db55953a3dbaad5c6&v=4" />
+                <img class="w-10 h-10 object-cover rounded-full" alt="User avatar" src="/assets/img/favicon.ico" />
 
                 <h4 class="text-gray-600 dark:text-gray-300">Performance Improvment Plan</h4>
               </div>
@@ -209,7 +210,7 @@
                 <div class="w-5/6 max-w-lg mx-auto text-center">
                   <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">Comments</span>
-                    <textarea name="comments" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your comments here."></textarea>
+                    <textarea name="comments" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your comments here."><% if (formData.comments) {%><%= formData.comments %><% } %></textarea>
                   </label>
                 </div>
                 <div class="w-full p-4 flex flex-col items-center text-gray-500">
