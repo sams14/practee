@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  let mentors = JSON.parse(mentor);
   $('[data-toggle="datepicker"]').datepicker({
     // options here
     startDate: new Date(),
@@ -14,8 +15,21 @@ $(document).ready(function () {
 
   $("#pipStartDate").datepicker("setDate", new Date());
   console.log($('input[name="pipDuration"]').val());
+  console.log(mentors);
 
-  var $date = $("#pipEndDate").datepicker();
+  $('select[name="mentor"]').change(function () {
+    // console.log($(this).val());
+    let selectedMentor = $(this).val();
+    $.each(mentors, function (key, mentor) {
+      let name = mentor.first_name + " " + mentor.last_name;
+      // console.log(mentor.first_name + " " + mentor.last_name);
+      if (selectedMentor === name) {
+        $("#mentorMail").val(mentor.email);
+      }
+    });
+    console.log($("#mentorMail").val());
+  });
+
   $('select[name="pipDuration"]').change(function () {
     if ($(this).val() == "NA") {
       $("#pipEndDate").val("");
@@ -34,3 +48,32 @@ function addDays(date, days) {
   result.setDate(result.getDate() + days);
   return result;
 }
+
+const createForm = document.getElementById("createPipForm");
+createForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  formData = {
+    mentor: $('select[name="mentor"]').val(),
+    mentorMail: $('input[name="mentorMail"]').val(),
+    pipStartDate: $('input[name="pipStartDate"]').val(),
+    pipDuration: $('select[name="pipDuration"]').val(),
+    pipEndDate: $('input[name="pipEndDate"]').val(),
+    improvmentObjectives: $('textarea[name="improvmentObjectives"]').val(),
+    successCriteria: $('textarea[name="successCriteria"]').val(),
+    additionalSupportRequired: $(
+      'textarea[name="additionalSupportRequired"]'
+    ).val(),
+    reviewSchedule: $('textarea[name="reviewSchedule"]').val(),
+    objectiveOutcome: $('textarea[name="objectiveOutcome"]').val(),
+  };
+
+  console.log(formData);
+  axios
+    .post("/utility/new-form", formData)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});

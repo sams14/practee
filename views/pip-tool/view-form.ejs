@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html :class="{ 'dark': dark }" x-data="data()" lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> View Form | Practee Technologies</title>
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/tailwind.output.css" />
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <script src="/assets/js/init-alpine.js"></script>
+</head>
+
+<body>
+  <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
+    <div class="flex flex-col flex-1">
+      <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+        <div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+          <!-- Search input -->
+          <div class="flex justify-center flex-1 lg:mr-32">
+            <div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
+              <div class="absolute inset-y-0 flex items-center pl-2">
+                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <input class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input" type="text" placeholder="Search for projects" aria-label="Search" />
+            </div>
+          </div>
+          <ul class="flex items-center flex-shrink-0 space-x-6">
+            <!-- Theme toggler -->
+            <li class="flex">
+              <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme" aria-label="Toggle color mode">
+                <template x-if="!dark">
+                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                  </svg>
+                </template>
+                <template x-if="dark">
+                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                  </svg>
+                </template>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </header>
+      <main class="h-full pb-16 overflow-y-auto">
+        <div class="container px-6 mx-auto grid">
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          </h2>
+          <!-- CTA -->
+
+          <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+            <div class="flex items-center">
+              <label class="block px-3 my-4 text-sm">
+                <span class="text-gray-700 dark:text-black-400">&nbsp;Mentor</span>
+                <select name="mentor" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                  <option selected>
+                    <%= formData.mentor %>
+                  </option>
+                </select>
+              </label>
+              <label class="block px-3 my-4 text-sm">
+                <span class="text-gray-700 dark:text-black-400">&nbsp;Auditor</span>
+                <select name="pipCreater" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                  <option selected>
+                    <%= formData.pipCreater %>
+                  </option>
+                </select>
+              </label>
+              <input type='hidden' id="mentorMail" name='mentorMail'>
+              <label class="block px-3 my-4 text-sm">
+                <span class="text-gray-700 dark:text-black-400">&nbsp;PIP Start Date</span>
+                <input type="text" value=<%=formData.pipStartDate %> data-toggle="datepicker" autocomplete="off" name="pipStartDate" id="pipStartDate" class=" block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700
+                  focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300
+                  dark:focus:shadow-outline-gray form-input" disabled>
+                </input>
+              </label>
+              <label class="block px-3 my-4 text-sm">
+                <span class="text-gray-700 dark:text-black-400">&nbsp;Duration</span>
+                <select name="pipDuration" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                  <option selected>
+                    <%= formData.pipDuration %>
+                  </option>
+                </select>
+              </label>
+              <label class="block px-3 my-4 text-sm">
+                <span class="text-gray-700 dark:text-black-400">&nbsp;PIP End Date</span>
+                <input type="text" value=<%=formData.pipEndDate %> data-toggle="datepicker" autocomplete="off" name="pipEndDate" id="pipEndDate" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700
+                  focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300
+                  dark:focus:shadow-outline-gray form-input" />
+              </label>
+            </div>
+          </div>
+          <!-- General elements -->
+          <div class=" p-4 border-t-2 bg-opacity-5 border-indigo-400 rounded-t-lg text-lg font-semibold bg-gray-800  dark:bg-gray-700" style="box-shadow: 0 0px 6px -1px rgb(0 0 0 / 0.1), 0 0px 4px -2px rgb(0 0 0 / 0.1);">
+            <div class="max-w-sm mx-auto md:w-full md:mx-0">
+              <div class="inline-flex items-center space-x-4">
+                <img class="w-10 h-10 object-cover rounded-full" alt="User avatar" src="https://avatars3.githubusercontent.com/u/72724639?s=400&u=964a4803693899ad66a9229db55953a3dbaad5c6&v=4" />
+
+                <h4 class="text-gray-600 dark:text-gray-300">Performance Improvment Plan</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-4 py-3 mb-8 rounded-b-lg shadow-md bg-white dark:divide-gray-700 dark:bg-gray-800">
+            <div class="space-y-6">
+              <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+                  <span class="font-semibold text-gray-600 dark:text-gray-300">
+                    Improvment Objectives
+                  </span>
+                  <br>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">
+                    What individual should do to improve performance!
+                  </span>
+                </div>
+
+                <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+                  <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Response</span>
+                    <textarea name="improvmentObjectives" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled> <%=formData.improvmentObjectives %></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+              <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+                  <span class="font-semibold text-gray-600 dark:text-gray-300">
+                    Success Criteria
+                  </span>
+                  <br>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">
+                    Set the success criteria here!
+                  </span>
+                </div>
+                <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+                  <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Response</span>
+                    <textarea name="successCriteria" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.successCriteria %></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+              <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+                  <span class="font-semibold text-gray-600 dark:text-gray-300">
+                    Additional Support Required
+                  </span>
+                  <br>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">
+                    Support that an individual require in order to achieve standard.
+                  </span>
+                </div>
+                <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+                  <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Response</span>
+                    <textarea name="additionalSupportRequired" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.additionalSupportRequired %></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+              <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+                  <span class="font-semibold text-gray-600 dark:text-gray-300">
+                    Review Schedule
+                  </span>
+                  <br>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">
+                    When will the progress be reviewed?
+                  </span>
+                </div>
+                <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+                  <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Response</span>
+                    <textarea name="reviewSchedule" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.reviewSchedule %></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+              <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+                  <span class="font-semibold text-gray-600 dark:text-gray-300">
+                    Objective Outcome
+                  </span>
+                  <br>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">
+                    Actions to be taken if objective are not met.
+                  </span>
+                </div>
+                <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+                  <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Response</span>
+                    <textarea name="objectiveOutcome" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.objectiveOutcome %></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+              <form id="updatePipForm">
+                <div class="w-5/6 max-w-lg mx-auto text-center">
+                  <label class="block mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Comments</span>
+                    <textarea name="comments" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your comments here."></textarea>
+                  </label>
+                </div>
+                <div class="w-full p-4 flex flex-col items-center text-gray-500">
+                  <div>
+                    <button type="submit" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                      Submit
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/view-pip-form.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/dist/datepicker.min.js"></script>
+
+</html>

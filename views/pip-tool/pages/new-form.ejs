@@ -1,192 +1,177 @@
 <div class="container px-6 mx-auto grid">
+  <div>
+    <script>
+      let mentor = '<%- JSON.stringify(mentors) %>'
+    </script>
+  </div>
   <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-    &nbsp;Search For Slots:
   </h2>
   <!-- CTA -->
-  <form action="/profile" method="GET" id="slotForm"
-    class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
-    <div class="flex items-center">
-      <label class="block px-3 my-4 text-sm">
-        <span class="text-gray-700 dark:text-black-400">&nbsp;Mentor</span>
-        <select name="mentor"
-          class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-          <option selected>NA</option>
-          <% mentors.forEach((mentor)=>{ %>
+  <form id="createPipForm">
+    <div class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
+      <div class="flex items-center">
+        <label class="block px-3 my-4 text-sm">
+          <span class="text-gray-700 dark:text-black-400">&nbsp;Mentor</span>
+          <select name="mentor" class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+            <option selected>NA</option>
+            <% mentors.forEach((mentor)=>{ %>
             <% if (mentor.first_name!="Practee" && mentor.first_name!="Practee Zoom" && mentor.first_name!="" ) { %>
-              <option>
-                <%= mentor.first_name + " " +mentor.last_name %>
-              </option>
-              <% } %>
-                <% }); %>
-        </select>
-      </label>
-      <label class="block px-3 my-4 text-sm">
-        <span class="text-gray-700 dark:text-black-400">&nbsp;PIP Start Date</span>
-        <input type="text" data-toggle="datepicker" autocomplete="off" name="pipStartDate" id="pipStartDate" class=" block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700
+            <option>
+              <%= mentor.first_name + " " + mentor.last_name %>
+              <% let mentorMail=mentor.email %>
+            </option>
+            <% } %>
+            <% }); %>
+          </select>
+        </label>
+        <input type='hidden' id="mentorMail" name='mentorMail'>
+        <label class="block px-3 my-4 text-sm">
+          <span class="text-gray-700 dark:text-black-400">&nbsp;PIP Start Date</span>
+          <input type="text" data-toggle="datepicker" autocomplete="off" name="pipStartDate" id="pipStartDate" class=" block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700
         focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300
         dark:focus:shadow-outline-gray form-input" disabled>
-        </input>
-      </label>
-      <label class="block px-3 my-4 text-sm">
-        <span class="text-gray-700 dark:text-black-400">&nbsp;Duration</span>
-        <select name="pipDuration"
-          class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-          <option selected>NA</option>
-          <option>2 Weeks</option>
-          <option>4 Weeks</option>
-          <option>6 Weeks</option>
-        </select>
-      </label>
-      <label class="block px-3 my-4 text-sm">
-        <span class="text-gray-700 dark:text-black-400">&nbsp;PIP End Date</span>
-        <input type="text" data-toggle="datepicker" autocomplete="off" name="pipEndDate" id="pipEndDate" disabled
-          class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
-      </label>
-    </div>
-  </form>
-
-
-  <!-- General elements -->
-  <div
-    class=" p-4 border-t-2 bg-opacity-5 border-indigo-400 rounded-t-lg text-lg font-semibold bg-gray-800  dark:bg-gray-700"
-    style="box-shadow: 0 0px 6px -1px rgb(0 0 0 / 0.1), 0 0px 4px -2px rgb(0 0 0 / 0.1);">
-    <div class="max-w-sm mx-auto md:w-full md:mx-0">
-      <div class="inline-flex items-center space-x-4">
-        <img class="w-10 h-10 object-cover rounded-full" alt="User avatar"
-          src="https://avatars3.githubusercontent.com/u/72724639?s=400&u=964a4803693899ad66a9229db55953a3dbaad5c6&v=4" />
-
-        <h4 class="text-gray-600 dark:text-gray-300">Performance Improvment Parameters</h4>
-      </div>
-    </div>
-  </div>
-
-  <div class="px-4 py-3 mb-8 rounded-b-lg shadow-md bg-white dark:divide-gray-700 dark:bg-gray-800">
-    <div class="space-y-6">
-      <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
-        <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
-          <span class="font-semibold text-gray-600 dark:text-gray-300">
-            Improvment Objectives
-          </span>
-          <br>
-          <span class="text-xs text-gray-600 dark:text-gray-400">
-            What individual should do to improve performance!
-          </span>
-        </div>
-
-        <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
-          <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Response</span>
-            <textarea
-              class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-              rows="3" placeholder="Enter your content here."></textarea>
-          </label>
-        </div>
-      </div>
-
-      <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
-      <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
-        <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
-          <span class="font-semibold text-gray-600 dark:text-gray-300">
-            Success Criteria
-          </span>
-          <br>
-          <span class="text-xs text-gray-600 dark:text-gray-400">
-            Set the success criteria here!
-          </span>
-        </div>
-        <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
-          <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Response</span>
-            <textarea
-              class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-              rows="3" placeholder="Enter your content here."></textarea>
-          </label>
-        </div>
-      </div>
-
-      <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
-      <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
-        <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
-          <span class="font-semibold text-gray-600 dark:text-gray-300">
-            Additional Support Required
-          </span>
-          <br>
-          <span class="text-xs text-gray-600 dark:text-gray-400">
-            Support that an individual require in order to achieve standard.
-          </span>
-        </div>
-        <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
-          <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Response</span>
-            <textarea
-              class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-              rows="3" placeholder="Enter your content here."></textarea>
-          </label>
-        </div>
-      </div>
-
-      <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
-      <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
-        <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
-          <span class="font-semibold text-gray-600 dark:text-gray-300">
-            Review Schedule
-          </span>
-          <br>
-          <span class="text-xs text-gray-600 dark:text-gray-400">
-            When will the progress be reviewed?
-          </span>
-        </div>
-        <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
-          <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Response</span>
-            <textarea
-              class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-              rows="3" placeholder="Enter your content here."></textarea>
-          </label>
-        </div>
-      </div>
-
-      <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
-      <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
-        <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
-          <span class="font-semibold text-gray-600 dark:text-gray-300">
-            Objective Outcome
-          </span>
-          <br>
-          <span class="text-xs text-gray-600 dark:text-gray-400">
-            Actions to be taken if objective are not met.
-          </span>
-        </div>
-        <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
-          <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Response</span>
-            <textarea
-              class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-              rows="3" placeholder="Enter your content here."></textarea>
-          </label>
-        </div>
-      </div>
-
-      <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
-      <div class="w-5/6 max-w-lg mx-auto text-center">
-        <label class="block mt-4 text-sm">
-          <span class="text-gray-700 dark:text-gray-400">Comments</span>
-          <textarea
-            class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-            rows="3" placeholder="Enter your comments here." disabled></textarea>
+          </input>
+        </label>
+        <label class="block px-3 my-4 text-sm">
+          <span class="text-gray-700 dark:text-black-400">&nbsp;Duration</span>
+          <select name="pipDuration" class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+            <option selected>NA</option>
+            <option>2 Weeks</option>
+            <option>4 Weeks</option>
+            <option>6 Weeks</option>
+          </select>
+        </label>
+        <label class="block px-3 my-4 text-sm">
+          <span class="text-gray-700 dark:text-black-400">&nbsp;PIP End Date</span>
+          <input type="text" data-toggle="datepicker" autocomplete="off" name="pipEndDate" id="pipEndDate" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" />
         </label>
       </div>
-      <div class="w-full p-4 flex flex-col items-center text-gray-500">
-        <div>
-          <button
-            class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-            Submit
-          </button>
-        </div>
+    </div>
+    <!-- General elements -->
+    <div class=" p-4 border-t-2 bg-opacity-5 border-indigo-400 rounded-t-lg text-lg font-semibold bg-gray-800  dark:bg-gray-700" style="box-shadow: 0 0px 6px -1px rgb(0 0 0 / 0.1), 0 0px 4px -2px rgb(0 0 0 / 0.1);">
+      <div class="max-w-sm mx-auto md:w-full md:mx-0">
+        <div class="inline-flex items-center space-x-4">
+          <img class="w-10 h-10 object-cover rounded-full" alt="User avatar" src="https://avatars3.githubusercontent.com/u/72724639?s=400&u=964a4803693899ad66a9229db55953a3dbaad5c6&v=4" />
 
+          <h4 class="text-gray-600 dark:text-gray-300">Performance Improvment Plan</h4>
+        </div>
       </div>
     </div>
-  </div>
 
+    <div class="px-4 py-3 mb-8 rounded-b-lg shadow-md bg-white dark:divide-gray-700 dark:bg-gray-800">
+      <div class="space-y-6">
+        <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+          <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+            <span class="font-semibold text-gray-600 dark:text-gray-300">
+              Improvement Objectives
+            </span>
+            <br>
+            <span class="text-xs text-gray-600 dark:text-gray-400">
+              What individual should do to improve performance!
+            </span>
+          </div>
+
+          <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+            <label class="block mt-4 text-sm">
+              <span class="text-gray-700 dark:text-gray-400">Response</span>
+              <textarea name="improvmentObjectives" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here."></textarea>
+            </label>
+          </div>
+        </div>
+
+        <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+        <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+          <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+            <span class="font-semibold text-gray-600 dark:text-gray-300">
+              Success Criteria
+            </span>
+            <br>
+            <span class="text-xs text-gray-600 dark:text-gray-400">
+              Set the success criteria here!
+            </span>
+          </div>
+          <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+            <label class="block mt-4 text-sm">
+              <span class="text-gray-700 dark:text-gray-400">Response</span>
+              <textarea name="successCriteria" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here."></textarea>
+            </label>
+          </div>
+        </div>
+
+        <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+        <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+          <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+            <span class="font-semibold text-gray-600 dark:text-gray-300">
+              Additional Support Required
+            </span>
+            <br>
+            <span class="text-xs text-gray-600 dark:text-gray-400">
+              Support that an individual require in order to achieve standard.
+            </span>
+          </div>
+          <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+            <label class="block mt-4 text-sm">
+              <span class="text-gray-700 dark:text-gray-400">Response</span>
+              <textarea name="additionalSupportRequired" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here."></textarea>
+            </label>
+          </div>
+        </div>
+
+        <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+        <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+          <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+            <span class="font-semibold text-gray-600 dark:text-gray-300">
+              Review Schedule
+            </span>
+            <br>
+            <span class="text-xs text-gray-600 dark:text-gray-400">
+              When will the progress be reviewed?
+            </span>
+          </div>
+          <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+            <label class="block mt-4 text-sm">
+              <span class="text-gray-700 dark:text-gray-400">Response</span>
+              <textarea name="reviewSchedule" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here."></textarea>
+            </label>
+          </div>
+        </div>
+
+        <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+        <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+          <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
+            <span class="font-semibold text-gray-600 dark:text-gray-300">
+              Objective Outcome
+            </span>
+            <br>
+            <span class="text-xs text-gray-600 dark:text-gray-400">
+              Actions to be taken if objectives are not met.
+            </span>
+          </div>
+          <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+            <label class="block mt-4 text-sm">
+              <span class="text-gray-700 dark:text-gray-400">Response</span>
+              <textarea name="objectiveOutcome" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here."></textarea>
+            </label>
+          </div>
+        </div>
+
+        <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
+        <div class="w-5/6 max-w-lg mx-auto text-center">
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Comments</span>
+            <textarea name="comments" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your comments here." disabled></textarea>
+          </label>
+        </div>
+        <div class="w-full p-4 flex flex-col items-center text-gray-500">
+          <div>
+            <button type="submit" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+              Submit
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
 
 </div>

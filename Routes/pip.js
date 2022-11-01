@@ -3,9 +3,11 @@ const axios = require("axios").default;
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Mentor = require("../models/Mentor");
+const pipForm = require("../models/PIP Form");
 const Slot = require("../models/Slots");
+const { mailer } = require("../utils/password");
 const { forgotPassword, varifyToken } = require("../utils/password");
-const { getAvailableSlots } = require("../utils/FindSlots");
+// const { getAvailableSlots } = require("../utils/FindSlots");
 const {
   userAuth,
   userLogin,
@@ -14,6 +16,46 @@ const {
   userRegister,
   serializeUser,
 } = require("../utils/Auth");
+
+router.get("/pip-form/:id", async (req, res) => {
+  await pipForm.findOne({ _id: req.params.id }, function (err, formData) {
+    if (err) {
+      console.log(err);
+      return res.render("pages/404");
+    } else {
+      if (formData) return res.render("pip-tool/view-form", { formData });
+      return res.render("pages/404");
+    }
+  });
+});
+
+router.put("/pip-form/:id", async (req, res) => {
+  const formData = await pipForm.findOne({ _id: req.params.id });
+
+  if (formData) {
+    pipForm.updateOne(
+      { _id: req.params._id },
+      req.body,
+      function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            message: "Failed Updated Your Response",
+            success: false,
+          });
+        } else {
+          return res.status(200).json({
+            message: "Updated Your Response",
+            success: true,
+          });
+        }
+      }
+    );
+  } else
+    return res.status(500).json({
+      message: "PIP Form DOesn't Exist",
+      success: false,
+    });
+});
 
 //___________________________________________________________________________
 // Users Registeration Route
@@ -203,6 +245,7 @@ router.get(
   userAuth,
   checkRole(["admin", "user"]),
   async (req, res) => {
+    console.log(req.user);
     var options = {
       method: "GET",
       url: "https://api.zoom.us/v2/users",
@@ -215,7 +258,7 @@ router.get(
     axios
       .request(options)
       .then(function (response) {
-        console.log(response.data.users);
+        // console.log(response.data.users);
         return res.render("pip-tool/index", {
           page: "New Forms",
           mentors: response.data.users,
@@ -227,6 +270,49 @@ router.get(
       });
   }
 );
+
+router.post(
+  "/new-form",
+  userAuth,
+  checkRole(["admin", "user"]),
+  async (req, res) => {
+    console.log(req.body);
+    const formData = new pipForm({
+      ...req.body,
+      pipCreater: req.user.name,
+      pipCreaterMail: req.user.email,
+    });
+    const formInfo = await formData.save();
+    console.log(formInfo);
+
+    var mailOptions = {
+      from: "Practee Technologies",
+      to: "ashutosh.das@practee.com",
+      subject: "Performance Improvement Plan - Acknowledge Now!",
+      html: `
+      <h4>Hi Mentor,</h4>
+      <br>
+      <h4>At Practee, we believe in Continuous Improvement. Below is the link for your performance action plan that your auditor has prepared to help you improve any knowledge gap areas.
+      Your auditor must have completed this discussion with you, but we request you to go through this plan & reach out if you have any questions or doubts.</h4>
+      <br>
+      <h4>Note - As per the process, you are required to acknowledge this plan unless there are any pending discussions with your auditor.</h4>
+      <br>
+      <h4>Thank you!</h4>
+      </h4>Practee Team</h4>
+      <br>
+      <h4>Click on the link below</h4>
+      <h3><a href="${
+        process.env.APP_URL + "/utility/pip-form/" + formInfo._id
+      }" >Ackownoledge Now!</a><h3>
+      `,
+    };
+    await mailer(mailOptions);
+    return res
+      .status(200)
+      .send("Mail Has been Sent Successfully to" + req.body.mentorMail);
+  }
+);
+
 router.get(
   "/history",
   userAuth,
@@ -386,17 +472,6 @@ router.get("/logout", userAuth, function (req, res) {
   req.session.destroy(function (err) {
     res.redirect(303, "/utility/login-" + role);
   });
-});
-
-// ---------------------------------------------------
-// PIP Form Routes
-// ---------------------------------------------------
-router.get("/pip", function (req, res) {
-  res.render("pip-tool/user-login");
-});
-router.post("/pip", function (req, res) {
-  console.log(req.body);
-  res.render("pip-tool/dashboard");
 });
 
 module.exports = router;
