@@ -239,7 +239,8 @@ router.get(
   userAuth,
   checkRole(["admin", "user"]),
   async (req, res) => {
-    res.render("pip-tool/index", { page: "Dashboard" });
+    // console.log(req.user);
+    res.render("pip-tool/index", { page: "Dashboard", loginUserName: req.user.name });
   }
 );
 router.get(
@@ -289,7 +290,8 @@ router.post(
 
     var mailOptions = {
       from: "practeetechnology@gmail.com",
-      to: "ashutosh.das@practee.com",
+      to: req.body.email,
+      cc: req.user.email,
       subject: "Performance Improvement Plan - Acknowledge Now!",
       html: `
       <h4>Hi Mentor,</h4>
@@ -320,7 +322,17 @@ router.get(
   userAuth,
   checkRole(["admin", "user"]),
   async (req, res) => {
-    res.render("pip-tool/index", { page: "History" });
+    await pipForm.find({ pipCreaterMail: req.user.email }, function (err, formData) {
+      if (err) {
+        console.log(err);
+        return res.render("pages/404");
+      } else {
+        // console.log(formData)
+        if (formData) {
+          return res.render("pip-tool/index", { page: "History", formData: formData});
+        }
+      }
+    });
   }
 );
 
