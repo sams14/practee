@@ -1,67 +1,66 @@
 <div class="container px-6 mx-auto grid">
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-      Previous PIPs Committed by You
-    </h2>
+  <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+    Previous PIPs Committed by You
+  </h2>
 
-    <!-- New Table -->
-    <div class="w-full overflow-hidden rounded-lg shadow-xs">
-      <div class="w-full overflow-x-auto">
-        <table class="w-full whitespace-no-wrap">
-          <thead>
-            <tr
-              class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-              <th class="px-4 py-3">Mentor</th>
-              <th class="px-4 py-3">PIP Start Date</th>
-              <th class="px-4 py-3">PIP End Date</th>
-              <th class="px-4 py-3">Improvement Objective</th>
-              <th class="px-4 py-3">Success Criteria</th>
-              <th class="px-4 py-3">Additional Support Required</th>
-              <th class="px-4 py-3">Review Schedule</th>
-              <th class="px-4 py-3">Objctive Outcome</th>
-              <th class="px-4 py-3">Acknowledgement</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-            <% formData.forEach((record)=>{ %> 
-              <tr class="text-gray-700 dark:text-gray-400">
-                <td class="px-4 py-3">
-                  <div class="flex items-center text-sm">
-                    <div>
-                      <p class="font-semibold"><%= record.mentor %> </p>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.pipStartDate %> 
-                </td>
-                <td class="px-4 py-3 text-xs">
-                  <%= record.pipEndDate %> 
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.improvmentObjectives %>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.successCriteria %>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.additionalSupportRequired %>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.reviewSchedule %>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.objectiveOutcome %>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  <%= record.acknowledged %>
-                </td> 
-              </tr>
-            <% }); %> 
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div>
-      <h2>&nbsp;</h2>
+  <!-- New Table -->
+  <div class="w-full overflow-hidden rounded-lg shadow-xs">
+    <div class="w-full overflow-x-auto">
+      <table class="w-full whitespace-no-wrap">
+        <thead>
+          <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+            <th class="px-4 py-3">Mentor</th>
+            <th class="px-4 py-3">PIP Start Date</th>
+            <th class="px-4 py-3">PIP End Date</th>
+            <th class="px-4 py-3">Improvement Objective</th>
+            <th class="px-4 py-3">Success Criteria</th>
+            <th class="px-4 py-3">Additional Support Required</th>
+            <th class="px-4 py-3">Review Schedule</th>
+            <th class="px-4 py-3">Objctive Outcome</th>
+            <th class="px-4 py-3">Acknowledgement</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+          <% formData.forEach((record)=>{ %>
+          <tr class="text-gray-700 dark:text-gray-400">
+            <td class="px-4 py-3">
+              <div class="flex items-center text-sm text-center">
+                <div>
+                  <p class="font-semibold"><%= record.mentor %> </p>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.pipStartDate %>
+            </td>
+            <td class="px-4 py-3 text-xs text-center">
+              <%= record.pipEndDate %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.improvmentObjectives %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.successCriteria %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.additionalSupportRequired %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.reviewSchedule %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.objectiveOutcome %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.acknowledged %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
   </div>
+  <div>
+    <h2>&nbsp;</h2>
+  </div>
+</div>

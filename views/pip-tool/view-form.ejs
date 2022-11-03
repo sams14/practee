@@ -21,14 +21,6 @@
         <div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
           <!-- Search input -->
           <div class="flex justify-center flex-1 lg:mr-32">
-            <div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
-              <div class="absolute inset-y-0 flex items-center pl-2">
-                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                </svg>
-              </div>
-              <input class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input" type="text" placeholder="Search for projects" aria-label="Search" />
-            </div>
           </div>
           <ul class="flex items-center flex-shrink-0 space-x-6">
             <!-- Theme toggler -->
@@ -52,6 +44,7 @@
       <main class="h-full pb-16 overflow-y-auto">
         <div class="container px-6 mx-auto grid">
           <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Please Comment Below To Acknowledge !
           </h2>
           <!-- CTA -->
 
@@ -101,7 +94,7 @@
           <div class=" p-4 border-t-2 bg-opacity-5 border-indigo-400 rounded-t-lg text-lg font-semibold bg-gray-800  dark:bg-gray-700" style="box-shadow: 0 0px 6px -1px rgb(0 0 0 / 0.1), 0 0px 4px -2px rgb(0 0 0 / 0.1);">
             <div class="max-w-sm mx-auto md:w-full">
               <div class="inline-flex items-center space-x-4">
-                <img class="w-10 h-10 object-cover rounded-full" alt="User avatar" src="/assets/img/favicon.ico" />
+                <img class="w-10 h-10 object-cover rounded-full" alt="User avatar" src="/assets/img/Practee-logo-hd-transparent.png" />
 
                 <h4 class="text-gray-600 dark:text-gray-300">Performance Improvment Plan</h4>
               </div>
@@ -124,7 +117,7 @@
                 <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
                   <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">Response</span>
-                    <textarea name="improvmentObjectives" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled> <%=formData.improvmentObjectives %></textarea>
+                    <span name="improvmentObjectives" class="block w-full rounded-md mt-1 text-sm text-justify dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" disabled> <%=formData.improvmentObjectives %></span>
                   </label>
                 </div>
               </div>
@@ -143,7 +136,7 @@
                 <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
                   <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">Response</span>
-                    <textarea name="successCriteria" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.successCriteria %></textarea>
+                    <span name="successCriteria" class="block w-full rounded-md mt-1 text-sm text-justify dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.successCriteria %></span>
                   </label>
                 </div>
               </div>
@@ -162,7 +155,7 @@
                 <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
                   <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">Response</span>
-                    <textarea name="additionalSupportRequired" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.additionalSupportRequired %></textarea>
+                    <span name="additionalSupportRequired" class="block w-full rounded-md mt-1 text-sm text-justify dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.additionalSupportRequired %></span>
                   </label>
                 </div>
               </div>
@@ -181,7 +174,7 @@
                 <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
                   <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">Response</span>
-                    <textarea name="reviewSchedule" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.reviewSchedule %></textarea>
+                    <span name="reviewSchedule" class="block w-full rounded-md mt-1 text-sm text-justify dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.reviewSchedule %></span>
                   </label>
                 </div>
               </div>
@@ -200,7 +193,7 @@
                 <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
                   <label class="block mt-4 text-sm">
                     <span class="text-gray-700 dark:text-gray-400">Response</span>
-                    <textarea name="objectiveOutcome" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.objectiveOutcome %></textarea>
+                    <span name="objectiveOutcome" class="block w-full rounded-md mt-1 text-sm text-justifydark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your content here." disabled><%=formData.objectiveOutcome %></span>
                   </label>
                 </div>
               </div>

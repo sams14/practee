@@ -23,7 +23,6 @@ router.get("/pip-form/:id", async (req, res) => {
       console.log(err);
       return res.render("pages/404");
     } else {
-      console.log(formData.comments)
       if (formData) return res.render("pip-tool/view-form", { formData });
       return res.render("pages/404");
     }
@@ -34,24 +33,20 @@ router.put("/pip-form/:id", async (req, res) => {
   const formData = await pipForm.findOne({ _id: req.params.id });
 
   if (formData) {
-    console.log(req.body)
-    pipForm.updateOne(
-      { _id: req.params.id },
-      req.body ,
-      function (err, result) {
-        if (err) {
-          return res.status(500).json({
-            message: "Failed Updated Your Response",
-            success: false,
-          });
-        } else {
-          return res.status(200).json({
-            message: "Updated Your Response",
-            success: true,
-          });
-        }
+    console.log(req.body);
+    pipForm.updateOne({ _id: req.params.id }, req.body, function (err, result) {
+      if (err) {
+        return res.status(500).json({
+          message: "Failed Updated Your Response",
+          success: false,
+        });
+      } else {
+        return res.status(200).json({
+          message: "Updated Your Response",
+          success: true,
+        });
       }
-    );
+    });
   } else
     return res.status(500).json({
       message: "PIP Form DOesn't Exist",
@@ -153,14 +148,15 @@ router.post("/login-user", userLogin("user"), function (req, res) {
 // Admin Login Route
 //---------------------------------------------------------------------------
 router.get("/login-admin", checkLogin, async (req, res) => {
-  if (Object.keys(req.query).length !== 0) {
-    const response = {
-      message: req.query.message,
-      success: req.query.success === "false" ? false : true,
-    };
-    return res.render("pages/login", { role: "admin", response: response });
-  }
-  return res.render("pages/login", { role: "admin" });
+  return res.redirect(303, "/utility/login-user");
+  // if (Object.keys(req.query).length !== 0) {
+  //   const response = {
+  //     message: req.query.message,
+  //     success: req.query.success === "false" ? false : true,
+  //   };
+  //   return res.render("pages/login", { role: "admin", response: response });
+  // }
+  // return res.render("pages/login", { role: "admin" });
 });
 router.post("/login-admin", userLogin("admin"), function (req, res) {
   res.redirect(303, "/utility/profile");
@@ -170,7 +166,7 @@ router.post("/login-admin", userLogin("admin"), function (req, res) {
 // Super Admin Login Route
 //---------------------------------------------------------------------------
 router.get("/login-super-admin", checkLogin, async (req, res) => {
-  return res.redirect(303, "/utility/login-admin");
+  return res.redirect(303, "/utility/login-user");
   // if(Object.keys(req.query).length !== 0){
   //   const response = { message : req.query.message, success : req.query.success==="false"? false : true};
   //   res.render('pages/login',{role : "super-admin", response : response});
@@ -191,7 +187,7 @@ router.post(
 router.get("/forgot-password", checkLogin, async (req, res) => {
   res.render("pages/forgot-password");
 });
-router.put("/forgot-password", forgotPassword);
+router.post("/forgot-password", forgotPassword);
 
 //___________________________________________________________________________
 // Reset Password Route
@@ -240,7 +236,10 @@ router.get(
   checkRole(["admin", "user"]),
   async (req, res) => {
     // console.log(req.user);
-    res.render("pip-tool/index", { page: "Dashboard", loginUserName: req.user.name });
+    res.render("pip-tool/index", {
+      page: "Dashboard",
+      loginUserName: req.user.name,
+    });
   }
 );
 router.get(
@@ -322,17 +321,23 @@ router.get(
   userAuth,
   checkRole(["admin", "user"]),
   async (req, res) => {
-    await pipForm.find({ pipCreaterMail: req.user.email }, function (err, formData) {
-      if (err) {
-        console.log(err);
-        return res.render("pages/404");
-      } else {
-        // console.log(formData)
-        if (formData) {
-          return res.render("pip-tool/index", { page: "History", formData: formData});
+    await pipForm.find(
+      { pipCreaterMail: req.user.email },
+      function (err, formData) {
+        if (err) {
+          console.log(err);
+          return res.render("pages/404");
+        } else {
+          // console.log(formData)
+          if (formData) {
+            return res.render("pip-tool/index", {
+              page: "History",
+              formData: formData,
+            });
+          }
         }
       }
-    });
+    );
   }
 );
 
