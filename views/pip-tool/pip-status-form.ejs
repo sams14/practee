@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> View Form | Practee Technologies</title>
+  <title> PIP Status Form | Practee Technologies</title>
   <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -44,7 +44,7 @@
       <main class="h-full pb-16 overflow-y-auto">
         <div class="container px-6 mx-auto grid">
           <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Please Comment Below To Acknowledge !
+            PIP Form Status
           </h2>
           <!-- CTA -->
 
@@ -84,7 +84,7 @@
               </label>
               <label class="block px-3 my-4 text-sm">
                 <span class="text-gray-700 dark:text-black-400">&nbsp;PIP End Date</span>
-                <input type="text" value=<%=formData.pipEndDate %> data-toggle="datepicker" autocomplete="off" name="pipEndDate" id="pipEndDate" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700
+                <input type="text" id="pipEndDate" value=<%=formData.pipEndDate %> data-toggle="datepicker" autocomplete="off" name="pipEndDate" id="pipEndDate" disabled class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-700
                   focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300
                   dark:focus:shadow-outline-gray form-input" />
               </label>
@@ -199,22 +199,65 @@
               </div>
 
               <hr class="my-8 h-px bg-gray-200 border-0 dark:bg-gray-700">
-              <form id="updatePipForm">
-                <div class="w-5/6 max-w-lg mx-auto text-center">
+
+              <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                <div class="md:w-1/4 lg:1/6 max-w-sm mx-auto text-center">
                   <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">Comments</span>
-                    <textarea name="comments" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" rows="3" placeholder="Enter your comments here."><% if (formData.comments) {%><%= formData.comments %><% } %></textarea>
+                    <span class="font-semibold text-gray-600 dark:text-gray-300">
+                      Comments
+                    </span>
+                    <textarea name="comments" class="block w-full rounded-md mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray text-center" rows="3" placeholder="Enter your comments here." disabled><% if (formData.comments) {%><%= formData.comments %><% } %></textarea>
                   </label>
                 </div>
-                <div class="w-full p-4 flex flex-col items-center text-gray-500">
-                  <div>
-                    <button type="submit" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                      Submit
-                    </button>
-                  </div>
+                <div class="md:w-3/4 lg:5/6 max-w-sm mx-auto">
+                  <form id="updatePipStatus">
+                    <div class="md:inline-flex space-y-4 md:space-y-0 w-full p-4 text-gray-500 items-center">
+                      <div class="w-1/2 max-w-sm mx-auto text-center">
+                        <label class="block mt-4 text-sm">
+                          <label class="block px-3 my-4 text-sm">
+                            <span class="font-semibold text-gray-600 dark:text-gray-300">Action</span>
+                            <select name="pipStatus" id="pipStatus" class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                              <option selected>
+                                Success
+                              </option>
+                              <option>
+                                Extend
+                              </option>
+                              <option>
+                                Failure
+                              </option>
+                            </select>
+                          </label>
+                      </div>
 
+                      <div class="w-1/2  max-w-sm mx-auto text-center" id="extendPipDiv" hidden>
+                        <label class="block px-3 my-4 text-sm">
+                          <span class="font-semibold text-gray-600 dark:text-gray-300">Choose Duration</span>
+                          <select name="extendPIP" class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                            <option selected>
+                              1 Week
+                            </option>
+                            <option>
+                              2 Weeks
+                            </option>
+                            <option>
+                              3 Weeks
+                            </option>
+                            <option>
+                              4 Weeks
+                            </option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+                    <label class="block mt-4 text-sm text-center">
+                      <button type="submit" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        Submit
+                      </button>
+                    </label>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
 
@@ -226,7 +269,7 @@
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script type="text/javascript" src="/assets/js/view-pip-form.js"></script>
+<script type="text/javascript" src="/assets/js/pip-status-form.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="/dist/datepicker.min.js"></script>
 

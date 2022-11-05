@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Mentor = require("../models/Mentor");
 const pipForm = require("../models/PIP Form");
+const emailTemplate = require("../Email Templates/pipNewForm");
 const Slot = require("../models/Slots");
 const { mailer } = require("../utils/password");
 const { forgotPassword, varifyToken } = require("../utils/password");
@@ -16,6 +17,57 @@ const {
   userRegister,
   serializeUser,
 } = require("../utils/Auth");
+
+router.get(
+  "/pip-status-form/:id",
+  userAuth,
+  checkRole(["user", "admin"]),
+  async (req, res) => {
+    await pipForm.findOne({ _id: req.params.id }, function (err, formData) {
+      if (err) {
+        console.log(err);
+        return res.render("pages/404");
+      } else {
+        if (formData)
+          return res.render("pip-tool/pip-status-form", { formData });
+        return res.render("pages/404");
+      }
+    });
+  }
+);
+router.put(
+  "/pip-status-form/:id",
+  userAuth,
+  checkRole(["user", "admin"]),
+  async (req, res) => {
+    const formData = await pipForm.findOne({ _id: req.params.id });
+
+    if (formData) {
+      console.log(req.body);
+      pipForm.updateOne(
+        { _id: req.params.id },
+        req.body,
+        function (err, result) {
+          if (err) {
+            return res.status(500).json({
+              message: "Failed Updated Your Response",
+              success: false,
+            });
+          } else {
+            return res.status(200).json({
+              message: "Updated Your Response",
+              success: true,
+            });
+          }
+        }
+      );
+    } else
+      return res.status(500).json({
+        message: "PIP Form DOesn't Exist",
+        success: false,
+      });
+  }
+);
 
 router.get("/pip-form/:id", async (req, res) => {
   await pipForm.findOne({ _id: req.params.id }, function (err, formData) {
@@ -289,25 +341,14 @@ router.post(
 
     var mailOptions = {
       from: "practeetechnology@gmail.com",
-      to: req.body.email,
-      cc: req.user.email,
+      // to: req.body.email,
+      to: "ashutosh.das@practee.com",
+      // cc: req.user.email,
       subject: "Performance Improvement Plan - Acknowledge Now!",
-      html: `
-      <h4>Hi Mentor,</h4>
-      <br>
-      <h4>At Practee, we believe in Continuous Improvement. Below is the link for your performance action plan that your auditor has prepared to help you improve any knowledge gap areas.
-      Your auditor must have completed this discussion with you, but we request you to go through this plan & reach out if you have any questions or doubts.</h4>
-      <br>
-      <h4>Note - As per the process, you are required to acknowledge this plan unless there are any pending discussions with your auditor.</h4>
-      <br>
-      <h4>Thank you!</h4>
-      </h4>Practee Team</h4>
-      <br>
-      <h4>Click on the link below</h4>
-      <h3><a href="${
+      html: emailTemplate(
+        req.body.mentor,
         process.env.APP_URL + "/utility/pip-form/" + formInfo._id
-      }" >Ackownoledge Now!</a><h3>
-      `,
+      ),
     };
     await mailer(mailOptions);
     return res

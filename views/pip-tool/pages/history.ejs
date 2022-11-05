@@ -9,15 +9,16 @@
       <table class="w-full whitespace-no-wrap">
         <thead>
           <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-            <th class="px-4 py-3">Mentor</th>
-            <th class="px-4 py-3">PIP Start Date</th>
-            <th class="px-4 py-3">PIP End Date</th>
-            <th class="px-4 py-3">Improvement Objective</th>
-            <th class="px-4 py-3">Success Criteria</th>
-            <th class="px-4 py-3">Additional Support Required</th>
-            <th class="px-4 py-3">Review Schedule</th>
-            <th class="px-4 py-3">Objctive Outcome</th>
-            <th class="px-4 py-3">Acknowledgement</th>
+            <th class="px-4 py-3 text-center">Mentor</th>
+            <th class="px-4 py-3 text-center">PIP Start Date</th>
+            <th class="px-4 py-3 text-center">PIP End Date</th>
+            <th class="px-4 py-3 text-center">Improvement Objective</th>
+            <th class="px-4 py-3 text-center">Success Criteria</th>
+            <th class="px-4 py-3 text-center">Additional Support Required</th>
+            <th class="px-4 py-3 text-center">Review Schedule</th>
+            <th class="px-4 py-3 text-center">Objctive Outcome</th>
+            <th class="px-4 py-3 text-center">Acknowledgement</th>
+            <th class="px-4 py-3 text-center">PIP Status</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -53,6 +54,9 @@
             </td>
             <td class="px-4 py-3 text-sm text-center">
               <%= record.acknowledged %>
+            </td>
+            <td class="px-4 py-3 text-sm text-center">
+              <%= record.pipStatus ? record.pipStatus : "pending" %>
             </td>
           </tr>
           <% }); %>
