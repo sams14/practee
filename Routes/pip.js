@@ -4,7 +4,9 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Mentor = require("../models/Mentor");
 const pipForm = require("../models/PIP Form");
-const emailTemplate = require("../Email Templates/pipNewForm");
+const newPipEmail = require("../Email Templates/pipNewForm");
+const successfulPipEmail = require("../Email Templates/successfulPipForm");
+const extendedPipEmail = require("../Email Templates/extendedPipForm");
 const Slot = require("../models/Slots");
 const { mailer } = require("../utils/password");
 const { forgotPassword, varifyToken } = require("../utils/password");
@@ -28,8 +30,13 @@ router.get(
         console.log(err);
         return res.render("pages/404");
       } else {
-        if (formData)
+        if (
+          formData &&
+          formData.pipStatus != "Success" &&
+          formData.pipStatus != "Failure"
+        )
           return res.render("pip-tool/pip-status-form", { formData });
+
         return res.render("pages/404");
       }
     });
@@ -47,13 +54,47 @@ router.put(
       pipForm.updateOne(
         { _id: req.params.id },
         req.body,
-        function (err, result) {
+        async function (err, result) {
           if (err) {
             return res.status(500).json({
               message: "Failed Updated Your Response",
               success: false,
             });
           } else {
+            if (req.body.pipStatus === "Success") {
+              var mailOptions = {
+                from: "practeetechnology@gmail.com",
+                to: formData.mentorMail,
+                // to: "ashutosh.das@practee.com",
+                cc: formData.pipCreaterMail,
+                subject: "Performance Improvement Plan - Successful!",
+                html: successfulPipEmail(formData.mentor),
+              };
+              await mailer(mailOptions);
+              return res.status(200).json({
+                message:
+                  "Mail Has been Sent Successfully to " + formData.mentorMail,
+                success: true,
+              });
+            } else if (req.body.pipStatus === "Extend") {
+              var mailOptions = {
+                from: "practeetechnology@gmail.com",
+                to: formData.mentorMail,
+                // to: "ashutosh.das@practee.com",
+                cc: formData.pipCreaterMail,
+                subject: "Performance Improvement Plan - Extended!",
+                html: extendedPipEmail(
+                  formData.mentor,
+                  process.env.APP_URL + "/utility/pip-form/" + formData._id
+                ),
+              };
+              await mailer(mailOptions);
+              return res.status(200).json({
+                message:
+                  "Mail Has been Sent Successfully to " + formData.mentorMail,
+                success: true,
+              });
+            }
             return res.status(200).json({
               message: "Updated Your Response",
               success: true,
@@ -101,7 +142,7 @@ router.put("/pip-form/:id", async (req, res) => {
     });
   } else
     return res.status(500).json({
-      message: "PIP Form DOesn't Exist",
+      message: "PIP Form Doesn't Exist",
       success: false,
     });
 });
@@ -193,7 +234,9 @@ router.get("/login-user", checkLogin, async (req, res) => {
 });
 
 router.post("/login-user", userLogin("user"), function (req, res) {
-  res.redirect(303, "/utility/profile");
+  console.log(req.session.returnTo);
+  res.redirect(req.session.returnTo || "/utility/profile");
+  delete req.session.returnTo;
 });
 
 //___________________________________________________________________________
@@ -341,11 +384,11 @@ router.post(
 
     var mailOptions = {
       from: "practeetechnology@gmail.com",
-      // to: req.body.email,
-      to: "ashutosh.das@practee.com",
-      // cc: req.user.email,
+      to: req.body.email,
+      // to: "ashutosh.das@practee.com",
+      cc: req.user.email,
       subject: "Performance Improvement Plan - Acknowledge Now!",
-      html: emailTemplate(
+      html: newPipEmail(
         req.body.mentor,
         process.env.APP_URL + "/utility/pip-form/" + formInfo._id
       ),

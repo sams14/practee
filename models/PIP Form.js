@@ -59,8 +59,8 @@ const pipFormSchema = new Schema(
     },
     pipStatus: {
       type: String,
-      default: "pending",
-      enum: ["pending", "success", "failure", "extended"],
+      default: "Pending",
+      enum: ["Pending", "Success", "Failure", "Extend"],
     },
   },
   { timestamps: true }

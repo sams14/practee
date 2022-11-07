@@ -154,7 +154,8 @@ const userAuth = (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
   } else {
-    res.redirect(303, "/utility/login-user");
+    req.session.returnTo = req.originalUrl;
+    res.redirect("/utility/login-user");
   }
 };
 

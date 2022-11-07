@@ -18,17 +18,7 @@ $(document).ready(function () {
       pipStatus: $('select[name="pipStatus"]').val(),
     };
     if ($('select[name="pipStatus"]').val() == "Extend") {
-      if ($('select[name="extendPIP"]').val() == "1 Week") {
-        formData["pipDuration"] =
-          (
-            parseInt($('select[name="pipDuration"]').val().split(" ")[0]) + 1
-          ).toString() + " Weeks";
-
-        $("#pipEndDate").datepicker(
-          "setDate",
-          addDays($("#pipEndDate").val(), 7)
-        );
-      } else if ($('select[name="extendPIP"]').val() == "2 Weeks") {
+      if ($('select[name="extendPIP"]').val() == "2 Weeks") {
         formData["pipDuration"] =
           (
             parseInt($('select[name="pipDuration"]').val().split(" ")[0]) + 2
@@ -37,16 +27,6 @@ $(document).ready(function () {
         $("#pipEndDate").datepicker(
           "setDate",
           addDays($("#pipEndDate").val(), 14)
-        );
-      } else if ($('select[name="extendPIP"]').val() == "3 Weeks") {
-        formData["pipDuration"] =
-          (
-            parseInt($('select[name="pipDuration"]').val().split(" ")[0]) + 3
-          ).toString() + " Weeks";
-
-        $("#pipEndDate").datepicker(
-          "setDate",
-          addDays($("#pipEndDate").val(), 21)
         );
       } else if ($('select[name="extendPIP"]').val() == "4 Weeks") {
         formData["pipDuration"] =
@@ -70,7 +50,9 @@ $(document).ready(function () {
         },
       })
       .then((res) => {
-        Swal.fire("Done !", res.data.message, "success");
+        Swal.fire("Done !", res.data.message, "success").then((res) => {
+          location.replace("../profile");
+        });
       })
       .catch((err) => {
         Swal.fire("Oops...", err, "error");

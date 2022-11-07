@@ -13,6 +13,8 @@ const { mailer } = require("./utils/password");
 const { connect, connection } = require("mongoose");
 const { success, error } = require("consola");
 const { update_VimeoFolder } = require("./utils/vimeoFolder");
+const pipForm = require("./models/PIP Form");
+const reminderPipEmail = require("./Email Templates/reminderPipStatus");
 
 // Bring in the app constants
 const { ENV, URL, DB, SECRET, PORT } = require("./config/index");
@@ -194,7 +196,7 @@ const zoomAttendanceReport = new CronJob({
       console.log(`Zoom Attendace Report exited with code: ${code}`);
       if (code) {
         var mailOptions = {
-          from: "ash2000test@gmail.com",
+          from: "practeetechnology@gmail.com",
           to: "asutosh2000ad@gmail.com",
           cc: "sambidbharadwaj@gmail.com",
           subject: "Zoom Attendace Report Status",
@@ -211,6 +213,67 @@ const zoomAttendanceReport = new CronJob({
   start: true,
   timeZone: "Asia/Kolkata",
 });
+
+const pipReminderScheduler = new CronJob({
+  // Run at 10:00am Indian Standard time, everyday
+  cronTime: "00 10 * * *",
+  onTick: async function () {
+    // Run whatever you like here..
+    const reminderList = await pipForm.find({
+      pipEndDate: getFormattedDate(addDays(new Date(), 3)),
+    });
+    console.log(reminderList);
+    console.log(getFormattedDate(addDays(new Date(), 3)));
+    reminderList.forEach(async (pipData) => {
+      console.log(pipData.mentorMail);
+      console.log(pipData.pipCreaterMail);
+      var mailOptions = {
+        from: "practeetechnology@gmail.com",
+        to: pipData.mentorMail,
+        // to: "ashutosh.das@practee.com",
+        subject: "PIP - Deadline Reminder",
+        html: reminderPipEmail(
+          pipData.mentor,
+          process.env.APP_URL + "/utility/pip-status-form/" + pipData._id,
+          false
+        ),
+      };
+      await mailer(mailOptions);
+      var mailOptions = {
+        from: "practeetechnology@gmail.com",
+        to: pipData.pipCreaterMail,
+        // to: "ash.exp@outlook.com",
+        subject: "PIP - Deadline Reminder",
+        html: reminderPipEmail(
+          pipData.pipCreater,
+          process.env.APP_URL + "/utility/pip-status-form/" + pipData._id,
+          true
+        ),
+      };
+      await mailer(mailOptions);
+    });
+  },
+  start: true,
+  timeZone: "Asia/Kolkata",
+});
+
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function getFormattedDate(date) {
+  var year = date.getFullYear();
+
+  var month = (1 + date.getMonth()).toString();
+  month = month.length > 1 ? month : "0" + month;
+
+  var day = date.getDate().toString();
+  day = day.length > 1 ? day : "0" + day;
+
+  return month + "/" + day + "/" + year;
+}
 
 // Start Listenting for the server on PORT
 const db = connection;
