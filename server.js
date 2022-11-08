@@ -96,7 +96,7 @@ app.use("/api/v1", require("./Routes/api"));
 app.use("/utility", require("./Routes/pip"));
 
 app.get("/", function (req, res) {
-  return res.redirect("/profile");
+  return res.redirect("/utility/profile");
 });
 
 app.get("/review", function (req, res) {
