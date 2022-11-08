@@ -22,7 +22,9 @@ $(document).ready(function () {
         Swal.fire("Done !", res.data.message, "success");
       })
       .catch((err) => {
-        Swal.fire("Oops...", err, "error");
+        Swal.fire("Oops...", err, "error").then((res) => {
+          location.reload();
+        });
       });
   });
 });

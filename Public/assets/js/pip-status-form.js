@@ -42,6 +42,7 @@ $(document).ready(function () {
       formData["pipEndDate"] = $("#pipEndDate").val();
     }
     console.log(formData);
+    alert("Do you want to submit your form ?");
     const url = window.location.href;
     axios
       .put(url, formData, {
@@ -55,7 +56,9 @@ $(document).ready(function () {
         });
       })
       .catch((err) => {
-        Swal.fire("Oops...", err, "error");
+        Swal.fire("Oops...", err, "error").then((res) => {
+          location.reload();
+        });
       });
   });
 });
