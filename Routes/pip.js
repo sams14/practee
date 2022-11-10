@@ -384,7 +384,7 @@ router.post(
 
     var mailOptions = {
       from: "practeetechnology@gmail.com",
-      to: req.body.email,
+      to: req.body.mentorEmail,
       // to: "ashutosh.das@practee.com",
       cc: req.user.email,
       subject: "Performance Improvement Plan - Acknowledge Now!",
