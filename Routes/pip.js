@@ -343,28 +343,46 @@ router.get(
   checkRole(["admin", "user"]),
   async (req, res) => {
     console.log(req.user);
-    var options = {
-      method: "GET",
-      url: "https://api.zoom.us/v2/users",
-      params: { page_size: "50", status: "active" },
-      headers: {
-        Authorization: "Bearer " + process.env.zoom_token,
-      },
-    };
+    Mentor.find({}, async (err, mentors) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send();
+      } else {
+        if (mentors.length == 0) {
+          return res.render("pip-tool/index", {
+            page: "New Forms",
+            mentors: [],
+          });
+        } else {
+          return res.render("pip-tool/index", {
+            page: "New Forms",
+            mentors: mentors,
+          });
+        }
+      }
+    });
+    // var options = {
+    //   method: "GET",
+    //   url: "https://api.zoom.us/v2/users",
+    //   params: { page_size: "50", status: "active" },
+    //   headers: {
+    //     Authorization: "Bearer " + process.env.zoom_token,
+    //   },
+    // };
 
-    axios
-      .request(options)
-      .then(function (response) {
-        // console.log(response.data.users);
-        return res.render("pip-tool/index", {
-          page: "New Forms",
-          mentors: response.data.users,
-        });
-      })
-      .catch(function (error) {
-        console.error(error);
-        return res.status(500).send("Failed To Fetch Mentor Details !!");
-      });
+    // axios
+    //   .request(options)
+    //   .then(function (response) {
+    //     // console.log(response.data.users);
+    //     return res.render("pip-tool/index", {
+    //       page: "New Forms",
+    //       mentors: response.data.users,
+    //     });
+    //   })
+    //   .catch(function (error) {
+    //     console.error(error);
+    //     return res.status(500).send("Failed To Fetch Mentor Details !!");
+    //   });
   }
 );
 

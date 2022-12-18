@@ -15,12 +15,10 @@
           <select name="mentor" class="block w-full rounded-md mt-1 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
             <option selected>NA</option>
             <% mentors.forEach((mentor)=>{ %>
-            <% if (mentor.first_name!="Practee" && mentor.first_name!="Practee Zoom" && mentor.first_name!="" ) { %>
             <option>
-              <%= mentor.first_name + " " + mentor.last_name %>
+              <%= mentor.name %>
               <% let mentorMail=mentor.email %>
             </option>
-            <% } %>
             <% }); %>
           </select>
         </label>
