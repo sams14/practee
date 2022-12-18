@@ -23,7 +23,6 @@ const {
 router.get(
   "/pip-status-form/:id",
   userAuth,
-  checkRole(["user", "admin"]),
   async (req, res) => {
     await pipForm.findOne({ _id: req.params.id }, function (err, formData) {
       if (err) {
@@ -392,6 +391,7 @@ router.post(
   checkRole(["admin", "user"]),
   async (req, res) => {
     console.log(req.body);
+    console.log(req.body.mentorMail);
     const formData = new pipForm({
       ...req.body,
       pipCreater: req.user.name,
@@ -402,7 +402,7 @@ router.post(
 
     var mailOptions = {
       from: "practeetechnology@gmail.com",
-      to: req.body.mentorEmail,
+      to: req.body.mentorMail,
       // to: "ashutosh.das@practee.com",
       cc: req.user.email,
       subject: "Performance Improvement Plan - Acknowledge Now!",

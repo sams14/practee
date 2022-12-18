@@ -163,7 +163,7 @@ module.exports = (name, pipFormLink, isLink) => {
 															<td class="pad">
 																<div style="font-family: sans-serif">
 																	<div class style="font-size: 14px; mso-line-height-alt: 21px; color: #6f7077; line-height: 1.5; font-family: Arial, Helvetica Neue, Helvetica, sans-serif;">
-																		<p style="margin: 0; text-align: left; mso-line-height-alt: 21px;">This is to remind you that the end for the PIP which you initiated is around the corner.&nbsp;</p>
+																		<p style="margin: 0; text-align: left; mso-line-height-alt: 21px;">This is to remind you about the PIP review. The end date is around the corner.&nbsp;</p>
 																		<p style="margin: 0; mso-line-height-alt: 21px;">Please update the status post having a discussion.&nbsp;</p>
 																	</div>
 																</div>
