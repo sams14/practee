@@ -67,6 +67,7 @@ def delete_folder_videos(folder_details):
     videos = []
     videos_counter = 0
     counter = 1
+    flag = True
     headers = headers = {"authorization": "Bearer " + vimeo_token}
     while True:
         query = {"per_page": 50, "page": counter}
@@ -84,7 +85,14 @@ def delete_folder_videos(folder_details):
                 + "Fetching Videos In {folders}".format(folders=folder_details["name"])
             )
             for record in json_response["data"]:
-                videos.append(record["uri"].split("/")[2])
+                date_now = datetime.datetime.now(datetime.timezone.utc)
+                video_created = datetime.datetime.fromisoformat(record["created_time"])
+                if (date_now - video_created).days >= 250:
+                    videos.append(record["uri"].split("/")[2])
+                else:
+                    flag = False
+        else:
+            return True
 
         videos_counter += len(json_response["data"])
         counter += 1
@@ -109,8 +117,7 @@ def delete_folder_videos(folder_details):
                 )
             )
             return False
-
-    return True
+    return flag
 
 
 def delete_vimeo_folders(records):
@@ -147,7 +154,7 @@ def delete_vimeo_folders(records):
         else:
             print(
                 "\n"
-                + "Failed To Delete Videos !!{folders} Folder Skipped".format(
+                + "Failed To Delete All Videos !!{folders} Folder Skipped".format(
                     folders=folder_details["name"]
                 )
             )
